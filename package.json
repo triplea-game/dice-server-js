@@ -4,7 +4,7 @@
   "description": "The Official TripleA Dice Server",
   "main": "dice-server.js",
   "scripts": {
-    "test": "./node_modules/.bin/eslint ."
+    "test": "./node_modules/.bin/eslint dice-server.js"
   },
   "keywords": [
     "nodejs",
