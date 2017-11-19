@@ -1,6 +1,6 @@
 'use strict';
-const Promise = require("bluebird");
-const randomNumber = require("random-number-csprng");
+const Promise = require('bluebird');
+const randomNumber = require('random-number-csprng');
 const roller = {};
 
 roller.roll = function(max, times, callback){
@@ -8,7 +8,7 @@ roller.roll = function(max, times, callback){
 	for(var i = 0; i < times; i++){
 		promises.push(randomNumber(1, max));
 	}
-	Promise.all(promises).then(callback);
+	Promise.all(promises).asCallback(callback);
 };
 
 module.exports = roller;

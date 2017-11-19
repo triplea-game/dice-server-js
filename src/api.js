@@ -2,6 +2,7 @@
 const roller = require('./dice-roller');
 const validator = require('./validator');
 const base64url = require('base64-url');
+const async = require('async');
 
 module.exports = function(router){
 	router.get('/verify/:diceArray/:signature/:date', handleVerify);
@@ -14,24 +15,33 @@ function registrationMiddleware(req, res, next){
 }
 
 function handleRoll(req, res){
-	req.params.max = parseInt(req.params.max);
-	req.params.times = parseInt(req.params.times);
-	if(validateRollArgs(req, res)){
-		roller.roll(req.params.max, req.params.times, dice => {
+	async.waterfall([
+		callback => {
+			req.params.max = parseInt(req.params.max);
+			req.params.times = parseInt(req.params.times);
+			callback(validateRollArgs(req, res), req.params.max, req.params.times);
+		},
+		roller.roll,
+		(dice, callback) => {
 			const now = new Date();
-			validator.sign(pushToCopy(dice, now.getTime()), signature => res.json({
-				status: 'OK',
-				result: {
-					dice: dice,
-					signature: {
-						plain: signature,
-						urlescaped: base64url.escape(signature)
-					},
-					date: now.toISOString()
-				}
-			}));
-		});
-	}
+			async.waterfall([
+				callback => callback(pushToCopy(dice, now.getTime())),
+				validator.sign
+			], (error, signature) => {
+				res.json({
+					status: 'OK',
+					result: {
+						dice: dice,
+						signature: {
+							plain: signature,
+							urlescaped: base64url.escape(signature)
+						},
+						date: now.toISOString()
+					}
+				});
+			});
+			callback(null);
+		}]);
 }
 
 function validateRollArgs(req, res){
@@ -50,21 +60,30 @@ function validateRollArgs(req, res){
 			status: 'Error',
 			errors: errors
 		});
-		return false;
+		return 'Invalid Parameters';
 	}
-	return true;
+	return null;
 }
 
 function handleVerify(req, res){
-	req.params.signature = base64url.unescape(req.params.signature);
-	if(validateVerifyArgs(req, res)){
-		const queryDate = new Date(req.params.date);
-		req.params.diceArray.push(queryDate.getTime());
-		validator.verify(pushToCopy(req.params.diceArray, queryDate), req.params.signature, valid => res.json({
-			status: 'OK',
-			valid: valid
-		}));
-	}
+	async.waterfall([
+		callback => {
+			req.params.signature = base64url.unescape(req.params.signature);
+			callback(validateVerifyArgs(req, res));
+		},
+		callback => {
+			req.params.diceArray.push(new Date(req.params.date).getTime());
+			callback(null, req.params.diceArray, req.params.signature);
+		},
+		validator.verify,
+		(valid, callback) => {
+			res.json({
+				status: 'OK',
+				valid: valid
+			});
+			callback(null);
+		}
+	]);
 }
 
 function validateVerifyArgs(req, res){
@@ -98,9 +117,9 @@ function validateVerifyArgs(req, res){
 			status: 'Error',
 			errors: errors
 		});
-		return false;
+		return 'Invalid Parameters';
 	}
-	return true;
+	return null;
 }
 
 function pushToCopy(array, object){
