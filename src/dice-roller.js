@@ -1,21 +1,14 @@
 'use strict';
-const crypto = require('crypto');
+const Promise = require("bluebird");
+const randomNumber = require("random-number-csprng");
 const roller = {};
 
-function getByteCount(max, times){
-	return Math.ceil(Math.log2(Math.pow(max, times)) / 8);
-}
-
-roller.roll = function(max, times){
-	const byteCount = getByteCount(max, times);
-	const randomToken = crypto.randomBytes(byteCount).readUIntBE(0, byteCount);
-	var remainingToken = randomToken;
-	const dice = [];
+roller.roll = function(max, times, callback){
+	const promises = [];
 	for(var i = 0; i < times; i++){
-		dice.push((remainingToken % max) + 1);
-		remainingToken = Math.floor(remainingToken / max);
+		promises.push(randomNumber(1, max));
 	}
-	return dice;
+	Promise.all(promises).then(callback);
 };
 
 module.exports = roller;

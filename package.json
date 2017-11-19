@@ -20,7 +20,8 @@
     "express": "^4.15.3",
     "nconf": "^0.8.4",
     "nodemailer": "^4.0.1",
-    "pg-promise": "^6.3.8"
+    "pg-promise": "^6.3.8",
+    "random-number-csprng": "^1.0.2"
   },
   "devDependencies": {
     "eslint": "^4.11.0"

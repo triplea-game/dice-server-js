@@ -17,19 +17,20 @@ function handleRoll(req, res){
 	req.params.max = parseInt(req.params.max);
 	req.params.times = parseInt(req.params.times);
 	if(validateRollArgs(req, res)){
-		const dice = roller.roll(req.params.max, req.params.times);
-		const now = new Date();
-		validator.sign(pushToCopy(dice, now.getTime()), signature => res.json({
-			status: 'OK',
-			result: {
-				dice: dice,
-				signature: {
-					plain: signature,
-					urlescaped: base64url.escape(signature)
-				},
-				date: now.toISOString()
-			}
-		}));
+		roller.roll(req.params.max, req.params.times, dice => {
+			const now = new Date();
+			validator.sign(pushToCopy(dice, now.getTime()), signature => res.json({
+				status: 'OK',
+				result: {
+					dice: dice,
+					signature: {
+						plain: signature,
+						urlescaped: base64url.escape(signature)
+					},
+					date: now.toISOString()
+				}
+			}));
+		});
 	}
 }
 

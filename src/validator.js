@@ -12,13 +12,13 @@ const validator = {};
 validator.sign = function(diceArray, callback){
 	const sign = crypto.createSign(algorithm);
 	sign.update(Buffer.from(diceArray));
-	callback(sign.sign(privateKey, encoding));
+	new Promise(resolve => resolve(sign.sign(privateKey, encoding))).then(callback);
 };
 
 validator.verify = function(diceArray, signature, callback){
 	const verify = crypto.createVerify(algorithm);
 	verify.update(Buffer.from(diceArray));
-	callback(verify.verify(publicKey, signature, encoding));
+	new Promise(resolve => resolve(verify.verify(publicKey, signature, encoding))).then(callback);
 };
 
 module.exports = validator;
