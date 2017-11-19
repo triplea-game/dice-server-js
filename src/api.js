@@ -4,26 +4,18 @@ const validator = require('./validator');
 const base64url = require('base64-url');
 
 module.exports = function(router){
-	router.get('/verify/:diceArray/:signature/:date', transformParams({'signature': base64url.unescape}), handleVerify);
-	router.get('/roll/:max/:times/:email1/:email2', transformParams({'max': parseInt, 'times': parseInt}), handleRoll);
-	router.post('/roll', isUserRegistered, handleRoll);
+	router.get('/verify/:diceArray/:signature/:date', handleVerify);
+	router.post('/roll', registrationMiddleware, handleRoll);
 	return router;
 };
 
-function isUserRegistered(req, res, next){
+function registrationMiddleware(req, res, next){
 	next();
 }
 
-function transformParams(actionmap){
-	return function(req, res, next){
-		for(const key in actionmap){
-			req.params[key] = actionmap[key](req.params[key]);
-		}
-		next();
-	};
-}
-
 function handleRoll(req, res){
+	req.params.max = parseInt(req.params.max);
+	req.params.times = parseInt(req.params.times);
 	if(validateRollArgs(req, res)){
 		const dice = roller.roll(req.params.max, req.params.times);
 		const now = new Date();
@@ -63,6 +55,7 @@ function validateRollArgs(req, res){
 }
 
 function handleVerify(req, res){
+	req.params.signature = base64url.unescape(req.params.signature);
 	if(validateVerifyArgs(req, res)){
 		const queryDate = new Date(req.params.date);
 		req.params.diceArray.push(queryDate.getTime());
