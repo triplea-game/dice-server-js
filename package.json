@@ -4,7 +4,8 @@
   "description": "The Official TripleA Dice Server",
   "main": "dice-server.js",
   "scripts": {
-    "test": "./node_modules/.bin/eslint ."
+    "test": "./node_modules/.bin/eslint .",
+    "generate-keypair": "openssl genrsa -out privkey.pem 4096 && openssl rsa -in privkey.pem -outform PEM -pubout -out pubkey.pem"
   },
   "keywords": [
     "nodejs",

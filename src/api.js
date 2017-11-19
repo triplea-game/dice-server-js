@@ -63,18 +63,14 @@ function validateRollArgs(req, res){
 }
 
 function handleVerify(req, res){
-	if(!validateVerifyArgs(req, res)){
-		return;
+	if(validateVerifyArgs(req, res)){
+		const queryDate = new Date(req.params.date);
+		req.params.diceArray.push(queryDate.getTime());
+		validator.verify(pushToCopy(req.params.diceArray, queryDate), req.params.signature, valid => res.json({
+			status: 'OK',
+			valid: valid
+		}));
 	}
-	const queryDate = new Date(req.params.date);
-	req.params.diceArray.push(queryDate.getTime());
-	validator.verify(req.params.diceArray, req.params.signature, queryDate, valid => res.json({
-		status: 'OK',
-		valid: valid
-	}), e => res.status(410).json({
-		status: 'Error',
-		errors: [e]
-	}));
 }
 
 function validateVerifyArgs(req, res){

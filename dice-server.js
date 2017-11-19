@@ -20,18 +20,10 @@ nconf.defaults({
 		host: 'localhost',
 		port: 5432,
 		database: 'dicedb'
-	},
-	smtp: {
-		host: 'smtp.example.com',
-		port: 465,
-		secure: true, // secure:true for port 465, secure:false for port 587
-		auth: {
-			user: 'username@example.com',
-			pass: 'userpass'
-		}
-	},
-	emailsender: '"TripleA dice server🎲" <noreply@triplea-game.org>'
+	}
 });
+
+nconf.required(['server', 'database', 'smtp', 'private-key', 'public-key']);
 
 require('./src/db-handler').setupDb();
 
