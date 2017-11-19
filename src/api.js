@@ -3,15 +3,36 @@ const roller = require('./dice-roller');
 const validator = require('./validator');
 const base64url = require('base64-url');
 const async = require('async');
+const emailManager = require('./email-manager.js');
+const dbhandler = require('./db-handler');
 
 module.exports = function(router){
 	router.get('/verify/:diceArray/:signature/:date', handleVerify);
 	router.post('/roll', registrationMiddleware, handleRoll);
+	router.post('/register', handleEmailRegister);
+	router.post('/unregister', handleEmailUnregister);
 	return router;
 };
 
 function registrationMiddleware(req, res, next){
-	next();
+	const errors = [];
+	async.each([req.body.email1, req.body.email2], (email, callback) => {
+		dbhandler.checkMail(email, result => {
+			if(!result){
+				errors.push('Email "' + email +'" not registered.');
+			}
+			callback();
+		});
+	}, () => {
+		if(errors.length > 0){
+			res.status(403).json({
+				status: 'Error',
+				errors: errors
+			});
+		} else {
+			next();
+		}
+	});
 }
 
 function handleRoll(req, res){
@@ -100,7 +121,7 @@ function validateVerifyArgs(req, res, callback){
 				if(!(e instanceof SyntaxError)){
 					return callback(e);
 				} else {
-					errors.push('The supplied diceArray parameter is invalid JSON');
+					errors.push('The supplied diceArray parameter is invalid JSON.');
 				}
 			}
 			callback();
@@ -110,17 +131,17 @@ function validateVerifyArgs(req, res, callback){
 				if(Array.isArray(req.params.diceArray)){
 					req.params.diceArray = req.params.diceArray.map(o => parseInt(o));
 					if(req.params.diceArray.some(Number.isNaN)){
-						errors.push('The provided diceArray parameter contains values other than integers');
+						errors.push('The provided diceArray parameter contains values other than integers.');
 					}
 				} else{
-					errors.push('The provided diceArray parameter is not an array');
+					errors.push('The provided diceArray parameter is not an array.');
 				}
 			}
 			callback();
 		}
 	]);
 	if(req.params.signature.length !== 684){
-		errors.push('The provided signature has a wrong length');
+		errors.push('The provided signature has a wrong length.');
 	}
 	if(errors.length > 0){
 		res.status(422).json({
@@ -131,6 +152,28 @@ function validateVerifyArgs(req, res, callback){
 	} else {
 		callback(null);
 	}
+}
+
+function handleEmailRegister(req, res){
+	if(req.body.token){
+		emailManager.verifyEmail(req.params.email, base64url.unescape(req.params.token),
+			() => res.status(200).json({status: 'OK'}));
+	} else {
+		emailManager.registerEmail(req.body.email);
+	}
+}
+
+function handleEmailUnregister(req, res){
+	emailManager.unregisterEmail(req.body.email, rowCount => {
+		if(rowCount == 1){
+			res.status(200).json({status: 'OK'});
+		} else if(rowCount == 0){
+			res.status(412).json({
+				status: 'Error',
+				errors: ['Email "' + req.body.email + '" does not exist in the database.']
+			});
+		}
+	});
 }
 
 function pushToCopy(array, object){

@@ -11,12 +11,11 @@ const manager = {};
 manager.verifyEmail = function(email, token, callback){
 	if(emailMap.verify(email, token)){
 		dbhandler.addUser(email, callback);
-		return true;
 	}
-	return false;
 };
 
 manager.registerEmail = function(email){
+	//TODO replace with uuid package
 	const token = crypto.randomBytes(512).toString('base64');
 	emailMap.put(email, token);
 	sendEmailWithToken(email, token);
@@ -27,7 +26,7 @@ function sendEmailWithToken(email, token){
 	transport.sendEmail({
 		from: nconf.get('emailsender'),
 		to: email,
-		subject: 'Confirm your email',
+		subject: 'Confirm your email',//TODO use proper templating engine
 		html: 'Please click this link to confirm your email adress: <a href="' + url + '">Confirm!</a><br>It will expire after 24 hours or when a new confirmation email is sent.'
 	}, (error, info) => {
 		if (error) {

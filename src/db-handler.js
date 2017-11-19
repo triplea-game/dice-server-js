@@ -1,8 +1,6 @@
 'use strict';
 const dbconfig = require('nconf').get('database');
-const pg = require('pg-promise');
-const PreparedStatement = pg.PreparedStatement;
-const db = pg()('postgres://' + dbconfig.username + ':' + dbconfig.password + '@' + dbconfig.host + ':' + dbconfig.port + '/' + dbconfig.database);
+const db = require('pg-promise')()('postgres://' + dbconfig.username + ':' + dbconfig.password + '@' + dbconfig.host + ':' + dbconfig.port + '/' + dbconfig.database);
 
 const handler = {};
 
@@ -12,19 +10,19 @@ handler.setupDb = function(){
 };
 
 handler.addUser = function(email, callback){
-	db.none(new PreparedStatement('add-user', 'INSERT INTO users (email) VALUES ($1)', [email]))
+	db.none('INSERT INTO users (email) VALUES ($1)', email)
 		.then(callback)
 		.catch(reportError('Failed to add email "' + email + '" to the database.'));
 };
 
 handler.removeUser = function(email, callback){
-	db.result(new PreparedStatement('remove-user', 'DELETE FROM users WHERE email=$1', [email]))
+	db.result('DELETE FROM users WHERE email=$1', email, r => r.rowCount)
 		.then(callback)
 		.catch(reportError('Failed to remove email "' + email + '" from the database.'));
 };
 
 handler.checkMail = function(email, callback){
-	db.oneOrNone(new PreparedStatement('check-user', 'SELECT email FROM users WHERE email=$1', [email]))
+	db.oneOrNone('SELECT email FROM users WHERE email=$1', email)
 		.then(callback)
 		.catch(reportError('Failed to query email: ""' + email + '" from the database.'));
 };
