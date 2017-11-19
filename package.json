@@ -20,5 +20,8 @@
     "node-rsa": "^0.4.2",
     "nodemailer": "^4.0.1",
     "pg-promise": "^6.3.8"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0"
   }
 }

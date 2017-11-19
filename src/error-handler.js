@@ -1,13 +1,13 @@
 'use strict';
 
-module.exports = function(req, res){
-  const errorHandler = {};
+module.exports = function(){
+	const errorHandler = {};
 
-  errorHandler.requireParam = function(){
-    //TODO
-  }
+	errorHandler.requireParam = function(){
+		//TODO
+	};
 
-  //TODO add nice framework for handling syntax errors
+	//TODO add nice framework for handling syntax errors
 
-  return errorHandler;
-}
+	return errorHandler;
+};
