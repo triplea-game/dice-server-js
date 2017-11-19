@@ -11,11 +11,11 @@ TokenCache.prototype.put = function(key, value){
 };
 
 TokenCache.prototype.verify = function(key, token){
-	const value = this.map['email'];
+	const value = this.map[key];
 	if(value){
 		clearTimeout(value.timeout);
 	}
-	return delete this.map['email'] && value.value === token;
+	return delete this.map[key] && value.value === token;
 };
 
 module.exports = TokenCache;

@@ -156,10 +156,16 @@ function validateVerifyArgs(req, res, callback){
 
 function handleEmailRegister(req, res){
 	if(req.body.token){
-		emailManager.verifyEmail(req.params.email, base64url.unescape(req.params.token),
-			() => res.status(200).json({status: 'OK'}));
+		if(!emailManager.verifyEmail(req.params.email, base64url.unescape(req.params.token),
+			() => res.status(200).json({status: 'OK'}))){
+			res.status(403).json({
+				status: 'Error',
+				errors: 'invalid Token or mail.'
+			});
+		}
 	} else {
 		emailManager.registerEmail(req.body.email);
+		res.status(200).json({status: 'OK'});
 	}
 }
 

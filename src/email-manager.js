@@ -9,9 +9,10 @@ const emailMap = new (require('./token-cache.js'))();
 const manager = {};
 
 manager.verifyEmail = function(email, token, callback){
-	if(emailMap.verify(email, token)){
-		dbhandler.addUser(email, callback);
+	if(!emailMap.verify(email, token)){
+		return false;
 	}
+	dbhandler.addUser(email, callback);
 };
 
 manager.registerEmail = function(email){
