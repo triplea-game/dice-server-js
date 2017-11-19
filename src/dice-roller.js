@@ -12,7 +12,7 @@ roller.roll = function(max, times){
 	var remainingToken = randomToken;
 	const dice = [];
 	for(var i = 0; i < times; i++){
-		dice.push(remainingToken % max);
+		dice.push((remainingToken % max) + 1);
 		remainingToken = Math.floor(remainingToken / max);
 	}
 	return dice;
