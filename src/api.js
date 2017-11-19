@@ -19,8 +19,10 @@ function handleRoll(req, res){
 		callback => {
 			req.params.max = parseInt(req.params.max);
 			req.params.times = parseInt(req.params.times);
-			callback(validateRollArgs(req, res), req.params.max, req.params.times);
+			callback(null, req, res);
 		},
+		validateRollArgs,
+		callback => callback(null, req.params.max, req.params.times),
 		roller.roll,
 		(dice, callback) => {
 			const now = new Date();
@@ -44,33 +46,35 @@ function handleRoll(req, res){
 		}]);
 }
 
-function validateRollArgs(req, res){
+function validateRollArgs(req, res, callback){
 	const errors = [];
-	function validateIntParam(name){
+	async.each(['max', 'times'], (name, callback) => {
 		if(!req.params[name]){
 			errors.push(name + ' parameter is not defined');
 		} else if(!Number.isInteger(req.params[name])){
 			errors.push(name + ' parameter is not a valid number');
 		}
-	}
-	validateIntParam('max');
-	validateIntParam('times');
-	if(errors.length > 0){
-		res.status(422).json({
-			status: 'Error',
-			errors: errors
-		});
-		return 'Invalid Parameters';
-	}
-	return null;
+		callback();
+	},
+	() => {
+		if(errors.length > 0){
+			res.status(422).json({
+				status: 'Error',
+				errors: errors
+			});
+			callback(errors);
+		}
+		callback(null);
+	});
 }
 
 function handleVerify(req, res){
 	async.waterfall([
 		callback => {
 			req.params.signature = base64url.unescape(req.params.signature);
-			callback(validateVerifyArgs(req, res));
+			callback(null, req, res);
 		},
+		validateVerifyArgs,
 		callback => {
 			req.params.diceArray.push(new Date(req.params.date).getTime());
 			callback(null, req.params.diceArray, req.params.signature);
@@ -86,29 +90,35 @@ function handleVerify(req, res){
 	]);
 }
 
-function validateVerifyArgs(req, res){
+function validateVerifyArgs(req, res, callback){
 	const errors = [];
-	if(typeof req.params.diceArray === 'string'){
-		try {
-			req.params.diceArray = JSON.parse(req.params.diceArray);
-		} catch(e){
-			if(!(e instanceof SyntaxError)){
-				throw e;
-			} else {
-				errors.push('The supplied diceArray parameter is invalid JSON');
+	async.waterfall([
+		callback => {
+			try {
+				req.params.diceArray = JSON.parse(req.params.diceArray);
+			} catch(e){
+				if(!(e instanceof SyntaxError)){
+					return callback(e);
+				} else {
+					errors.push('The supplied diceArray parameter is invalid JSON');
+				}
 			}
-		}
-	}
-	if(errors.length === 0){
-		if(Array.isArray(req.params.diceArray)){
-			req.params.diceArray = req.params.diceArray.map(o => parseInt(o));
-			if(req.params.diceArray.some(Number.isNaN)){
-				errors.push('The provided diceArray parameter contains values other than integers');
+			callback();
+		},
+		callback => {
+			if(errors.length === 0){
+				if(Array.isArray(req.params.diceArray)){
+					req.params.diceArray = req.params.diceArray.map(o => parseInt(o));
+					if(req.params.diceArray.some(Number.isNaN)){
+						errors.push('The provided diceArray parameter contains values other than integers');
+					}
+				} else{
+					errors.push('The provided diceArray parameter is not an array');
+				}
 			}
-		} else{
-			errors.push('The provided diceArray parameter is not an array');
+			callback();
 		}
-	}
+	]);
 	if(req.params.signature.length !== 684){
 		errors.push('The provided signature has a wrong length');
 	}
@@ -117,9 +127,10 @@ function validateVerifyArgs(req, res){
 			status: 'Error',
 			errors: errors
 		});
-		return 'Invalid Parameters';
+		callback(errors);
+	} else {
+		callback(null);
 	}
-	return null;
 }
 
 function pushToCopy(array, object){
