@@ -15,7 +15,7 @@
   "author": "TripleA-Organisation",
   "license": "MIT",
   "dependencies": {
-    "base64-url": "^1.3.3",
+    "base64-url": "^2.2.0",
     "body-parser": "^1.18.2",
     "express": "^4.15.3",
     "nconf": "^0.8.4",
