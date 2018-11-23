@@ -35,14 +35,14 @@ const sendEmailWithToken = (email, token) => {
 		}
 		console.log('Message %s sent: %s', info.messageId, info.response);
 	});
-}
+};
 
 const getServerBaseUrl = () => {
 	const server = nconf.get('server');
 	const isCommonPort = () =>
 		(server.port === 80 && server.protocol === 'http') || (server.port === 443 && server.protocol === 'https');
 	return server.protocol + '://' + server.host + (isCommonPort() ? '' : (':' + server.port)) + server.baseurl;
-}
+};
 
 
 manager.unregisterEmail = (email, callback) => {

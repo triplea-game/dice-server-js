@@ -3,8 +3,8 @@ const dbconfig = require('nconf').get('database');
 const db = require('pg-promise')()('postgres://' + dbconfig.username + ':' + dbconfig.password + '@' + dbconfig.host + ':' + dbconfig.port + '/' + dbconfig.database);
 
 const reportError = (message) => (e) => {
-		console.error(message);
-		console.error(e);
+	console.error(message);
+	console.error(e);
 };
 
 const handler = {};

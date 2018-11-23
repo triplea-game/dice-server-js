@@ -9,7 +9,7 @@ const registrationMiddleware = async (req, res, next) => {
 	const errors = [];
 	const checkPromises = [req.body.email1, req.body.email2].map((email) => (
 		new Promise((resolve) => dbhandler.checkMail(email, result => {
-			if(!result){
+			if (!result) {
 				errors.push(`Email "${email}" not registered.`);
 			}
 			resolve();
@@ -26,7 +26,7 @@ const registrationMiddleware = async (req, res, next) => {
 	} else {
 		next();
 	}
-}
+};
 
 const handleRoll = async (req, res) => {
 		req.params.max = parseInt(req.params.max);
@@ -47,7 +47,7 @@ const handleRoll = async (req, res) => {
 				}
 			})
 		}
-}
+};
 
 const validateRollArgs = (req, res) => {
 	const errors = [];
@@ -66,7 +66,7 @@ const validateRollArgs = (req, res) => {
 		return false;
 	}
 	return true;
-}
+};
 
 const handleVerify = (req, res) => {
 	req.params.signature = base64url.unescape(req.params.signature);
@@ -78,7 +78,7 @@ const handleVerify = (req, res) => {
 			valid: valid
 		});
 	}
-}
+};
 
 const validateVerifyArgs = (req, res) => {
 	const errors = [];
@@ -112,7 +112,7 @@ const validateVerifyArgs = (req, res) => {
 		return false;
 	}
 	return true;
-}
+};
 
 const handleEmailRegister = (req, res) => {
 	if (req.body.token) {
@@ -127,7 +127,7 @@ const handleEmailRegister = (req, res) => {
 		emailManager.registerEmail(req.body.email);
 		res.status(200).json({status: 'OK'});
 	}
-}
+};
 
 const handleEmailUnregister = (req, res) => {
 	emailManager.unregisterEmail(req.body.email, rowCount => {
@@ -136,17 +136,17 @@ const handleEmailUnregister = (req, res) => {
 		} else if (rowCount == 0) {
 			res.status(412).json({
 				status: 'Error',
-				errors: ['Email "' + req.body.email + '" does not exist in the database.']
+				errors: [`Email "${req.body.email}" does not exist in the database.`]
 			});
 		}
 	});
-}
+};
 
 const pushToCopy = (array, object) => {
 	const copy = array.slice();
 	array.push(object);
 	return copy;
-}
+};
 
 module.exports = (router) => {
 	router.get('/verify/:diceArray/:signature/:date', handleVerify);
