@@ -10,7 +10,7 @@ const publicKey = fs.readFileSync(nconf.get('public-key'));
 
 const validator = {};
 
-validator.sign = function(diceArray, callback){
+validator.sign = (diceArray, callback) => {
 	new Promise(resolve => {
 		const sign = crypto.createSign(algorithm);
 		sign.update(Buffer.from(diceArray));
@@ -18,7 +18,7 @@ validator.sign = function(diceArray, callback){
 	}).asCallback(callback);
 };
 
-validator.verify = function(diceArray, signature, callback){
+validator.verify = (diceArray, signature, callback) => {
 	new Promise(resolve => {
 		const verify = crypto.createVerify(algorithm);
 		verify.update(Buffer.from(diceArray));

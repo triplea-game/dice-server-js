@@ -8,21 +8,21 @@ const emailMap = new (require('../util/token-cache.js'))();
 
 const manager = {};
 
-manager.verifyEmail = function(email, token, callback){
+manager.verifyEmail = (email, token, callback) => {
 	if(!emailMap.verify(email, token)){
 		return false;
 	}
 	dbhandler.addUser(email, callback);
 };
 
-manager.registerEmail = function(email){
+manager.registerEmail = (email) => {
 	//TODO replace with uuid package
 	const token = crypto.randomBytes(512).toString('base64');
 	emailMap.put(email, token);
 	sendEmailWithToken(email, token);
 };
 
-function sendEmailWithToken(email, token){
+const sendEmailWithToken = (email, token) => {
 	const url = getServerBaseUrl() + '/verify/' + email + '/' + base64url.escape(token);
 	transport.sendEmail({
 		from: nconf.get('emailsender'),
@@ -37,16 +37,15 @@ function sendEmailWithToken(email, token){
 	});
 }
 
-function getServerBaseUrl(){
+const getServerBaseUrl = () => {
 	const server = nconf.get('server');
-	function isCommonPort(){
-		return (server.port === 80 && server.protocol === 'http') || (server.port === 443 && server.protocol === 'https');
-	}
+	const isCommonPort = () =>
+		(server.port === 80 && server.protocol === 'http') || (server.port === 443 && server.protocol === 'https');
 	return server.protocol + '://' + server.host + (isCommonPort() ? '' : (':' + server.port)) + server.baseurl;
 }
 
 
-manager.unregisterEmail = function(email, callback){
+manager.unregisterEmail = (email, callback) => {
 	dbhandler.removeUser(email, callback);
 };
 

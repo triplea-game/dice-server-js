@@ -6,15 +6,7 @@ const async = require('async');
 const emailManager = require('./email-manager.js');
 const dbhandler = require('./db-handler');
 
-module.exports = function(router){
-	router.get('/verify/:diceArray/:signature/:date', handleVerify);
-	router.post('/roll', registrationMiddleware, handleRoll);
-	router.post('/register', handleEmailRegister);
-	router.post('/unregister', handleEmailUnregister);
-	return router;
-};
-
-function registrationMiddleware(req, res, next){
+const registrationMiddleware = (req, res, next) => {
 	const errors = [];
 	async.each([req.body.email1, req.body.email2], (email, callback) => {
 		dbhandler.checkMail(email, result => {
@@ -35,7 +27,7 @@ function registrationMiddleware(req, res, next){
 	});
 }
 
-function handleRoll(req, res){
+const handleRoll = (req, res) => {
 	async.waterfall([
 		callback => {
 			req.params.max = parseInt(req.params.max);
@@ -67,7 +59,7 @@ function handleRoll(req, res){
 		}]);
 }
 
-function validateRollArgs(req, res, callback){
+const validateRollArgs = (req, res, callback) => {
 	const errors = [];
 	async.each(['max', 'times'], (name, callback) => {
 		if(!req.params[name]){
@@ -90,7 +82,7 @@ function validateRollArgs(req, res, callback){
 	});
 }
 
-function handleVerify(req, res){
+const handleVerify = (req, res) => {
 	async.waterfall([
 		callback => {
 			req.params.signature = base64url.unescape(req.params.signature);
@@ -112,7 +104,7 @@ function handleVerify(req, res){
 	]);
 }
 
-function validateVerifyArgs(req, res, callback){
+const validateVerifyArgs = (req, res, callback) => {
 	const errors = [];
 	async.waterfall([
 		callback => {
@@ -155,7 +147,7 @@ function validateVerifyArgs(req, res, callback){
 	}
 }
 
-function handleEmailRegister(req, res){
+const handleEmailRegister = (req, res) => {
 	if(req.body.token){
 		if(!emailManager.verifyEmail(req.params.email, base64url.unescape(req.params.token),
 			() => res.status(200).json({status: 'OK'}))){
@@ -170,7 +162,7 @@ function handleEmailRegister(req, res){
 	}
 }
 
-function handleEmailUnregister(req, res){
+const handleEmailUnregister = (req, res) => {
 	emailManager.unregisterEmail(req.body.email, rowCount => {
 		if(rowCount == 1){
 			res.status(200).json({status: 'OK'});
@@ -183,8 +175,16 @@ function handleEmailUnregister(req, res){
 	});
 }
 
-function pushToCopy(array, object){
+const pushToCopy = (array, object) => {
 	const copy = array.slice();
 	array.push(object);
 	return copy;
 }
+
+module.exports = (router) => {
+	router.get('/verify/:diceArray/:signature/:date', handleVerify);
+	router.post('/roll', registrationMiddleware, handleRoll);
+	router.post('/register', handleEmailRegister);
+	router.post('/unregister', handleEmailUnregister);
+	return router;
+};
