@@ -1,10 +1,12 @@
 'use strict';
 const express = require('express');
 const nconf = require('nconf');
+const bodyParser = require('body-parser');
+
 const app = express();
 const routerParams = {caseSensitive: true, strict: true};
 const rootRouter = express.Router(routerParams);
-const bodyParser = require('body-parser');
+
 
 nconf.argv().env().file({file: './config.json'});
 
@@ -28,7 +30,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 nconf.required(['server', 'database', 'smtp', 'private-key', 'public-key']);
 
-require('./src/api/db-handler').setupDb();
+const { setupDb } = require('./src/api/db-handler');
+setupDb();
 
 require('./src/controller')(rootRouter, express.Router(routerParams));
 app.use(nconf.get('server:baseurl'), rootRouter);
