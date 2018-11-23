@@ -28,10 +28,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 nconf.required(['server', 'database', 'smtp', 'private-key', 'public-key']);
 
-require('./src/db-handler').setupDb();
+require('./src/api/db-handler').setupDb();
 
 require('./src/controller')(rootRouter, express.Router(routerParams));
 app.use(nconf.get('server:baseurl'), rootRouter);
-app.listen(nconf.get('server:port'), function(){
-	console.info('Running on port ' + nconf.get('server:port'));
-});
+app.listen(nconf.get('server:port'), () => console.info('Running on port ' + nconf.get('server:port')));

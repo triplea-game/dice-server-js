@@ -4,7 +4,7 @@ const nconf = require('nconf');
 const transport = require('nodemailer').createTransport(nconf.get('smtp'));
 const base64url = require('base64-url');
 const crypto = require('crypto');
-const emailMap = new (require('./token-cache.js'))();
+const emailMap = new (require('../util/token-cache.js'))();
 
 const manager = {};
 

@@ -84,8 +84,9 @@ function validateRollArgs(req, res, callback){
 				errors: errors
 			});
 			callback(errors);
+		} else {
+			callback(null);
 		}
-		callback(null);
 	});
 }
 
