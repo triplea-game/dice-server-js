@@ -3,12 +3,12 @@ const Promise = require('bluebird');
 const randomNumber = require('random-number-csprng');
 const roller = {};
 
-roller.roll = (max, times, callback) => {
+roller.roll = (max, times) => {
 	const promises = [];
-	for(var i = 0; i < times; i++){
+	for (let i = 0; i < times; i++) {
 		promises.push(randomNumber(1, max));
 	}
-	Promise.all(promises).asCallback(callback);
+	return Promise.all(promises);
 };
 
 module.exports = roller;
