@@ -19,30 +19,35 @@ class Api {
 
   async registrationMiddleware(req, res, next) {
     const errors = [];
-    await Promise.all([req.body.email1, req.body.email2].map(email => (
-      this.dbHandler.checkMail(email).then((result) => {
-        if (!result) {
-          errors.push(`Email "${email}" not registered.`);
-        }
-      })
-    )));
-    if (errors.length > 0) {
-      res.status(403).json({
-        status: 'Error',
-        errors,
-      });
-    } else {
-      next();
+    try {
+      await Promise.all([req.body.email1, req.body.email2].map(email => (
+        this.dbHandler.checkMail(email).then((result) => {
+          if (!result) {
+            errors.push(`Email "${email}" not registered.`);
+          }
+        })
+      )));
+      if (errors.length > 0) {
+        res.status(403).json({
+          status: 'Error',
+          errors,
+        });
+      } else {
+        next();
+      }
+    } catch (e) {
+      res.status(500).json({ status: 'Error', errors: [e.toString()]});
     }
   }
 
   static validateRollArgs(req, res, next) {
     const errors = [];
     ['max', 'times'].forEach((name) => {
-      if (!req.params[name]) {
+      if (!req.body[name]) {
         errors.push(`${name} parameter is not defined`);
+      } else {
+        req.body[name] = parseInt(req.body[name], 10);
       }
-      req.params[name] = parseInt(req.params[name], 10);
     });
     if (errors.length > 0) {
       res.status(422).json({
@@ -55,7 +60,7 @@ class Api {
   }
 
   async handleRoll(req, res) {
-    const dice = await roller.roll(req.params.max, req.params.times);
+    const dice = await roller.roll(req.body.max, req.body.times);
     const now = new Date();
     const signature = await this.validator.sign(pushToCopy(dice, now.getTime()));
     res.json({
