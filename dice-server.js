@@ -1,5 +1,8 @@
 const nconf = require('nconf');
 
+const DbHandler = require('./src/api/db-handler');
+const controller = require('./src/controller');
+
 // TODO move to dedicated module
 nconf.argv().env().file({ file: './config.json' });
 nconf.defaults({
@@ -18,12 +21,4 @@ nconf.defaults({
   },
 });
 nconf.required(['server', 'database', 'smtp', 'private-key', 'public-key']);
-
-// TODO move imports to top once possible
-const { setupDb } = require('./src/api/db-handler');
-
-setupDb();
-
-const controller = require('./src/controller');
-
-controller(nconf.get('server:baseurl'), nconf.get('server:port'));
+controller(nconf.get('server:baseurl'), nconf.get('server:port'), nconf.get('database'));

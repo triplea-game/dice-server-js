@@ -1,21 +1,17 @@
 const nconf = require('nconf');
-const transport = require('nodemailer').createTransport(nconf.get('smtp'));
+const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const dbhandler = require('./db-handler');
 const TokenCache = require('../util/token-cache.js');
 
-const emailMap = new TokenCache();
-
-const getServerBaseUrl = () => {
-  const server = nconf.get('server');
+const getServerBaseUrl = (server) => {
   const isCommonPort = () => (server.port === 80 && server.protocol === 'http') || (server.port === 443 && server.protocol === 'https');
   return `${server.protocol}://${server.host}${isCommonPort() ? '' : (`:${server.port}`)}${server.baseurl}`;
 };
 
-const sendEmailWithToken = (email, token) => {
-  const url = `${getServerBaseUrl()}/verify/${email}/${encodeURIComponent(token)}`;
+const sendEmailWithToken = (email, token, transport, sender, server) => {
+  const url = `${getServerBaseUrl(server)}/verify/${email}/${encodeURIComponent(token)}`;
   transport.sendEmail({
-    from: nconf.get('emailsender'),
+    from: sender,
     to: email,
     subject: 'Confirm your email', // TODO use proper templating engine
     html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a><br>It will expire after 24 hours or when a new confirmation email is sent.`,
@@ -28,23 +24,32 @@ const sendEmailWithToken = (email, token) => {
   });
 };
 
-const manager = {};
-
-manager.verifyEmail = async (email, token) => {
-  if (!emailMap.verify(email, token)) {
-    return false;
+class Manager {
+  constructor(dbhandler, transport, server, emailsender) {
+    this.dbhandler = dbhandler;
+    this.emailMap = new TokenCache();
+    this.transport = nodemailer.createTransport(transport);
+    this.server = server;
+    this.emailsender = emailsender;
   }
-  await dbhandler.addUser(email);
-  return true;
-};
 
-manager.registerEmail = (email) => {
-  // TODO replace with uuid package
-  const token = crypto.randomBytes(512).toString('base64');
-  emailMap.put(email, token);
-  sendEmailWithToken(email, token);
-};
+  async verifyEmail(email, token) {
+    if (!this.emailMap.verify(email, token)) {
+      return false;
+    }
+    await this.dbhandler.addUser(email);
+    return true;
+  }
 
-manager.unregisterEmail = email => dbhandler.removeUser(email);
+  registerEmail(email) {
+    const token = crypto.randomBytes(512).toString('base64');
+    this.emailMap.put(email, token);
+    sendEmailWithToken(email, token, this.transport, this.emailsender, this.server);
+  }
 
-module.exports = manager;
+  unregisterEmail(email) {
+    return this.dbhandler.removeUser(email);
+  }
+}
+
+module.exports = Manager;

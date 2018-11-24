@@ -4,22 +4,24 @@ const crypto = require('crypto');
 
 const algorithm = 'RSA-SHA512';
 const encoding = 'base64';
-// TODO convert to class so this can be initialized per instance
-const privateKey = fs.readFileSync(nconf.get('private-key'));
-const publicKey = fs.readFileSync(nconf.get('public-key'));
 
-const validator = {};
+class Validator {
+  constructor() {
+    this.privateKey = fs.readFileSync(nconf.get('private-key'));
+    this.publicKey = fs.readFileSync(nconf.get('public-key'));
+  }
 
-validator.sign = async (diceArray) => {
-  const sign = crypto.createSign(algorithm);
-  sign.update(Buffer.from(diceArray));
-  return sign.sign(privateKey, encoding);
-};
+  async sign(diceArray) {
+    const sign = crypto.createSign(algorithm);
+    sign.update(Buffer.from(diceArray));
+    return sign.sign(this.privateKey, encoding);
+  }
 
-validator.verify = async (diceArray, signature) => {
-  const verify = crypto.createVerify(algorithm);
-  verify.update(Buffer.from(diceArray));
-  return verify.verify(publicKey, signature, encoding);
-};
+  async verify(diceArray, signature) {
+    const verify = crypto.createVerify(algorithm);
+    verify.update(Buffer.from(diceArray));
+    return verify.verify(this.publicKey, signature, encoding);
+  }
+}
 
-module.exports = validator;
+module.exports = Validator;

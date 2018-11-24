@@ -1,21 +1,30 @@
-const dbconfig = require('nconf').get('database');
-// TODO convert to class, so the connection can be made per instance
-const db = require('pg-promise')()(`postgres://${dbconfig.username}:${dbconfig.password}@${dbconfig.host}:${dbconfig.port}/${dbconfig.database}`);
+const pg = require('pg-promise')();
 
-const handler = {};
+class Handler {
+  constructor({ username, password, host, port, database}) {
+    this.db = pg(`postgres://${username}:${password}@${host}:${port}/${database}`);
+    this.setupDb();
+  }
 
-handler.setupDb = () => (
-  db.none('CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);')
+  setupDb() {
+    this.db.none('CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);')
     .catch((e) => {
       console.error('Failed to create table "users"');
       console.error(e);
     })
-);
+  }
 
-handler.addUser = email => db.none('INSERT INTO users (email) VALUES ($1)', email);
+  addUser(email) {
+    return this.db.none('INSERT INTO users (email) VALUES ($1)', email);
+  }
 
-handler.removeUser = email => db.result('DELETE FROM users WHERE email=$1', email, r => r.rowCount);
+  removeUser(email) {
+    return this.db.result('DELETE FROM users WHERE email=$1', email, r => r.rowCount);
+  }
 
-handler.checkMail = email => db.oneOrNone('SELECT email FROM users WHERE email=$1', email);
+  checkMail(email) {
+    return this.db.oneOrNone('SELECT email FROM users WHERE email=$1', email);
+  }
+}
 
-module.exports = handler;
+module.exports = Handler;
