@@ -154,6 +154,8 @@ module.exports = (router, database) => {
   router.get('/register/:email/:token', api.handleEmailRegisterConfirm.bind(api));
   router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
 
-  router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }));
+  // express.js behaves differently if no next parameter is used here
+  // so we call next in case something's odd to please ESLint
+  router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }) || next());
   return router;
 };
