@@ -36,44 +36,39 @@ class Api {
     }
   }
 
-  static validateRollArgs(req, res) {
+  static validateRollArgs(req, res, next) {
     const errors = [];
     ['max', 'times'].forEach((name) => {
       if (!req.params[name]) {
         errors.push(`${name} parameter is not defined`);
-      } else if (!Number.isInteger(req.params[name])) {
-        errors.push(`${name} parameter is not a valid number`);
       }
+      req.params[name] = parseInt(req.params[name], 10);
     });
     if (errors.length > 0) {
       res.status(422).json({
         status: 'Error',
         errors,
       });
-      return false;
+    } else {
+      next();
     }
-    return true;
   }
 
   async handleRoll(req, res) {
-    req.params.max = parseInt(req.params.max, 10);
-    req.params.times = parseInt(req.params.times, 10);
-    if (Api.validateRollArgs(req, res)) {
-      const dice = await roller.roll(req.params.max, req.params.times);
-      const now = new Date();
-      const signature = await this.validator.sign(pushToCopy(dice, now.getTime()));
-      res.json({
-        status: 'OK',
-        result: {
-          dice,
-          signature,
-          date: now.toISOString(),
-        },
-      });
-    }
+    const dice = await roller.roll(req.params.max, req.params.times);
+    const now = new Date();
+    const signature = await this.validator.sign(pushToCopy(dice, now.getTime()));
+    res.json({
+      status: 'OK',
+      result: {
+        dice,
+        signature,
+        date: now.toISOString(),
+      },
+    });
   }
 
-  static validateVerifyArgs(req, res) {
+  static validateVerifyArgs(req, res, next) {
     const errors = [];
     try {
       const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
@@ -107,20 +102,18 @@ class Api {
         status: 'Error',
         errors,
       });
-      return false;
+    } else {
+      next();
     }
-    return true;
   }
 
   async handleVerify(req, res) {
-    if (Api.validateVerifyArgs(req, res)) {
-      req.params.dice.push(new Date(req.params.date).getTime());
-      const valid = await this.validator.verify(req.params.dice, req.params.signature);
-      res.json({
-        status: 'OK',
-        valid,
-      });
-    }
+    req.params.dice.push(new Date(req.params.date).getTime());
+    const valid = await this.validator.verify(req.params.dice, req.params.signature);
+    res.json({
+      status: 'OK',
+      valid,
+    });
   }
 
   async handleEmailRegister(req, res) {
@@ -155,8 +148,8 @@ class Api {
 
 module.exports = (router, database) => {
   const api = new Api(database);
-  router.get('/verify/:token', api.handleVerify);
-  router.post('/roll', api.registrationMiddleware, api.handleRoll);
+  router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify);
+  router.post('/roll', api.registrationMiddleware, Api.validateRollArgs, api.handleRoll);
   router.post('/register', api.handleEmailRegister);
   router.post('/unregister', api.handleEmailUnregister);
   return router;
