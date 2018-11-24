@@ -1,9 +1,6 @@
 const nconf = require('nconf');
-
-const DbHandler = require('./src/api/db-handler');
 const controller = require('./src/controller');
 
-// TODO move to dedicated module
 nconf.argv().env().file({ file: './config.json' });
 nconf.defaults({
   server: {

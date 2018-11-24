@@ -2,16 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const apiMiddleware = require('./api/api');
 
-const nestMiddleware = (middleware, ...arguments) => {
-  middleware(...arguments);
-  return arguments[0];
-};
-
 const setupRoutes = (db) => {
   const routerParams = { caseSensitive: true, strict: true };
   const router = express.Router(routerParams);
 
-  router.use('/api', nestMiddleware(apiMiddleware, express.Router(routerParams), db));
+  router.use('/api', apiMiddleware(express.Router(routerParams), db));
   // TODO use templating engine to create user friendly registration sites
   return router;
 };

@@ -1,11 +1,12 @@
-const nconf = require('nconf');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const TokenCache = require('../util/token-cache.js');
 
-const getServerBaseUrl = (server) => {
-  const isCommonPort = () => (server.port === 80 && server.protocol === 'http') || (server.port === 443 && server.protocol === 'https');
-  return `${server.protocol}://${server.host}${isCommonPort() ? '' : (`:${server.port}`)}${server.baseurl}`;
+const getServerBaseUrl = ({
+  port, protocol, host, baseurl,
+}) => {
+  const isCommonPort = () => (port === 80 && protocol === 'http') || (port === 443 && protocol === 'https');
+  return `${protocol}://${host}${isCommonPort() ? '' : (`:${port}`)}${baseurl}`;
 };
 
 const sendEmailWithToken = (email, token, transport, sender, server) => {

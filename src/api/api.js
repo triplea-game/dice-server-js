@@ -36,7 +36,7 @@ class Api {
     }
   }
 
-  validateRollArgs(req, res) {
+  static validateRollArgs(req, res) {
     const errors = [];
     ['max', 'times'].forEach((name) => {
       if (!req.params[name]) {
@@ -53,12 +53,12 @@ class Api {
       return false;
     }
     return true;
-  };
+  }
 
   async handleRoll(req, res) {
     req.params.max = parseInt(req.params.max, 10);
     req.params.times = parseInt(req.params.times, 10);
-    if (validateRollArgs(req, res)) {
+    if (Api.validateRollArgs(req, res)) {
       const dice = await roller.roll(req.params.max, req.params.times);
       const now = new Date();
       const signature = await this.validator.sign(pushToCopy(dice, now.getTime()));
@@ -71,9 +71,9 @@ class Api {
         },
       });
     }
-  };
+  }
 
-  validateVerifyArgs(req, res) {
+  static validateVerifyArgs(req, res) {
     const errors = [];
     try {
       req.params.diceArray = JSON.parse(req.params.diceArray);
@@ -105,10 +105,10 @@ class Api {
       return false;
     }
     return true;
-  };
+  }
 
   async handleVerify(req, res) {
-    if (validateVerifyArgs(req, res)) {
+    if (Api.validateVerifyArgs(req, res)) {
       req.params.diceArray.push(new Date(req.params.date).getTime());
       const valid = await this.validator.verify(req.params.diceArray, req.params.signature);
       res.json({
@@ -116,7 +116,7 @@ class Api {
         valid,
       });
     }
-  };
+  }
 
   async handleEmailRegister(req, res) {
     if (req.body.token) {
@@ -133,7 +133,7 @@ class Api {
       this.emailManager.registerEmail(req.body.email);
       res.status(200).json({ status: 'OK' });
     }
-  };
+  }
 
   async handleEmailUnregister(req, res) {
     const rowCount = await this.emailManager.unregisterEmail(req.body.email);
@@ -145,7 +145,7 @@ class Api {
         errors: [`Email "${req.body.email}" does not exist in the database.`],
       });
     }
-  };
+  }
 }
 
 module.exports = (router, database) => {
@@ -154,4 +154,5 @@ module.exports = (router, database) => {
   router.post('/roll', api.registrationMiddleware, api.handleRoll);
   router.post('/register', api.handleEmailRegister);
   router.post('/unregister', api.handleEmailUnregister);
+  return router;
 };
