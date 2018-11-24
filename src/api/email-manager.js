@@ -24,7 +24,7 @@ const sendEmailWithToken = (email, token, transport, sender, server) => {
   });
 };
 
-class Manager {
+class EmailManager {
   constructor(dbhandler, transport, server, emailsender) {
     this.dbhandler = dbhandler;
     this.emailMap = new TokenCache();
@@ -52,4 +52,4 @@ class Manager {
   }
 }
 
-module.exports = Manager;
+module.exports = EmailManager;

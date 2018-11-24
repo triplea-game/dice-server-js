@@ -1,6 +1,6 @@
 const pg = require('pg-promise')();
 
-class Handler {
+class DbHandler {
   constructor({ username, password, host, port, database}) {
     this.db = pg(`postgres://${username}:${password}@${host}:${port}/${database}`);
     this.setupDb();
@@ -27,4 +27,4 @@ class Handler {
   }
 }
 
-module.exports = Handler;
+module.exports = DbHandler;
