@@ -1,6 +1,5 @@
 const nconf = require('nconf');
 const transport = require('nodemailer').createTransport(nconf.get('smtp'));
-const base64url = require('base64-url');
 const crypto = require('crypto');
 const dbhandler = require('./db-handler');
 const TokenCache = require('../util/token-cache.js');
@@ -14,7 +13,7 @@ const getServerBaseUrl = () => {
 };
 
 const sendEmailWithToken = (email, token) => {
-  const url = `${getServerBaseUrl()}/verify/${email}/${base64url.escape(token)}`;
+  const url = `${getServerBaseUrl()}/verify/${email}/${encodeURIComponent(token)}`;
   transport.sendEmail({
     from: nconf.get('emailsender'),
     to: email,

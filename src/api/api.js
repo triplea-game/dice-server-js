@@ -1,4 +1,3 @@
-const base64url = require('base64-url');
 const roller = require('./dice-roller');
 const validator = require('./validator');
 const emailManager = require('./email-manager.js');
@@ -59,10 +58,7 @@ const handleRoll = async (req, res) => {
       status: 'OK',
       result: {
         dice,
-        signature: {
-          plain: signature,
-          urlescaped: base64url.escape(signature),
-        },
+        signature,
         date: now.toISOString(),
       },
     });
@@ -104,7 +100,6 @@ const validateVerifyArgs = (req, res) => {
 };
 
 const handleVerify = async (req, res) => {
-  req.params.signature = base64url.unescape(req.params.signature);
   if (validateVerifyArgs(req, res)) {
     req.params.diceArray.push(new Date(req.params.date).getTime());
     const valid = await validator.verify(req.params.diceArray, req.params.signature);
@@ -117,8 +112,7 @@ const handleVerify = async (req, res) => {
 
 const handleEmailRegister = async (req, res) => {
   if (req.body.token) {
-    const verified = await emailManager.verifyEmail(req.params.email,
-      base64url.unescape(req.params.token));
+    const verified = await emailManager.verifyEmail(req.params.email);
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
