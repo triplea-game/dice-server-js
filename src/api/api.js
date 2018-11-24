@@ -154,7 +154,7 @@ class Api {
     if (typeof req.body.email === 'string') {
       next();
     } else {
-      res.status(412).json({
+      res.status(422).json({
         status: 'Error',
         errors: ['Body Parameter Email is missing'],
       });
