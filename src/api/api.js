@@ -76,26 +76,31 @@ class Api {
   static validateVerifyArgs(req, res) {
     const errors = [];
     try {
-      req.params.diceArray = JSON.parse(req.params.diceArray);
+      const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
+      req.params.dice = information.dice;
+      req.params.date = information.date;
+      req.params.signature = information.signature;
     } catch (e) {
-      if (e instanceof SyntaxError) {
-        errors.push('The supplied diceArray parameter is invalid JSON.');
-      } else {
-        throw e;
-      }
+      errors.push('The supplied diceArray parameter is invalid JSON.');
     }
     if (errors.length === 0) {
-      if (Array.isArray(req.params.diceArray)) {
-        req.params.diceArray = req.params.diceArray.map(o => parseInt(o, 10));
-        if (req.params.diceArray.some(Number.isNaN)) {
-          errors.push('The provided diceArray parameter contains values other than integers.');
+      if (Array.isArray(req.params.dice)) {
+        if (req.params.dice.some(Number.isNaN)) {
+          errors.push('The provided dice parameter contains values other than integers.');
         }
       } else {
-        errors.push('The provided diceArray parameter is not an array.');
+        errors.push('The provided dice parameter is not an array.');
       }
     }
-    if (req.params.signature.length !== 684) {
-      errors.push('The provided signature has a wrong length.');
+    if (typeof req.params.signature === 'string') {
+      if (req.params.signature.length !== 684) {
+        errors.push('The provided signature has a wrong length.');
+      }
+    } else {
+      errors.push('The provided signature is not from type string');
+    }
+    if (typeof req.params.date !== 'string') {
+      errors.push('The provided data is not from type string');
     }
     if (errors.length > 0) {
       res.status(422).json({
@@ -109,8 +114,8 @@ class Api {
 
   async handleVerify(req, res) {
     if (Api.validateVerifyArgs(req, res)) {
-      req.params.diceArray.push(new Date(req.params.date).getTime());
-      const valid = await this.validator.verify(req.params.diceArray, req.params.signature);
+      req.params.dice.push(new Date(req.params.date).getTime());
+      const valid = await this.validator.verify(req.params.dice, req.params.signature);
       res.json({
         status: 'OK',
         valid,
@@ -150,7 +155,7 @@ class Api {
 
 module.exports = (router, database) => {
   const api = new Api(database);
-  router.get('/verify/:diceArray/:signature/:date', api.handleVerify);
+  router.get('/verify/:token', api.handleVerify);
   router.post('/roll', api.registrationMiddleware, api.handleRoll);
   router.post('/register', api.handleEmailRegister);
   router.post('/unregister', api.handleEmailUnregister);
