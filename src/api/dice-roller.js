@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const randomNumber = require('random-number-csprng');
 
 const roller = {};

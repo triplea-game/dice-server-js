@@ -13,12 +13,11 @@ const pushToCopy = (array, object) => {
 const registrationMiddleware = async (req, res, next) => {
   const errors = [];
   await Promise.all([req.body.email1, req.body.email2].map(email => (
-    new Promise(resolve => dbhandler.checkMail(email, (result) => {
+    dbhandler.checkMail(email).then((result) => {
       if (!result) {
         errors.push(`Email "${email}" not registered.`);
       }
-      resolve();
-    }))
+    })
   )));
   if (errors.length > 0) {
     res.status(403).json({
@@ -55,7 +54,7 @@ const handleRoll = async (req, res) => {
   if (validateRollArgs(req, res)) {
     const dice = await roller.roll(req.params.max, req.params.times);
     const now = new Date();
-    const signature = validator.sign(pushToCopy(dice, now.getTime()));
+    const signature = await validator.sign(pushToCopy(dice, now.getTime()));
     res.json({
       status: 'OK',
       result: {
@@ -104,11 +103,11 @@ const validateVerifyArgs = (req, res) => {
   return true;
 };
 
-const handleVerify = (req, res) => {
+const handleVerify = async (req, res) => {
   req.params.signature = base64url.unescape(req.params.signature);
   if (validateVerifyArgs(req, res)) {
     req.params.diceArray.push(new Date(req.params.date).getTime());
-    const valid = validator.verify(req.params.diceArray, req.params.signature);
+    const valid = await validator.verify(req.params.diceArray, req.params.signature);
     res.json({
       status: 'OK',
       valid,
@@ -116,10 +115,13 @@ const handleVerify = (req, res) => {
   }
 };
 
-const handleEmailRegister = (req, res) => {
+const handleEmailRegister = async (req, res) => {
   if (req.body.token) {
-    if (!emailManager.verifyEmail(req.params.email, base64url.unescape(req.params.token),
-      () => res.status(200).json({ status: 'OK' }))) {
+    const verified = await emailManager.verifyEmail(req.params.email,
+      base64url.unescape(req.params.token));
+    if (verified) {
+      res.status(200).json({ status: 'OK' });
+    } else {
       res.status(403).json({
         status: 'Error',
         errors: 'invalid Token or mail.',
@@ -131,17 +133,16 @@ const handleEmailRegister = (req, res) => {
   }
 };
 
-const handleEmailUnregister = (req, res) => {
-  emailManager.unregisterEmail(req.body.email, (rowCount) => {
-    if (rowCount === 1) {
-      res.status(200).json({ status: 'OK' });
-    } else if (rowCount === 0) {
-      res.status(412).json({
-        status: 'Error',
-        errors: [`Email "${req.body.email}" does not exist in the database.`],
-      });
-    }
-  });
+const handleEmailUnregister = async (req, res) => {
+  const rowCount = await emailManager.unregisterEmail(req.body.email);
+  if (rowCount === 1) {
+    res.status(200).json({ status: 'OK' });
+  } else if (rowCount === 0) {
+    res.status(412).json({
+      status: 'Error',
+      errors: [`Email "${req.body.email}" does not exist in the database.`],
+    });
+  }
 };
 
 module.exports = (router) => {

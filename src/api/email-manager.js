@@ -31,11 +31,11 @@ const sendEmailWithToken = (email, token) => {
 
 const manager = {};
 
-manager.verifyEmail = (email, token, callback) => {
+manager.verifyEmail = async (email, token) => {
   if (!emailMap.verify(email, token)) {
     return false;
   }
-  dbhandler.addUser(email, callback);
+  await dbhandler.addUser(email);
   return true;
 };
 
@@ -46,8 +46,6 @@ manager.registerEmail = (email) => {
   sendEmailWithToken(email, token);
 };
 
-manager.unregisterEmail = (email, callback) => {
-  dbhandler.removeUser(email, callback);
-};
+manager.unregisterEmail = email => dbhandler.removeUser(email);
 
 module.exports = manager;

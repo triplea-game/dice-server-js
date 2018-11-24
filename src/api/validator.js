@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const fs = require('fs');
 const nconf = require('nconf');
 const crypto = require('crypto');
@@ -10,20 +9,16 @@ const publicKey = fs.readFileSync(nconf.get('public-key'));
 
 const validator = {};
 
-validator.sign = (diceArray, callback) => {
-  new Promise((resolve) => {
-    const sign = crypto.createSign(algorithm);
-    sign.update(Buffer.from(diceArray));
-    resolve(sign.sign(privateKey, encoding));
-  }).asCallback(callback);
+validator.sign = async (diceArray) => {
+  const sign = crypto.createSign(algorithm);
+  sign.update(Buffer.from(diceArray));
+  return sign.sign(privateKey, encoding);
 };
 
-validator.verify = (diceArray, signature, callback) => {
-  new Promise((resolve) => {
-    const verify = crypto.createVerify(algorithm);
-    verify.update(Buffer.from(diceArray));
-    resolve(verify.verify(publicKey, signature, encoding));
-  }).asCallback(callback);
+validator.verify = async (diceArray, signature) => {
+  const verify = crypto.createVerify(algorithm);
+  verify.update(Buffer.from(diceArray));
+  return verify.verify(publicKey, signature, encoding);
 };
 
 module.exports = validator;
