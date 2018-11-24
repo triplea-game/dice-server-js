@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const algorithm = 'RSA-SHA512';
 const encoding = 'base64';
-// TODO initialize elsewhere
+// TODO convert to class so this can be initialized per instance
 const privateKey = fs.readFileSync(nconf.get('private-key'));
 const publicKey = fs.readFileSync(nconf.get('public-key'));
 

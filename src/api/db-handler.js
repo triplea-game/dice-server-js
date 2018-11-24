@@ -1,5 +1,5 @@
 const dbconfig = require('nconf').get('database');
-// TODO connect elsewhere
+// TODO convert to class, so the connection can be made per instance
 const db = require('pg-promise')()(`postgres://${dbconfig.username}:${dbconfig.password}@${dbconfig.host}:${dbconfig.port}/${dbconfig.database}`);
 
 const handler = {};
