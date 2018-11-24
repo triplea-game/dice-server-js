@@ -34,7 +34,7 @@ class EmailManager {
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
     const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
-    return await this.transport.sendMail({
+    return this.transport.sendMail({
       from: this.emailsender,
       // FIXME email should be escaped
       to: email,
@@ -54,7 +54,7 @@ class EmailManager {
     const properties = {
       dice,
       signature,
-      date
+      date,
     };
     const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
     const url = `${getServerBaseUrl(this.server)}/api/verify/${encodedProperties}`;
@@ -71,7 +71,7 @@ class EmailManager {
       <br>
       <a href="${url}">Verify the validity of this message!</a>`,
     });
-  };
+  }
 }
 
 module.exports = EmailManager;

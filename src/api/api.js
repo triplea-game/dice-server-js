@@ -53,7 +53,8 @@ class Api {
     const dice = await roller.roll(req.body.max, req.body.times);
     const now = Date.now();
     const signature = await this.validator.sign([...dice, now]);
-    await this.emailManager.sendDiceVerificationEmail(req.body.email1, req.body.email2, dice, signature, now);
+    await this.emailManager
+      .sendDiceVerificationEmail(req.body.email1, req.body.email2, dice, signature, now);
     res.json({
       status: 'OK',
       result: {
