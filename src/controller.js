@@ -1,3 +1,8 @@
+// This MUST be required before express gets initialized
+// in order to support async middleware
+// until it gets officially supported in 5.x
+require('express-async-errors');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const apiMiddleware = require('./api/api');

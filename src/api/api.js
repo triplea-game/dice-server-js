@@ -13,24 +13,20 @@ class Api {
 
   async registrationMiddleware(req, res, next) {
     const errors = [];
-    try {
-      await Promise.all([req.body.email1, req.body.email2].map(email => (
-        this.dbHandler.checkMail(email).then((result) => {
-          if (!result) {
-            errors.push(`Email "${email}" not registered.`);
-          }
-        })
-      )));
-      if (errors.length > 0) {
-        res.status(403).json({
-          status: 'Error',
-          errors,
-        });
-      } else {
-        next();
-      }
-    } catch (e) {
-      res.status(500).json({ status: 'Error', errors: [e.toString()]});
+    await Promise.all([req.body.email1, req.body.email2].map(email => (
+      this.dbHandler.checkMail(email).then((result) => {
+        if (!result) {
+          errors.push(`Email "${email}" not registered.`);
+        }
+      })
+    )));
+    if (errors.length > 0) {
+      res.status(403).json({
+        status: 'Error',
+        errors,
+      });
+    } else {
+      next();
     }
   }
 
@@ -70,7 +66,6 @@ class Api {
   static validateVerifyArgs(req, res, next) {
     const errors = [];
     try {
-      console.log(Buffer.from(req.params.token, 'base64').toString());
       const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
       req.params.dice = information.dice;
       req.params.date = information.date;
@@ -117,13 +112,9 @@ class Api {
   }
 
   async handleEmailRegister(req, res) {
-    try {
-      const info = await this.emailManager.registerEmail(req.body.email);
-      console.log('Message %s sent: %s', info.messageId, info.response);
-      res.status(200).json({ status: 'OK' });
-    } catch (e) {
-      res.status(500).json({ status: 'Error', errors: [e.toString()] });
-    }
+    const info = await this.emailManager.registerEmail(req.body.email);
+    console.log('Message %s sent: %s', info.messageId, info.response);
+    res.status(200).json({ status: 'OK' });
   }
 
   async handleEmailRegisterConfirm(req, res) {
@@ -163,7 +154,6 @@ class Api {
 }
 
 module.exports = (router, database) => {
-  // TODO wrap async middleWare in sync handler.
   const api = new Api(database);
   router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
   router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
@@ -171,5 +161,7 @@ module.exports = (router, database) => {
   // TODO replace with frontend and merge with middleware above
   router.get('/register/:email/:token', api.handleEmailRegisterConfirm.bind(api));
   router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
+
+  router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }));
   return router;
 };
