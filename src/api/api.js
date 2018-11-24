@@ -117,19 +117,24 @@ class Api {
   }
 
   async handleEmailRegister(req, res) {
-    if (req.body.token) {
-      const verified = await this.emailManager.verifyEmail(req.params.email);
-      if (verified) {
-        res.status(200).json({ status: 'OK' });
-      } else {
-        res.status(403).json({
-          status: 'Error',
-          errors: 'invalid Token or mail.',
-        });
-      }
-    } else {
-      this.emailManager.registerEmail(req.body.email);
+    try {
+      const info = await this.emailManager.registerEmail(req.body.email);
+      console.log('Message %s sent: %s', info.messageId, info.response);
       res.status(200).json({ status: 'OK' });
+    } catch (e) {
+      res.status(500).json({ status: 'Error', errors: [e.toString()] });
+    }
+  }
+
+  async handleEmailRegisterConfirm(req, res) {
+    const verified = await this.emailManager.verifyEmail(req.params.email, req.params.token);
+    if (verified) {
+      res.status(200).json({ status: 'OK' });
+    } else {
+      res.status(403).json({
+        status: 'Error',
+        errors: 'invalid Token or mail.',
+      });
     }
   }
 
@@ -144,13 +149,26 @@ class Api {
       });
     }
   }
+
+  static verifyEmailParam(req, res, next) {
+    if (typeof req.body.email === 'string') {
+      next();
+    } else {
+      res.status(412).json({
+        status: 'Error',
+        errors: ['Body Parameter Email is missing'],
+      });
+    }
+  }
 }
 
 module.exports = (router, database) => {
   const api = new Api(database);
-  router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify);
-  router.post('/roll', api.registrationMiddleware, Api.validateRollArgs, api.handleRoll);
-  router.post('/register', api.handleEmailRegister);
-  router.post('/unregister', api.handleEmailUnregister);
+  router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
+  router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
+  router.post('/register', Api.verifyEmailParam, api.handleEmailRegister.bind(api));
+  // TODO replace with frontend and merge with middleware above
+  router.get('/register/:email/:token', api.handleEmailRegisterConfirm.bind(api));
+  router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
   return router;
 };

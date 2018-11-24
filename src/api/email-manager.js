@@ -10,18 +10,13 @@ const getServerBaseUrl = ({
 };
 
 const sendEmailWithToken = (email, token, transport, sender, server) => {
-  const url = `${getServerBaseUrl(server)}/verify/${email}/${encodeURIComponent(token)}`;
-  transport.sendEmail({
+  // TODO replace with frontend
+  const url = `${getServerBaseUrl(server)}/api/register/${email}/${encodeURIComponent(token)}`;
+  return transport.sendMail({
     from: sender,
     to: email,
     subject: 'Confirm your email', // TODO use proper templating engine
     html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a><br>It will expire after 24 hours or when a new confirmation email is sent.`,
-  }, (error, info) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Message %s sent: %s', info.messageId, info.response);
-    }
   });
 };
 
@@ -45,7 +40,7 @@ class EmailManager {
   registerEmail(email) {
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
-    sendEmailWithToken(email, token, this.transport, this.emailsender, this.server);
+    return sendEmailWithToken(email, token, this.transport, this.emailsender, this.server);
   }
 
   unregisterEmail(email) {

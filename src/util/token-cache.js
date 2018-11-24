@@ -15,8 +15,10 @@ class TokenCache {
     const value = this.map[key];
     if (value) {
       clearTimeout(value.timeout);
+      delete this.map[key];
+      return value.value === token;
     }
-    return delete this.map[key] && value.value === token;
+    return false;
   }
 }
 
