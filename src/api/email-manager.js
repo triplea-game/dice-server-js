@@ -9,17 +9,6 @@ const getServerBaseUrl = ({
   return `${protocol}://${host}${isCommonPort() ? '' : (`:${port}`)}${baseurl}`;
 };
 
-const sendEmailWithToken = (email, token, transport, sender, server) => {
-  // TODO replace with frontend
-  const url = `${getServerBaseUrl(server)}/api/register/${email}/${encodeURIComponent(token)}`;
-  return transport.sendMail({
-    from: sender,
-    to: email,
-    subject: 'Confirm your email', // TODO use proper templating engine
-    html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a><br>It will expire after 24 hours or when a new confirmation email is sent.`,
-  });
-};
-
 class EmailManager {
   constructor(dbhandler, transport, server, emailsender) {
     this.dbhandler = dbhandler;
@@ -38,14 +27,48 @@ class EmailManager {
   }
 
   registerEmail(email) {
+    // TODO replace with frontend
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
-    return sendEmailWithToken(email, token, this.transport, this.emailsender, this.server);
+    const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
+    return this.transport.sendMail({
+      from: this.emailsender,
+      // FIXME email should be escaped
+      to: email,
+      subject: 'Confirm your email', // TODO use proper templating engine
+      html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a>
+      <br>
+      It will expire after 24 hours or when a new confirmation email is sent.`,
+    });
   }
 
   unregisterEmail(email) {
     return this.dbhandler.removeUser(email);
   }
+
+  sendDiceVerificationEmail(email1, email2, dice, signature, date) {
+    // TODO replace with frontend
+    const properties = {
+      dice,
+      signature,
+      date
+    };
+    const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
+    const url = `${getServerBaseUrl(this.server)}/api/verify/${encodedProperties}`;
+    return this.transport.sendMail({
+      from: this.emailsender,
+      // FIXME emails should be escaped
+      to: `${email1}, ${email2}`,
+      subject: 'Dice were rolled', // TODO use proper templating engine
+      html: `The dice have been cast!
+      <br>
+      Date: ${new Date(date).toLocaleString('en-US')}
+      <br>
+      Results: ${JSON.stringify(dice)}
+      <br>
+      <a href="${url}">Verify the validity of this message!</a>`,
+    });
+  };
 }
 
 module.exports = EmailManager;
