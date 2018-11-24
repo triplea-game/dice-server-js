@@ -26,12 +26,15 @@ class EmailManager {
     return true;
   }
 
-  registerEmail(email) {
+  async registerEmail(email) {
+    if (await this.dbhandler.checkMail(email)) {
+      return false;
+    }
     // TODO replace with frontend
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
     const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
-    return this.transport.sendMail({
+    return await this.transport.sendMail({
       from: this.emailsender,
       // FIXME email should be escaped
       to: email,

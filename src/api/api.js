@@ -114,8 +114,12 @@ class Api {
 
   async handleEmailRegister(req, res) {
     const info = await this.emailManager.registerEmail(req.body.email);
-    console.log('Message %s sent: %s', info.messageId, info.response);
-    res.status(200).json({ status: 'OK' });
+    if (info) {
+      console.log('Message %s sent: %s', info.messageId, info.response);
+      res.status(200).json({ status: 'OK' });
+    } else {
+      res.status(412).json({ status: 'Error', errors: ['Mail is already registred'] });
+    }
   }
 
   async handleEmailRegisterConfirm(req, res) {
