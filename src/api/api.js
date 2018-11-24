@@ -11,7 +11,7 @@ class Api {
     this.validator = new Validator();
   }
 
-  async registrationMiddleware(req, res, next) {
+  async registrationMiddleware(req, res) {
     const errors = [];
     await Promise.all([req.body.email1, req.body.email2].map(email => (
       this.dbHandler.checkMail(email).then((result) => {
@@ -25,12 +25,10 @@ class Api {
         status: 'Error',
         errors,
       });
-    } else {
-      next();
     }
   }
 
-  static validateRollArgs(req, res, next) {
+  static async validateRollArgs(req, res) {
     const errors = [];
     ['max', 'times'].forEach((name) => {
       if (!req.body[name]) {
@@ -44,8 +42,6 @@ class Api {
         status: 'Error',
         errors,
       });
-    } else {
-      next();
     }
   }
 
@@ -63,7 +59,7 @@ class Api {
     });
   }
 
-  static validateVerifyArgs(req, res, next) {
+  static async validateVerifyArgs(req, res) {
     const errors = [];
     try {
       const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
@@ -97,8 +93,6 @@ class Api {
         status: 'Error',
         errors,
       });
-    } else {
-      next();
     }
   }
 
@@ -141,10 +135,8 @@ class Api {
     }
   }
 
-  static verifyEmailParam(req, res, next) {
-    if (typeof req.body.email === 'string') {
-      next();
-    } else {
+  static async verifyEmailParam(req, res) {
+    if (typeof req.body.email !== 'string') {
       res.status(422).json({
         status: 'Error',
         errors: ['Body Parameter Email is missing'],
