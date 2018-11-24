@@ -4,12 +4,6 @@ const Validator = require('./validator');
 const EmailManager = require('./email-manager.js');
 const Handler = require('./db-handler');
 
-const pushToCopy = (array, object) => {
-  const copy = array.slice();
-  array.push(object);
-  return copy;
-};
-
 class Api {
   constructor(database) {
     this.dbHandler = new Handler(database);
@@ -61,14 +55,14 @@ class Api {
 
   async handleRoll(req, res) {
     const dice = await roller.roll(req.body.max, req.body.times);
-    const now = new Date();
-    const signature = await this.validator.sign(pushToCopy(dice, now.getTime()));
+    const now = Date.now();
+    const signature = await this.validator.sign([...dice, now]);
     res.json({
       status: 'OK',
       result: {
         dice,
         signature,
-        date: now.toISOString(),
+        date: now,
       },
     });
   }
@@ -76,31 +70,32 @@ class Api {
   static validateVerifyArgs(req, res, next) {
     const errors = [];
     try {
+      console.log(Buffer.from(req.params.token, 'base64').toString());
       const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
       req.params.dice = information.dice;
       req.params.date = information.date;
       req.params.signature = information.signature;
     } catch (e) {
-      errors.push('The supplied diceArray parameter is invalid JSON.');
+      errors.push('The supplied token parameter is invalid JSON.');
     }
     if (errors.length === 0) {
       if (Array.isArray(req.params.dice)) {
-        if (req.params.dice.some(Number.isNaN)) {
+        if (!req.params.dice.every(Number.isInteger)) {
           errors.push('The provided dice parameter contains values other than integers.');
         }
       } else {
         errors.push('The provided dice parameter is not an array.');
       }
-    }
-    if (typeof req.params.signature === 'string') {
-      if (req.params.signature.length !== 684) {
-        errors.push('The provided signature has a wrong length.');
+      if (typeof req.params.signature === 'string') {
+        if (req.params.signature.length !== 684) {
+          errors.push('The provided signature has a wrong length.');
+        }
+      } else {
+        errors.push('The provided signature is not from type string');
       }
-    } else {
-      errors.push('The provided signature is not from type string');
-    }
-    if (typeof req.params.date !== 'string') {
-      errors.push('The provided data is not from type string');
+      if (!Number.isInteger(req.params.date)) {
+        errors.push('The provided data is not an int');
+      }
     }
     if (errors.length > 0) {
       res.status(422).json({
@@ -113,8 +108,8 @@ class Api {
   }
 
   async handleVerify(req, res) {
-    req.params.dice.push(new Date(req.params.date).getTime());
-    const valid = await this.validator.verify(req.params.dice, req.params.signature);
+    const timedArray = [...req.params.dice, req.params.date];
+    const valid = await this.validator.verify(timedArray, req.params.signature);
     res.json({
       status: 'OK',
       valid,
@@ -168,6 +163,7 @@ class Api {
 }
 
 module.exports = (router, database) => {
+  // TODO wrap async middleWare in sync handler.
   const api = new Api(database);
   router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
   router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
