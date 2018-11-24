@@ -144,5 +144,4 @@ module.exports = (router) => {
   router.post('/roll', registrationMiddleware, handleRoll);
   router.post('/register', handleEmailRegister);
   router.post('/unregister', handleEmailUnregister);
-  return router;
 };

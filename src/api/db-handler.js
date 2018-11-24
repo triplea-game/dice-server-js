@@ -1,4 +1,5 @@
 const dbconfig = require('nconf').get('database');
+// TODO connect elsewhere
 const db = require('pg-promise')()(`postgres://${dbconfig.username}:${dbconfig.password}@${dbconfig.host}:${dbconfig.port}/${dbconfig.database}`);
 
 const handler = {};
