@@ -12,17 +12,14 @@ const pushToCopy = (array, object) => {
 
 const registrationMiddleware = async (req, res, next) => {
   const errors = [];
-  const checkPromises = [req.body.email1, req.body.email2].map(email => (
+  await Promise.all([req.body.email1, req.body.email2].map(email => (
     new Promise(resolve => dbhandler.checkMail(email, (result) => {
       if (!result) {
         errors.push(`Email "${email}" not registered.`);
       }
       resolve();
     }))
-  ));
-  for (const promise in checkPromises) {
-    await promise;
-  }
+  )));
   if (errors.length > 0) {
     res.status(403).json({
       status: 'Error',
@@ -35,13 +32,13 @@ const registrationMiddleware = async (req, res, next) => {
 
 const validateRollArgs = (req, res) => {
   const errors = [];
-  for (const name in ['max', 'times']) {
+  ['max', 'times'].forEach((name) => {
     if (!req.params[name]) {
       errors.push(`${name} parameter is not defined`);
     } else if (!Number.isInteger(req.params[name])) {
       errors.push(`${name} parameter is not a valid number`);
     }
-  }
+  });
   if (errors.length > 0) {
     res.status(422).json({
       status: 'Error',
@@ -53,8 +50,8 @@ const validateRollArgs = (req, res) => {
 };
 
 const handleRoll = async (req, res) => {
-  req.params.max = parseInt(req.params.max);
-  req.params.times = parseInt(req.params.times);
+  req.params.max = parseInt(req.params.max, 10);
+  req.params.times = parseInt(req.params.times, 10);
   if (validateRollArgs(req, res)) {
     const dice = await roller.roll(req.params.max, req.params.times);
     const now = new Date();
@@ -86,7 +83,7 @@ const validateVerifyArgs = (req, res) => {
   }
   if (errors.length === 0) {
     if (Array.isArray(req.params.diceArray)) {
-      req.params.diceArray = req.params.diceArray.map(o => parseInt(o));
+      req.params.diceArray = req.params.diceArray.map(o => parseInt(o, 10));
       if (req.params.diceArray.some(Number.isNaN)) {
         errors.push('The provided diceArray parameter contains values other than integers.');
       }
