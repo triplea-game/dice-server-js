@@ -1,14 +1,44 @@
 {% assign title = 'Confirm Registration' %}
 {% layout 'layout' %}
 {% if email and token %}
-<form action="./api/register/ {{ token }}" method="POST" enctype="application/x-www-form-urlencoded">
-  <input type="hidden" name="email" value="{{ email }}">
+<form id="form" action="./api/register/{{ token }}" method="POST" enctype="application/x-www-form-urlencoded">
+  <input id="email-input" type="hidden" name="email" value="{{ email }}" required>
   <div class="extended">
     <div class="button-center">
-      <button type="submit" name="button">Confirm Registration!</button>
+      <button id="submit-button" type="submit" name="button">Confirm Registration!</button>
     </div>
   </div>
+  <span id="error-display" style="display: none; text-align: center;"></span>
 </form>
+<script>
+  const form = document.getElementById('form');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const button = document.getElementById('submit-button');
+    button.disabled = true;
+    button.value = '';
+    button.innerHTML = '<div class="lds-dual-ring"></div>';
+    const request = new XMLHttpRequest();
+    request.addEventListener('load', (serverResponse) => {
+      setTimeout(() => {
+        const response = JSON.parse(serverResponse.target.responseText);
+        const errorDisplay = document.getElementById('error-display');
+        if (response.status === 'OK') {
+          errorDisplay.style.display = 'none';
+          button.innerHTML = '';
+        } else {
+          errorDisplay.style.display = 'block';
+          errorDisplay.innerHTML = response.errors.join('<br>');
+          button.disabled = false;
+          button.innerHTML = 'Confirm Registration!';
+        }
+      }, 100);
+    });
+    request.open('POST', './api/register/{{ token }}');
+    request.send(formData);
+  });
+</script>
 {% else %}
 <h2>Invalid Arguments!</h2>
 {% endif %}

@@ -134,7 +134,7 @@ class Api {
     } else {
       res.status(403).json({
         status: 'Error',
-        errors: 'invalid Token or mail.',
+        errors: ['Invalid Token or E-Mail.'],
       });
     }
   }
