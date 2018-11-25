@@ -61,26 +61,29 @@ class EmailManager {
     return this.dbhandler.removeUser(email);
   }
 
-  sendDiceVerificationEmail(email1, email2, dice, signature, date) {
-    // TODO replace with frontend
+  async sendDiceVerificationEmail(email1, email2, dice, signature, date) {
     const properties = {
       dice,
       signature,
       date,
     };
+    const subject = 'The dice have been cast!';
     const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
-    const url = `${getServerBaseUrl(this.server)}/verify?token=${encodedProperties}`;
+    const baseUrl = getServerBaseUrl(this.server);
+
+    const content = await this.engine.renderFile('verify-dice.html', {
+      subject,
+      date: new Date(date).toLocaleString('en-US'),
+      dice: JSON.stringify(dice),
+      url: `${baseUrl}/verify?token=${encodedProperties}`,
+      unsub: `${baseUrl}/unregister`
+    });
+
     return this.transport.sendMail({
       from: this.emailsender,
       to: `${email1}, ${email2}`,
-      subject: 'Dice were rolled', // TODO use proper templating engine
-      html: `The dice have been cast!
-      <br>
-      Date: ${new Date(date).toLocaleString('en-US')}
-      <br>
-      Results: ${JSON.stringify(dice)}
-      <br>
-      <a href="${url}">Verify the validity of this message!</a>`,
+      subject: subject,
+      html: content,
     });
   }
 }
