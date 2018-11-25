@@ -36,7 +36,6 @@ class EmailManager {
     const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
     return this.transport.sendMail({
       from: this.emailsender,
-      // FIXME email should be escaped
       to: email,
       subject: 'Confirm your email', // TODO use proper templating engine
       html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a>
@@ -60,7 +59,6 @@ class EmailManager {
     const url = `${getServerBaseUrl(this.server)}/api/verify/${encodedProperties}`;
     return this.transport.sendMail({
       from: this.emailsender,
-      // FIXME emails should be escaped
       to: `${email1}, ${email2}`,
       subject: 'Dice were rolled', // TODO use proper templating engine
       html: `The dice have been cast!

@@ -11,6 +11,10 @@ class Api {
     this.validator = new Validator();
   }
 
+  static isSingleEmail(email) {
+    return !/[,\s<>]/.test(email);
+  }
+
   async registrationMiddleware(req, res, next) {
     const errors = [];
     await Promise.all([req.body.email1, req.body.email2].map(email => (
@@ -149,7 +153,14 @@ class Api {
 
   static verifyEmailParam(req, res, next) {
     if (typeof req.body.email === 'string') {
-      next();
+      if (Api.isSingleEmail(req.body.email)) {
+        next();
+      } else {
+        res.status(422).json({
+          status: 'Error',
+          errors: ['Email has invalid format'],
+        });
+      }
     } else {
       res.status(422).json({
         status: 'Error',
