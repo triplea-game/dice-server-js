@@ -128,7 +128,7 @@ class Api {
   }
 
   async handleEmailRegisterConfirm(req, res) {
-    const verified = await this.emailManager.verifyEmail(req.params.email, req.params.token);
+    const verified = await this.emailManager.verifyEmail(req.body.email, req.params.token);
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
@@ -175,8 +175,7 @@ module.exports = (router, database) => {
   router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
   router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
   router.post('/register', Api.verifyEmailParam, api.handleEmailRegister.bind(api));
-  // TODO replace with frontend and merge with middleware above
-  router.get('/register/:email/:token', api.handleEmailRegisterConfirm.bind(api));
+  router.post('/register/:token', api.handleEmailRegisterConfirm.bind(api));
   router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
 
   // express.js behaves differently if no next parameter is used here

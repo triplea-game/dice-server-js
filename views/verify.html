@@ -1,1 +1,12 @@
+{% assign title = 'Verify your dice' %}
 {% layout 'layout' %}
+
+{% if invalid %}
+<h2>Invalid link!</h2>
+{% else %}
+<form action="./api/verify/{{ token | urlencode }}" method="POST" enctype="application/x-www-form-urlencoded">
+  <p>Dice Rolled: {{ dice | join: ", " }}</p>
+  <p>At {{ date | date: "%a, %b %d, %y" }}</p>
+  <button type="submit" name="button">Verify!</button>
+</form>
+{% endif %}

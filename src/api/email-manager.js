@@ -33,7 +33,7 @@ class EmailManager {
     // TODO replace with frontend
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
-    const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
+    const url = `${getServerBaseUrl(this.server)}/register?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
     return this.transport.sendMail({
       from: this.emailsender,
       to: email,
@@ -56,7 +56,7 @@ class EmailManager {
       date,
     };
     const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
-    const url = `${getServerBaseUrl(this.server)}/api/verify/${encodedProperties}`;
+    const url = `${getServerBaseUrl(this.server)}/verify?token=${encodedProperties}`;
     return this.transport.sendMail({
       from: this.emailsender,
       to: `${email1}, ${email2}`,

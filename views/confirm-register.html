@@ -1,1 +1,6 @@
+{% assign title = 'Confirm Registration' %}
 {% layout 'layout' %}
+<form action="./api/register/ {{ token | urlencode }}" method="POST" enctype="application/x-www-form-urlencoded">
+  <input type="hidden" name="email" value="{{ email }}">
+  <button type="submit" name="button">Confirm Registration!</button>
+</form>
