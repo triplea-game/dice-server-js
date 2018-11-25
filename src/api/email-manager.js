@@ -39,9 +39,11 @@ class EmailManager {
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
 
+    const subject = 'Verify your E-Mail';
     const baseUrl = getServerBaseUrl(this.server);
     const encodedEmail = encodeURIComponent(email);
     const content = await this.engine.renderFile('verify-email.html', {
+      subject,
       url: `${baseUrl}/register?email=${encodedEmail}&token=${encodeURIComponent(token)}`,
       host: this.server.host,
       unsub: `${baseUrl}/unregister?email=${encodedEmail}`
@@ -50,7 +52,7 @@ class EmailManager {
     return this.transport.sendMail({
       from: this.emailsender,
       to: email,
-      subject: 'Verify your E-Mail',
+      subject,
       html: content,
     });
   }
