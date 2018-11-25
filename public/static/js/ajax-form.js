@@ -1,5 +1,8 @@
-const registerForm = (form, button, errorDisplay, method, url, text, successText) => {
-  form.addEventListener('submit', event => {
+window.registerForm = (formId, buttonId, errorDisplayId, method, url, text, successText) => {
+  const form = document.getElementById(formId);
+  const button = document.getElementById(buttonId);
+  const errorDisplay = document.getElementById(errorDisplayId);
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     button.disabled = true;
@@ -22,6 +25,6 @@ const registerForm = (form, button, errorDisplay, method, url, text, successText
     request.open(method, url);
     // urlencode the FormData
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send([...formData.entries()].map(e => encodeURIComponent(e[0]) + "=" + encodeURIComponent(e[1])).join('&'));
+    request.send([...formData.entries()].map(e => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`).join('&'));
   });
 };

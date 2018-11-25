@@ -3,7 +3,9 @@
 <script type="text/javascript" src="./js/ajax-form.js"></script>
 <script type="text/javascript">
 registerForm(
-  ...['{{ formId }}', 'submit-button', 'error-display'].map(document.getElementById.bind(document)),
+  '{{ formId }}',
+  'submit-button',
+  'error-display',
   '{{ method }}',
   '{{ url }}',
   '{{ buttonText }}',

@@ -20,7 +20,7 @@ class EmailManager {
     this.emailsender = emailsender;
     this.engine = Liquid({
       root: path.resolve(__dirname, '../../public/email-templates/'),
-      extname: '.html'
+      extname: '.html',
     });
   }
 
@@ -46,7 +46,7 @@ class EmailManager {
       subject,
       url: `${baseUrl}/register?email=${encodedEmail}&token=${encodeURIComponent(token)}`,
       host: this.server.host,
-      unsub: `${baseUrl}/unregister?email=${encodedEmail}`
+      unsub: `${baseUrl}/unregister?email=${encodedEmail}`,
     });
 
     return this.transport.sendMail({
@@ -76,13 +76,13 @@ class EmailManager {
       date: new Date(date).toLocaleString('en-US'),
       dice: JSON.stringify(dice),
       url: `${baseUrl}/verify?token=${encodedProperties}`,
-      unsub: `${baseUrl}/unregister`
+      unsub: `${baseUrl}/unregister`,
     });
 
     return this.transport.sendMail({
       from: this.emailsender,
       to: `${email1}, ${email2}`,
-      subject: subject,
+      subject,
       html: content,
     });
   }
