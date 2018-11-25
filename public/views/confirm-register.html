@@ -1,6 +1,10 @@
 {% assign title = 'Confirm Registration' %}
 {% layout 'layout' %}
+{% if email and token %}
 <form action="./api/register/ {{ token | urlencode }}" method="POST" enctype="application/x-www-form-urlencoded">
   <input type="hidden" name="email" value="{{ email }}">
   <button type="submit" name="button">Confirm Registration!</button>
 </form>
+{% else %}
+<h2>Invalid Arguments!</h2>
+{% endif %}

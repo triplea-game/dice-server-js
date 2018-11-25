@@ -25,7 +25,7 @@ const startServer = (router, url, port) => {
 
   const engine = Liquid({ root: __dirname, extname: '.html' });
   app.engine('html', engine.express());
-  app.set('views', ['./partials', './views']);
+  app.set('views', ['./public/partials', './public/views']);
   app.set('view engine', 'html');
 
   app.use(url, router);
