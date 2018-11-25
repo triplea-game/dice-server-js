@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const Liquid = require('liquidjs');
+const path = require('path');
 const TokenCache = require('../util/token-cache.js');
 
 const getServerBaseUrl = ({
@@ -16,6 +18,10 @@ class EmailManager {
     this.transport = nodemailer.createTransport(transport);
     this.server = server;
     this.emailsender = emailsender;
+    this.engine = Liquid({
+      root: path.resolve(__dirname, '../../public/email-templates/'),
+      extname: '.html'
+    });
   }
 
   async verifyEmail(email, token) {
@@ -30,17 +36,22 @@ class EmailManager {
     if (await this.dbhandler.checkMail(email)) {
       return false;
     }
-    // TODO replace with frontend
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
-    const url = `${getServerBaseUrl(this.server)}/register?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
+
+    const baseUrl = getServerBaseUrl(this.server);
+    const encodedEmail = encodeURIComponent(email);
+    const content = await this.engine.renderFile('verify-email.html', {
+      url: `${baseUrl}/register?email=${encodedEmail}&token=${encodeURIComponent(token)}`,
+      host: this.server.host,
+      unsub: `${baseUrl}/unregister?email=${encodedEmail}`
+    });
+
     return this.transport.sendMail({
       from: this.emailsender,
       to: email,
-      subject: 'Confirm your email', // TODO use proper templating engine
-      html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a>
-      <br>
-      It will expire after 24 hours or when a new confirmation email is sent.`,
+      subject: 'Verify your E-Mail',
+      html: content,
     });
   }
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ subject }}</title>
+    <style media="screen">
+      a.big {
+        text-align: center;
+      }
+      a.big:link, a.big:visited {
+        background-color: #B8242B;
+        color: white;
+        padding: 14px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+      }
+      a.big:hover, a.big:active {
+        background-color: #8D1C21;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Verify your Email on {{ host }}</h1>
+    <p>You (or someone else prententing to be you) recently registered this email to be used for the dice rolling service.</p>
+    <p>In order to allow you to use this service you need to click 'Confirm!' below:</p>
+    <a class="big" href="{{ url }}">Confirm!</a>
+    <p>Note: The link expires after 24 hours or when a new confirmation email is sent.</p>
+    <br>
+    <p>This email was sent automatically, if it wasn't you who requested this email, please ignore it.</p>
+    <p>You can always unsubscribe <a href="{{ unsub }}">here</a>.</p>
+  </body>
+</html>
