@@ -11,6 +11,7 @@ const registerForm = (form, button, errorDisplay, method, url, text, successText
       if (response.status === 'OK') {
         errorDisplay.style.display = 'none';
         button.innerHTML = successText;
+        button.disabled = false;
       } else {
         errorDisplay.style.display = 'block';
         errorDisplay.innerHTML = response.errors.join('<br>');
