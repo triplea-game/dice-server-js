@@ -2,7 +2,6 @@
 {%- if invalid -%}
 <h2>Invalid link!</h2>
 {%- elsif token and dice and date -%}
-{%- if email and token -%}
 {%- capture url %}./api/verify/{{ token }}{% endcapture -%}
 {%- assign method = 'GET' -%}
 {%- assign formId = 'form' -%}
