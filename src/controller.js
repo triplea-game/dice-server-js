@@ -28,6 +28,8 @@ const startServer = (router, url, port) => {
   app.set('views', ['./public/partials', './public/views']);
   app.set('view engine', 'html');
 
+  app.use(express.static('./public/static'));
+
   app.use(url, router);
   app.listen(port, () => console.info(`Running on port ${port}`));
 };
