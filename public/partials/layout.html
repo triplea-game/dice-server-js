@@ -3,9 +3,46 @@
   <head>
     <meta charset="utf-8">
     <title>{{title}} | TripleA Dice Server</title>
+    <style>
+    button {
+      background-color: #B8242B;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+    input[type=text], input[type=email]{
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    .center {
+      margin: auto;
+      width: 50%;
+      padding: 10%;
+    }
+    .button-center {
+      margin: auto;
+      width: 50%;
+      text-align: center;
+    }
+    h1 {
+      width: 100%;
+      text-align: center;
+    }
+    .extended {
+      width: 100%;
+    }
+    </style>
   </head>
   <body>
-    <h1>{{title}}</h1>
-    {% block %}{% endblock %}
+    <div class="center">
+      <h1>{{title}}</h1>
+      {% block %}{% endblock %}
+    </div>
   </body>
 </html>

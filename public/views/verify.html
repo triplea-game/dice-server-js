@@ -4,10 +4,14 @@
 {% if invalid %}
 <h2>Invalid link!</h2>
 {% elsif token and dice and date %}
-<form action="./api/verify/{{ token | urlencode }}" method="POST" enctype="application/x-www-form-urlencoded">
+<form action="./api/verify/{{ token }}" method="GET">
   <p>Dice Rolled: {{ dice | join: ", " }}</p>
   <p>At {{ date | date: "%a, %b %d, %y" }}</p>
-  <button type="submit" name="button">Verify!</button>
+  <div class="extended">
+    <div class="button-center">
+      <button type="submit" name="button">Verify!</button>
+    </div>
+  </div>
 </form>
 {% else %}
 <h2>Malformed JSON</h2>
