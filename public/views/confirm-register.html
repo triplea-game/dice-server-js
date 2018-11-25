@@ -1,22 +1,11 @@
 {% layout 'layout', title: 'Confirm Registration' %}
 {% if email and token %}
-<form id="form" action="./api/register/{{ token }}" method="POST" enctype="application/x-www-form-urlencoded">
+{% capture url %}./api/register/{{ token }}{% endcapture %}
+{% assign method = 'POST' %}
+<form id="form" action="{{ url }}" method="{{ method }}" enctype="application/x-www-form-urlencoded">
   <input type="hidden" name="email" value="{{ email }}" required>
-  <div class="extended">
-    <div class="button-center">
-      <button id="submit-button" type="submit" name="button">Confirm Registration!</button>
-    </div>
-  </div>
-  <span id="error-display" style="display: none; text-align: center;"></span>
+  {% include 'form-ajaxify', buttonText: 'Confirm Registration!', formId: 'form' %}
 </form>
-<script type="text/javascript" src="./js/ajax-form.js"></script>
-<script type="text/javascript">
-registerForm(
-  ...['form', 'submit-button', 'error-display'].map(document.getElementById.bind(document)),
-  'POST',
-  './api/register/{{ token }}',
-  'Confirm Registration!');
-</script>
 {% else %}
 <h2>Invalid Arguments!</h2>
 {% endif %}
