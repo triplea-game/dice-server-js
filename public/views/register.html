@@ -1,7 +1,7 @@
-{% layout 'layout', title: 'Register for the Dice-Server' %}
-{% assign url ='./api/register' %}
-{% assign method = 'POST' %}
-{% assign formId = 'form' %}
+{%- layout 'layout', title: 'Register for the Dice-Server' -%}
+{%- assign url ='./api/register' -%}
+{%- assign method = 'POST' -%}
+{%- assign formId = 'form' -%}
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
   <input type="email" name="email" placeholder="Insert your email adress" required>
   {% include 'form-ajaxify', buttonText: 'Register!', formId: 'form' %}

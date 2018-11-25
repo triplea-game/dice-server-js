@@ -19,8 +19,8 @@ const registerForm = (form, button, errorDisplay, method, url, text, successText
       }
     });
     request.open(method, url);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     // urlencode the FormData
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send([...formData.entries()].map(e => encodeURIComponent(e[0]) + "=" + encodeURIComponent(e[1])).join('&'));
   });
 };
