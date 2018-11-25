@@ -13,7 +13,7 @@
     "dice"
   ],
   "author": "TripleA-Organisation",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
