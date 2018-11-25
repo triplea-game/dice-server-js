@@ -1,17 +1,15 @@
-{% assign title = 'Verify your dice' %}
-{% layout 'layout' %}
-
+{% layout 'layout', title: 'Verify your dice' %}
 {% if invalid %}
 <h2>Invalid link!</h2>
 {% elsif token and dice and date %}
-<form action="./api/verify/{{ token }}" method="GET">
+{% if email and token %}
+{% capture url %}./api/verify/{{ token }}{% endcapture %}
+{% assign method = 'GET' %}
+{% assign formId = 'form' %}
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
   <p>Dice Rolled: {{ dice | join: ", " }}</p>
   <p>At {{ date | date: "%a, %b %d, %y" }}</p>
-  <div class="extended">
-    <div class="button-center">
-      <button type="submit" name="button">Verify!</button>
-    </div>
-  </div>
+  {% include 'form-ajaxify', buttonText: 'Verify!' %}
 </form>
 {% else %}
 <h2>Malformed JSON</h2>

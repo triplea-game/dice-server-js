@@ -152,6 +152,7 @@ class Api {
   }
 
   static verifyEmailParam(req, res, next) {
+    console.log(req.body.email)
     if (typeof req.body.email === 'string') {
       if (Api.isSingleEmail(req.body.email)) {
         next();

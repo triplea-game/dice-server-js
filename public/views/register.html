@@ -1,11 +1,8 @@
-{% assign title = 'Register for the Dice-Server' %}
-{% layout 'layout' %}
-
-<form action="./api/register" method="POST" enctype="application/x-www-form-urlencoded">
-  <input type="email" name="email" placeholder="Insert your email adress">
-  <div class="extended">
-    <div class="button-center">
-      <button type="submit" name="button">Register!</button>
-    </div>
-  </div>
+{% layout 'layout', title: 'Register for the Dice-Server' %}
+{% assign url ='./api/register' %}
+{% assign method = 'POST' %}
+{% assign formId = 'form' %}
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
+  <input type="email" name="email" placeholder="Insert your email adress" required>
+  {% include 'form-ajaxify', buttonText: 'Register!', formId: 'form' %}
 </form>

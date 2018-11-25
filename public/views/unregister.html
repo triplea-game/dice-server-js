@@ -1,11 +1,9 @@
-{% assign title = 'Unregister from the dice Server' %}
-{% layout 'layout' %}
+{% layout 'layout', title: 'Unregister from the dice Server' %}
+{% assign url ='./api/unregister' %}
+{% assign method = 'POST' %}
+{% assign formId = 'form' %}
 
-<form action="./api/unregister" method="POST" enctype="application/x-www-form-urlencoded">
-  <input type="email" name="email" placeholder="Insert your email adress" value="{{ email }}">
-  <div class="extended">
-    <div class="button-center">
-      <button type="submit" name="button">Unregister!</button>
-    </div>
-  </div>
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
+  <input type="email" name="email" placeholder="Insert your email adress" value="{{ email }}" required>
+  {% include 'form-ajaxify', buttonText: 'Unregister!' %}
 </form>

@@ -1,4 +1,4 @@
-const registerForm = (form, button, errorDisplay, method, url, text) => {
+const registerForm = (form, button, errorDisplay, method, url, text, successText) => {
   form.addEventListener('submit', event => {
     event.preventDefault();
     const formData = new FormData(form);
@@ -10,7 +10,7 @@ const registerForm = (form, button, errorDisplay, method, url, text) => {
       const response = JSON.parse(serverResponse.target.responseText);
       if (response.status === 'OK') {
         errorDisplay.style.display = 'none';
-        button.innerHTML = '';
+        button.innerHTML = successText;
       } else {
         errorDisplay.style.display = 'block';
         errorDisplay.innerHTML = response.errors.join('<br>');
@@ -19,6 +19,8 @@ const registerForm = (form, button, errorDisplay, method, url, text) => {
       }
     });
     request.open(method, url);
-    request.send(formData);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // urlencode the FormData
+    request.send([...formData.entries()].map(e => encodeURIComponent(e[0]) + "=" + encodeURIComponent(e[1])).join('&'));
   });
 };
