@@ -1,0 +1,12 @@
+{%- layout 'layout', title: 'Confirm Registration' -%}
+{%- if email and token -%}
+{%- capture url %}./api/register/{{ token }}{% endcapture -%}
+{%- assign method = 'POST' -%}
+{%- assign formId = 'form' -%}
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
+  <input type="hidden" name="email" value="{{ email }}" required>
+  {% include 'form-ajaxify', buttonText: 'Confirm Registration!' %}
+</form>
+{%- else -%}
+<h2>Invalid Arguments!</h2>
+{%- endif -%}

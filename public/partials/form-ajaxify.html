@@ -1,0 +1,13 @@
+{% include 'submit-button' %}
+<span id="error-display" style="display: none; text-align: center;"></span>
+<script type="text/javascript" src="./js/ajax-form.js"></script>
+<script type="text/javascript">
+registerForm(
+  '{{ formId }}',
+  'submit-button',
+  'error-display',
+  '{{ method }}',
+  '{{ url }}',
+  '{{ buttonText }}',
+  'Success!');
+</script>

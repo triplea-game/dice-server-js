@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const Liquid = require('liquidjs');
+const path = require('path');
 const TokenCache = require('../util/token-cache.js');
 
 const getServerBaseUrl = ({
@@ -16,6 +18,10 @@ class EmailManager {
     this.transport = nodemailer.createTransport(transport);
     this.server = server;
     this.emailsender = emailsender;
+    this.engine = Liquid({
+      root: path.resolve(__dirname, '../../public/email-templates/'),
+      extname: '.html',
+    });
   }
 
   async verifyEmail(email, token) {
@@ -30,18 +36,24 @@ class EmailManager {
     if (await this.dbhandler.checkMail(email)) {
       return false;
     }
-    // TODO replace with frontend
     const token = crypto.randomBytes(512).toString('base64');
     this.emailMap.put(email, token);
-    const url = `${getServerBaseUrl(this.server)}/api/register/${email}/${encodeURIComponent(token)}`;
+
+    const subject = 'Verify your E-Mail';
+    const baseUrl = getServerBaseUrl(this.server);
+    const encodedEmail = encodeURIComponent(email);
+    const content = await this.engine.renderFile('verify-email.html', {
+      subject,
+      url: `${baseUrl}/register?email=${encodedEmail}&token=${encodeURIComponent(token)}`,
+      host: this.server.host,
+      unsub: `${baseUrl}/unregister?email=${encodedEmail}`,
+    });
+
     return this.transport.sendMail({
       from: this.emailsender,
-      // FIXME email should be escaped
       to: email,
-      subject: 'Confirm your email', // TODO use proper templating engine
-      html: `Please click this link to confirm your email adress: <a href="${url}">Confirm!</a>
-      <br>
-      It will expire after 24 hours or when a new confirmation email is sent.`,
+      subject,
+      html: content,
     });
   }
 
@@ -49,27 +61,29 @@ class EmailManager {
     return this.dbhandler.removeUser(email);
   }
 
-  sendDiceVerificationEmail(email1, email2, dice, signature, date) {
-    // TODO replace with frontend
+  async sendDiceVerificationEmail(email1, email2, dice, signature, date) {
     const properties = {
       dice,
       signature,
       date,
     };
+    const subject = 'The dice have been cast!';
     const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
-    const url = `${getServerBaseUrl(this.server)}/api/verify/${encodedProperties}`;
+    const baseUrl = getServerBaseUrl(this.server);
+
+    const content = await this.engine.renderFile('verify-dice.html', {
+      subject,
+      date: new Date(date).toLocaleString('en-US'),
+      dice: JSON.stringify(dice),
+      url: `${baseUrl}/verify?token=${encodedProperties}`,
+      unsub: `${baseUrl}/unregister`,
+    });
+
     return this.transport.sendMail({
       from: this.emailsender,
-      // FIXME emails should be escaped
       to: `${email1}, ${email2}`,
-      subject: 'Dice were rolled', // TODO use proper templating engine
-      html: `The dice have been cast!
-      <br>
-      Date: ${new Date(date).toLocaleString('en-US')}
-      <br>
-      Results: ${JSON.stringify(dice)}
-      <br>
-      <a href="${url}">Verify the validity of this message!</a>`,
+      subject,
+      html: content,
     });
   }
 }

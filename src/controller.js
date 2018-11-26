@@ -5,14 +5,16 @@ require('express-async-errors');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const Liquid = require('liquidjs');
 const apiMiddleware = require('./api/api');
+const userMiddleware = require('./user/user');
 
 const setupRoutes = (db) => {
   const routerParams = { caseSensitive: true, strict: true };
   const router = express.Router(routerParams);
 
   router.use('/api', apiMiddleware(express.Router(routerParams), db));
-  // TODO use templating engine to create user friendly registration sites
+  router.use('/', userMiddleware(express.Router(routerParams)));
   return router;
 };
 
@@ -20,6 +22,14 @@ const startServer = (router, url, port) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  const engine = Liquid({ root: __dirname, extname: '.html' });
+  app.engine('html', engine.express());
+  app.set('views', ['./public/partials', './public/views']);
+  app.set('view engine', 'html');
+
+  app.use(express.static('./public/static'));
+
   app.use(url, router);
   app.listen(port, () => console.info(`Running on port ${port}`));
 };

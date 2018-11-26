@@ -1,0 +1,9 @@
+{%- layout 'layout', title: 'Unregister from the dice Server' -%}
+{%- assign url ='./api/unregister' -%}
+{%- assign method = 'POST' -%}
+{%- assign formId = 'form' -%}
+
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
+  <input type="email" name="email" placeholder="Insert your email adress" value="{{ email }}" required>
+  {% include 'form-ajaxify', buttonText: 'Unregister!' %}
+</form>

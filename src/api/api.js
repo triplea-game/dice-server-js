@@ -4,11 +4,17 @@ const Validator = require('./validator');
 const EmailManager = require('./email-manager.js');
 const Handler = require('./db-handler');
 
+const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 class Api {
   constructor(database) {
     this.dbHandler = new Handler(database);
     this.emailManager = new EmailManager(this.dbHandler, nconf.get('smtp'), nconf.get('server'), nconf.get('emailsender'));
     this.validator = new Validator();
+  }
+
+  static isEmail(email) {
+    return emailValidation.test(email);
   }
 
   async registrationMiddleware(req, res, next) {
@@ -124,13 +130,13 @@ class Api {
   }
 
   async handleEmailRegisterConfirm(req, res) {
-    const verified = await this.emailManager.verifyEmail(req.params.email, req.params.token);
+    const verified = await this.emailManager.verifyEmail(req.body.email, req.params.token);
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
       res.status(403).json({
         status: 'Error',
-        errors: 'invalid Token or mail.',
+        errors: ['Invalid Token or E-Mail.'],
       });
     }
   }
@@ -149,7 +155,14 @@ class Api {
 
   static verifyEmailParam(req, res, next) {
     if (typeof req.body.email === 'string') {
-      next();
+      if (Api.isEmail(req.body.email)) {
+        next();
+      } else {
+        res.status(422).json({
+          status: 'Error',
+          errors: ['Email has invalid format'],
+        });
+      }
     } else {
       res.status(422).json({
         status: 'Error',
@@ -164,8 +177,7 @@ module.exports = (router, database) => {
   router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
   router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
   router.post('/register', Api.verifyEmailParam, api.handleEmailRegister.bind(api));
-  // TODO replace with frontend and merge with middleware above
-  router.get('/register/:email/:token', api.handleEmailRegisterConfirm.bind(api));
+  router.post('/register/:token', api.handleEmailRegisterConfirm.bind(api));
   router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
 
   // express.js behaves differently if no next parameter is used here

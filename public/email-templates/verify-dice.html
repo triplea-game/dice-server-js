@@ -1,0 +1,10 @@
+{% layout 'base' %}
+<h1>The dice have been cast!</h1>
+<p>Roll-Time: {{ date }}</p>
+<p>Results: {{ dice }}</p>
+<br>
+<p>You can click below to verify your results:</p>
+<a class="big" href="{{ url }}">Verify!</a>
+<br>
+<p>Note we might not be able to correctly verify integrity for very old (1+ years) dice rolls.</p>
+{% include 'footer' %}
