@@ -4,6 +4,8 @@ const Validator = require('./validator');
 const EmailManager = require('./email-manager.js');
 const Handler = require('./db-handler');
 
+const emailValidation = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 class Api {
   constructor(database) {
     this.dbHandler = new Handler(database);
@@ -11,8 +13,8 @@ class Api {
     this.validator = new Validator();
   }
 
-  static isSingleEmail(email) {
-    return !/[,\s<>]/.test(email);
+  static isEmail(email) {
+    return emailValidation.test(email);
   }
 
   async registrationMiddleware(req, res, next) {
@@ -153,7 +155,7 @@ class Api {
 
   static verifyEmailParam(req, res, next) {
     if (typeof req.body.email === 'string') {
-      if (Api.isSingleEmail(req.body.email)) {
+      if (Api.isEmail(req.body.email)) {
         next();
       } else {
         res.status(422).json({
