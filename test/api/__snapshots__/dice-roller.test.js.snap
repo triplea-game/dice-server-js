@@ -1,0 +1,2186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The dice-roller should call the RNG with the correct bounds 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      1,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      12,
+    ],
+    Array [
+      1,
+      123,
+    ],
+    Array [
+      1,
+      123,
+    ],
+    Array [
+      1,
+      123,
+    ],
+    Array [
+      1,
+      123,
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
