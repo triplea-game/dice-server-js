@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The API should setup the routes correctly 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "email:smtp",
+    ],
+    Array [
+      "email:display:server",
+    ],
+    Array [
+      "email:display:sender",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": "email:smtp",
+    },
+    Object {
+      "isThrow": false,
+      "value": "email:display:server",
+    },
+    Object {
+      "isThrow": false,
+      "value": "email:display:sender",
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 2`] = `[MockFunction]`;
+
+exports[`The API should setup the routes correctly 3`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 4`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      mockConstructor {},
+      "email:smtp",
+      "email:display:server",
+      "email:display:sender",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 5`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "name": "Dummy DB",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 6`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 7`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "/verify/:token",
+      [Function],
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 8`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "/roll",
+      [Function],
+      [Function],
+      [Function],
+    ],
+    Array [
+      "/register",
+      [Function],
+      [Function],
+    ],
+    Array [
+      "/register/:token",
+      [Function],
+    ],
+    Array [
+      "/unregister",
+      [Function],
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The API should setup the routes correctly 9`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
