@@ -119,7 +119,9 @@ class Api {
     const valid = await this.validator.verify(timedArray, req.params.signature);
     res.json({
       status: 'OK',
-      valid,
+      result: {
+        valid,
+      },
     });
   }
 
