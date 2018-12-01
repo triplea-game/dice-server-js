@@ -19,7 +19,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
    - On production systems you should move them into a "save directory" and (at least on UNIX-like systems) restrict read access of the private key to the user that's going to run the server and root.
 5. - Create a file `config.json` which contains all information the server needs to start.
    - Alternatively those configuration options can be passed via CLI directly or as environment variables. Check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
-   - The config files' Layout will be explained below.
+   - The config files' layout will be explained below.
 6. Create a Database in postgres to be used by the Server.
    
 #### config.json
