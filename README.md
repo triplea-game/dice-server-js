@@ -138,7 +138,7 @@ On Error:
    - A request to this endpoint sends an email to the specified email with a random 512-bit token that is only saved in the RAM and will expire after a maximum amount of 60 minutes.
 - POST `/register/:token`:
    - `:token` Parameter:
-      - This parameter is a base64 encoded random number to verify that the person registering the email actually has access.
+      - This parameter is a base64-encoded random number to verify that the person registering the email actually has access.
       - If the token is wrong, the actual token automatically expires and a new confirmation email needs to be sent.
    - Required Parameters (POST Body, urlencoded):
       - `email` String: The email to compare the token with.
