@@ -122,7 +122,7 @@ On Error:
    - Generates `times` random numbers with a value in `[1, max]`.
    - Result
       - `dice` Integer Array: An array of the rolled dice.
-      - `date` Integer: The current UNIX timestamp with millisecond precision, taken into account for the signature so the signature can't be reused in the future.
+      - `date` Integer: The current UNIX timestamp with millisecond precision. Taken into account for the signature so the signature can't be reused in the future.
       - `signature`: The base64-encoded signature verifying the integrity of the rolled dice.
 - GET `/api/verify/:token`:
    - `:token` Parameter:
