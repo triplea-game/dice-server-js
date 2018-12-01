@@ -7,8 +7,8 @@ const encoding = 'base64';
 
 class Validator {
   constructor() {
-    this.privateKey = fs.readFileSync(nconf.get('private-key'));
-    this.publicKey = fs.readFileSync(nconf.get('public-key'));
+    this.privateKey = fs.readFileSync(nconf.get('keys:private'));
+    this.publicKey = fs.readFileSync(nconf.get('keys:public'));
   }
 
   async sign(diceArray) {

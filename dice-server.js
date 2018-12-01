@@ -3,11 +3,16 @@ const controller = require('./src/controller');
 
 nconf.argv().env().file({ file: './config.json' });
 nconf.defaults({
-  server: {
-    protocol: 'http',
-    host: 'localhost',
-    port: 7654,
-    baseurl: '',
+  port: 7654,
+  email: {
+    display: {
+      server: {
+        protocol: 'http',
+        host: 'localhost',
+        port: 7654,
+        baseurl: '',
+      },
+    },
   },
   database: {
     username: 'postgres',
@@ -17,5 +22,13 @@ nconf.defaults({
     database: 'dicedb',
   },
 });
-nconf.required(['server', 'database', 'smtp', 'private-key', 'public-key']);
-controller(nconf.get('server:baseurl'), nconf.get('server:port'), nconf.get('database'));
+nconf.required([
+  'port',
+  'database',
+  'email:smtp',
+  'email:display:sender',
+  'email:display:server',
+  'keys:private',
+  'keys:public',
+]);
+controller(nconf.get('port'), nconf.get('database'));
