@@ -20,7 +20,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 5. - Create a file `config.json` which contains all information the server needs to start.
    - Alternatively those configuration options can be passed via CLI directly or as environment variables. Check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
    - The config files' layout will be explained below.
-6. Create a Database in postgres to be used by the Server.
+6. Create a database in Postgres to be used by the server.
    
 #### config.json
 ```json
