@@ -153,7 +153,7 @@ Basically all pages consist of a classic HTML form that gets replaced with a res
 - GET `/`:
    - The index page where users can register their emails.
 - GET `/verify`:
-   - The Page the emails redirect to to verify your emails.
+   - The page the emails redirect to to verify your emails.
    - Parameters:
       - `token` String: The token to pass to the `/api/verify` endpoint
 - GET `/register`:
