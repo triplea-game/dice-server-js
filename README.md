@@ -81,7 +81,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 ### Starting
 In order to start the server run
 `node dice-server.js`
-It can be terminated using `SIGTERM`, i.e. `Ctrl+C`
+It can be terminated using `SIGTERM`, i.e. `Ctrl+C`.
 
 ### Testing
 In order to run all local tests and eslint, you can simply run
