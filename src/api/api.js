@@ -192,3 +192,5 @@ module.exports = (router, database) => {
   router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }) || next());
   return router;
 };
+
+module.exports.Api = Api;

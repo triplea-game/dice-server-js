@@ -42,4 +42,39 @@ describe('The API', () => {
     expect(mockRouter.post).toMatchSnapshot();
     expect(mockRouter.use).toMatchSnapshot();
   });
+
+  it('should reject invalid emails', () => {
+    expect(api.Api.isEmail('name.sirname@provider.tl')).toBe(true);
+    expect(api.Api.isEmail('prefix+something@gmail.com')).toBe(true);
+    expect(api.Api.isEmail('hax+0rs@cr4zyd0main.org')).toBe(true);
+
+
+    expect(api.Api.isEmail('')).toBe(false);
+    expect(api.Api.isEmail('         ')).toBe(false);
+    expect(api.Api.isEmail('me@google')).toBe(false);
+    expect(api.Api.isEmail('me@gmail.com you@gmail.com')).toBe(false);
+    expect(api.Api.isEmail('"Display Name" <actual@email.com>')).toBe(false);
+  })
+
+  it('should return the correct status code on <enter here>', () => {
+    /* missing tests
+    registrationMiddleware()
+
+    validateRollArgs()
+
+    handleRoll()
+
+    validateVerifyArgs()
+
+    handleVerify()
+
+    handleEmailRegister()
+
+    handleEmailRegisterConfirm()
+
+    handleEmailUnregister()
+
+    verifyEmailParam()
+    */
+  });
 });
