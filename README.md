@@ -117,7 +117,7 @@ On Error:
    - Required Parameters (POST Body, urlencoded):
       - `max` Integer. Specifies the highest outcome for each roll, must be <= 100.
       - `times` Integer. Specifies how many dice should be rolled, must be <= 100.
-      - `email1` String. The first email to send the notification email to. This emails needs to be registered.
+      - `email1` String. The first email to send the notification email to. This email needs to be registered.
       - `email2` String. The second email to send the notification to. This email needs to be registered.
    - Generates `times` random numbers with a value in `[1, times]`.
    - Result
