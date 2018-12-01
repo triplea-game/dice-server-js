@@ -21,7 +21,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
    - Alternatively those configuration options can be passed via CLI directly or as environment variables. Check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
    - The config files' layout will be explained below.
 6. Create a database in Postgres to be used by the server.
-   
+
 #### config.json
 ```json
 {
@@ -60,16 +60,16 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 ```
 - `port`: The port node.js will listen on. Required.
 - `database`: Details about the database connection. Required.
-   - `username`: Username to authenticate with the Database. Default: `postgres`.
-   - `password`: Password to authenticate with the Database. Default ` `.
-   - `host`: Hostname to connect to the Database. Default `localhost`.
-   - `port`: Port to connect to the Database. Default `5432`.
-   - `database`: Name of the Database to use, this should be the Database you created in the one-time setup. Default `dicedb`.
+   - `username`: Username to authenticate with the database. Default: `postgres`.
+   - `password`: Password to authenticate with the database. Default ` `.
+   - `host`: Hostname to connect to the database. Default `localhost`.
+   - `port`: Port to connect to the database. Default `5432`.
+   - `database`: Name of the database to use, this should be the database you created in the one-time setup. Default `dicedb`.
 - `email`: Settings that are used by the EmailManager. Required.
    - `smtp`: Nodemailer SMTP Configuration, this object will be passed directly to Nodemailer without any further processing. Check the [Nodemailer Docs](https://nodemailer.com/smtp/#general-options). If you need a service to test emails locally you can use [Ethereal](https://ethereal.email/), a dummy email service that doesn't actually sends emails but simulates a fully-featured SMTP server.
    - `display`: Display settings how the server will refer to itself in emails.
       - `sender`: The Entry for the `From:` field in the email. The actual email should be the correct one, otherwise the emails will likely land in SPAM Folders. Required.
-      - `server`: Settings that define how the Server will refer to itself in E-Mails. Required.
+      - `server`: Settings that define how the server will refer to itself in E-Mails. Required.
          - `protocol`: The protocol that should be used to connect to this server. Default `http`.
          - `host`: The hostname that should be used to refer to this server, ideally a domain. Default `localhost`.
          - `port`: The port that should be used to connect to this server, if used behind a reverse-proxy this should be the public port. Default: `7654`.
@@ -77,7 +77,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 - `keys`:
    - `private`: Path to the private key used to sign dice rolls. Required.
    - `public`: Path to the public key used to sign dice rolls. Required.
-   
+
 ### Starting
 In order to start the server run
 `node dice-server.js`
