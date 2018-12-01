@@ -162,6 +162,6 @@ Basically all pages consist of a classic HTML form that gets replaced with a res
       - `email` String: The email to confirm the registration for.
       - `token` String: The token to pass to the `/api/register/:token` endpoint.
 - GET `/unregister`
-   - The Page where users can unregister their email.
+   - The page where users can unregister their email.
    - Paramaters:
       - `email` String, optional: The email to remove from the database, used to pre-fill the form.
