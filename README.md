@@ -61,7 +61,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 - `port`: The port node.js will listen on. Required.
 - `database`: Details about the database connection. Required.
    - `username`: Username to authenticate with the database. Default: `postgres`.
-   - `password`: Password to authenticate with the database. Default ` `.
+   - `password`: Password to authenticate with the database. Defaults to an empty String.
    - `host`: Hostname to connect to the database. Default `localhost`.
    - `port`: Port to connect to the database. Default `5432`.
    - `database`: Name of the database to use, this should be the database you created in the one-time setup. Default `dicedb`.
@@ -73,7 +73,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
          - `protocol`: The protocol that should be used to connect to this server. Default `http`.
          - `host`: The hostname that should be used to refer to this server, ideally a domain. Default `localhost`.
          - `port`: The port that should be used to connect to this server, if used behind a reverse-proxy this should be the public port. Default: `7654`.
-         - `baseurl`: In case your server is in a non-root installation, set this to the folder name. (Example `yourserver.com/dice` -> `/dice`.) Default ` `.
+         - `baseurl`: In case your server is in a non-root installation, set this to the folder name. (Example `yourserver.com/dice` -> `/dice`.) Defaults to an empty String.
 - `keys`:
    - `private`: Path to the private key used to sign dice rolls. Required.
    - `public`: Path to the public key used to sign dice rolls. Required.
