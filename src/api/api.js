@@ -44,7 +44,7 @@ class Api {
       } else {
         req.body[name] = parseInt(req.body[name], 10);
         const maxLimit = 100;
-        if (isNaN(req.body[name])) {
+        if (Number.isNaN(req.body[name])) {
           errors.push(`Parameter ${name} is not an Integer`);
         } else if (req.body[name] > maxLimit) {
           errors.push(`Parameter ${name} has value ${req.body[name]} which is higher than ${maxLimit}`);
