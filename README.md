@@ -68,7 +68,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 - `email`: Settings that are used by the EmailManager. Required.
    - `smtp`: Nodemailer SMTP Configuration, this object will be passed directly to Nodemailer without any further processing. Check the [Nodemailer Docs](https://nodemailer.com/smtp/#general-options). If you need a service to test emails locally you can use [Ethereal](https://ethereal.email/), a dummy email service that doesn't actually sends emails but simulates a fully-featured SMTP server.
    - `display`: Display settings how the server will refer to itself in emails.
-      - `sender`: The Entry for the `From:` field in the email, the actual email should be the correct one, otherwise the emails will likely land in SPAM Folders. Required.
+      - `sender`: The Entry for the `From:` field in the email. The actual email should be the correct one, otherwise the emails will likely land in SPAM Folders. Required.
       - `server`: Settings that define how the Server will refer to itself in E-Mails. Required.
          - `protocol`: The Protocol that should be used for this server in emails. Default `http`.
          - `host`: The hostname that should be used to refer to this server, ideally a domain. Default `localhost`.
