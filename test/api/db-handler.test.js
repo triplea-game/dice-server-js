@@ -1,3 +1,6 @@
+jest.enableAutomock();
+jest.unmock('../../src/api/db-handler');
+
 const pg = require('pg-promise');
 
 const mockedPg = jest.fn();
