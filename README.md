@@ -151,7 +151,7 @@ The same template engine is used for emails as well.
 Basically all pages consist of a classic HTML form that gets replaced with a responsive AJAX system if JavaScript is available.
 #### Routes
 - GET `/`:
-   - The index page, the page where users can register their emails.
+   - The index page where users can register their emails.
 - GET `/verify`:
    - The Page the emails redirect to to verify your emails.
    - Parameters:
