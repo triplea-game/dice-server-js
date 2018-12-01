@@ -126,7 +126,7 @@ On Error:
       - `signature`: The base64-encoded signature verifying the integrity of the rolled dice.
 - GET `/api/verify/:token`:
    - `:token` Parameter:
-      - This Parameter is actually a base64 encoded, urlencoded JSON string of roughly this scheme: `{ "dice": [1, 2, 3], "date": 121332, signature: "base64encodedsignature" }`
+      - This parameter is actually a base64-encoded, urlencoded JSON string of roughly this scheme: `{ "dice": [1, 2, 3], "date": 121332, "signature": "base64encodedsignature" }`.
       - `dice` Integer Array: An array of the dice rolls to be verified.
       - `date` Integer: A Unix Timestamp of the exact millisecond the original request was made. Important for the signature, and could potentially be used to check if this signature was made with a legacy certificate.
       - `signature` String: A base64-encoded RSA signature that can be verified by the server.
