@@ -1,4 +1,5 @@
 const pg = require('pg-promise');
+
 const mockedPg = jest.fn();
 pg.mockReturnValue(mockedPg);
 const DbHandler = require('../../src/api/db-handler');
@@ -33,11 +34,12 @@ describe('The DB-Handler', () => {
   it('should log an error if something goes wrong', async () => {
     global.console.error = jest.fn();
     dbObject.none = jest.fn();
-    dbObject.none.mockReturnValue(Promise.reject('ERROR MESSAGE'));
+    const testError = new Error('ERROR MESSAGE');
+    dbObject.none.mockReturnValue(Promise.reject(testError));
     await new DbHandler({}).setupDb();
 
     expect(global.console.error).toHaveBeenCalledTimes(2);
-    expect(global.console.error).toHaveBeenLastCalledWith('ERROR MESSAGE');
+    expect(global.console.error).toHaveBeenLastCalledWith(testError);
     global.console.error.mockRestore();
   });
 

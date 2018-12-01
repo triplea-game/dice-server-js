@@ -12,7 +12,7 @@ describe('The user module', () => {
     if (result) {
       return result[1];
     }
-    throw `No Route with name ${route} was registered`;
+    throw new Error(`No Route with name ${route} was registered`);
   };
 
   const res = {
@@ -39,7 +39,7 @@ describe('The user module', () => {
         token: Buffer.from(JSON.stringify({
           dice: [0, 1, 1, 2, 3, 5, 8, 13],
           date: 626644800,
-          signature: 'VGhlcmUgYXJlIG90aGVyIHNlY3JldHM='
+          signature: 'VGhlcmUgYXJlIG90aGVyIHNlY3JldHM=',
         })).toString('base64'),
       },
     }, res);
