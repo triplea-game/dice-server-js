@@ -1,0 +1,381 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The controller should setup the routes correctly 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": Object {
+        "engine": [MockFunction] {
+          "calls": Array [
+            Array [
+              "html",
+              "Express Router",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+        "listen": [MockFunction] {
+          "calls": Array [
+            Array [
+              1337,
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+        "set": [MockFunction] {
+          "calls": Array [
+            Array [
+              "views",
+              Array [
+                "./public/partials",
+                "./public/views",
+              ],
+            ],
+            Array [
+              "view engine",
+              "html",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+        "use": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+            Array [
+              [Function],
+            ],
+            Array [
+              "Static",
+            ],
+            Array [
+              Object {
+                "use": [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      "/api",
+                      "API Module",
+                    ],
+                    Array [
+                      "/",
+                      "User Module",
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                },
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "caseSensitive": true,
+        "strict": true,
+      },
+    ],
+    Array [
+      Object {
+        "caseSensitive": true,
+        "strict": true,
+      },
+    ],
+    Array [
+      Object {
+        "caseSensitive": true,
+        "strict": true,
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": Object {
+        "use": [MockFunction] {
+          "calls": Array [
+            Array [
+              "/api",
+              "API Module",
+            ],
+            Array [
+              "/",
+              "User Module",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      },
+    },
+    Object {
+      "isThrow": false,
+      "value": Object {
+        "use": [MockFunction] {
+          "calls": Array [
+            Array [
+              "/api",
+              "API Module",
+            ],
+            Array [
+              "/",
+              "User Module",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      },
+    },
+    Object {
+      "isThrow": false,
+      "value": Object {
+        "use": [MockFunction] {
+          "calls": Array [
+            Array [
+              "/api",
+              "API Module",
+            ],
+            Array [
+              "/",
+              "User Module",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 3`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "/api",
+      "API Module",
+    ],
+    Array [
+      "/",
+      "User Module",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 4`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      [Function],
+    ],
+    Array [
+      [Function],
+    ],
+    Array [
+      "Static",
+    ],
+    Array [
+      Object {
+        "use": [MockFunction] {
+          "calls": Array [
+            Array [
+              "/api",
+              "API Module",
+            ],
+            Array [
+              "/",
+              "User Module",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 5`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "html",
+      "Express Router",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 6`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "views",
+      Array [
+        "./public/partials",
+        "./public/views",
+      ],
+    ],
+    Array [
+      "view engine",
+      "html",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The controller should setup the routes correctly 7`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      1337,
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
