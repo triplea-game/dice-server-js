@@ -43,6 +43,10 @@ class Api {
         errors.push(`${name} parameter is not defined`);
       } else {
         req.body[name] = parseInt(req.body[name], 10);
+        const maxLimit = 100;
+        if (req.body[name] > maxLimit) {
+          errors.push(`${name} parameter has value ${req.body[name]} which is higher than ${maxLimit}`);
+        }
       }
     });
     if (errors.length > 0) {
