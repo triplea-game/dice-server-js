@@ -148,7 +148,7 @@ On Error:
 ### Frontend
 The _Frontend_ is being served using templates and the liquid format.
 The same template engine is used for emails as well.
-Basically all Pages consist of a classic HTML Form that gets replaced with a responsive AJAX system if JavaScript is available.
+Basically all pages consist of a classic HTML form that gets replaced with a responsive AJAX system if JavaScript is available.
 #### Routes
 - GET `/`:
    - The index page, the page where users can register their emails.
