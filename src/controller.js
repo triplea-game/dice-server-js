@@ -18,7 +18,7 @@ const setupRoutes = (db) => {
   return router;
 };
 
-const startServer = (router, url, port) => {
+const startServer = (router, port) => {
   const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,11 +30,11 @@ const startServer = (router, url, port) => {
 
   app.use(express.static('./public/static'));
 
-  app.use(url, router);
+  app.use(router);
   app.listen(port, () => console.info(`Running on port ${port}`));
 };
 
-module.exports = (url, port, db) => {
+module.exports = (port, db) => {
   const router = setupRoutes(db);
-  startServer(router, url, port);
+  startServer(router, port);
 };

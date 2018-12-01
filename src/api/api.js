@@ -9,7 +9,7 @@ const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".
 class Api {
   constructor(database) {
     this.dbHandler = new Handler(database);
-    this.emailManager = new EmailManager(this.dbHandler, nconf.get('smtp'), nconf.get('server'), nconf.get('emailsender'));
+    this.emailManager = new EmailManager(this.dbHandler, nconf.get('email:smtp'), nconf.get('email:display:server'), nconf.get('email:display:sender'));
     this.validator = new Validator();
   }
 
