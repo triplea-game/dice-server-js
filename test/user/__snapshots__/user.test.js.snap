@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The user module should trigger the correct render on / 1`] = `
+Object {
+  "render": [MockFunction] {
+    "calls": Array [
+      Array [
+        "register.html",
+      ],
+    ],
+    "results": Array [
+      Object {
+        "isThrow": false,
+        "value": undefined,
+      },
+    ],
+  },
+}
+`;
+
+exports[`The user module should trigger the correct render on /register 1`] = `
+Object {
+  "render": [MockFunction] {
+    "calls": Array [
+      Array [
+        "confirm-register.html",
+        Object {
+          "email": "itsame@mario.com",
+          "token": "My4xNDE1OTI2NTM1ODk3OTMyMzg0NjI2NDMzOA%3D%3D",
+        },
+      ],
+    ],
+    "results": Array [
+      Object {
+        "isThrow": false,
+        "value": undefined,
+      },
+    ],
+  },
+}
+`;
+
+exports[`The user module should trigger the correct render on /unregister 1`] = `
+Object {
+  "render": [MockFunction] {
+    "calls": Array [
+      Array [
+        "unregister.html",
+        Object {
+          "email": "itsame@luigi.com",
+        },
+      ],
+    ],
+    "results": Array [
+      Object {
+        "isThrow": false,
+        "value": undefined,
+      },
+    ],
+  },
+}
+`;
+
+exports[`The user module should trigger the correct render on /verify 1`] = `
+Object {
+  "render": [MockFunction] {
+    "calls": Array [
+      Array [
+        "verify.html",
+        Object {
+          "date": "Thu, 08 Jan 1970 06:04:04 GMT",
+          "dice": Array [
+            0,
+            1,
+            1,
+            2,
+            3,
+            5,
+            8,
+            13,
+          ],
+          "token": "eyJkaWNlIjpbMCwxLDEsMiwzLDUsOCwxM10sImRhdGUiOjYyNjY0NDgwMCwic2lnbmF0dXJlIjoiVkdobGNtVWdZWEpsSUc5MGFHVnlJSE5sWTNKbGRITT0ifQ%3D%3D",
+        },
+      ],
+    ],
+    "results": Array [
+      Object {
+        "isThrow": false,
+        "value": undefined,
+      },
+    ],
+  },
+}
+`;
+
+exports[`The user module should trigger the correct render on /verify with invalid params 1`] = `
+Object {
+  "render": [MockFunction] {
+    "calls": Array [
+      Array [
+        "verify.html",
+        Object {
+          "invalid": true,
+        },
+      ],
+    ],
+    "results": Array [
+      Object {
+        "isThrow": false,
+        "value": undefined,
+      },
+    ],
+  },
+}
+`;
