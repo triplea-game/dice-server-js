@@ -54,7 +54,7 @@ describe('The API', () => {
     expect(api.Api.isEmail('me@google')).toBe(false);
     expect(api.Api.isEmail('me@gmail.com you@gmail.com')).toBe(false);
     expect(api.Api.isEmail('"Display Name" <actual@email.com>')).toBe(false);
-  })
+  });
 
   it('should return the correct status code on <enter here>', () => {
     /* missing tests
