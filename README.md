@@ -119,7 +119,7 @@ On Error:
       - `times` Integer. Specifies how many dice should be rolled, must be <= 100.
       - `email1` String. The first email to send the notification email to. This email needs to be registered.
       - `email2` String. The second email to send the notification to. This email needs to be registered.
-   - Generates `times` random numbers with a value in `[1, times]`.
+   - Generates `times` random numbers with a value in `[1, max]`.
    - Result
       - `dice` Integer Array: An array of the rolled dice.
       - `date` Integer: The current UNIX timestamp with millisecond precision, taken into account for the signature so the signature can't be reused in the future.
