@@ -70,7 +70,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
    - `display`: Display settings how the server will refer to itself in emails.
       - `sender`: The Entry for the `From:` field in the email. The actual email should be the correct one, otherwise the emails will likely land in SPAM Folders. Required.
       - `server`: Settings that define how the Server will refer to itself in E-Mails. Required.
-         - `protocol`: The Protocol that should be used for this server in emails. Default `http`.
+         - `protocol`: The protocol that should be used to connect to this server. Default `http`.
          - `host`: The hostname that should be used to refer to this server, ideally a domain. Default `localhost`.
          - `port`: The port that should be used to connect to this server, if used behind a reverse-proxy this should be the public port. Default: `7654`.
          - `baseurl`: In case your server is in a non-root installation, set this to the folder name. (Example `yourserver.com/dice` -> `/dice`.) Default ` `.
