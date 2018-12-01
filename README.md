@@ -9,7 +9,7 @@ In order to be able to run the server you need to have a couple of things instal
  - `yarn`
  - `postgres` >= 10
 After those are installed on your system you can follow the steps below to get yourself up and running.
-The steps assume node and yarn are on the `PATH` of your system, if that's not the case, you need to replace `node` and `yarn` with the full qualified path name to the executable.
+The steps assume node and yarn are on the `PATH` of your system, if that's not the case, you need to replace `node` and `yarn` with the fully-qualified path name to the executable.
 
 ### One-Time-Setup
 1. Clone this Repository in a directory of your choice.
