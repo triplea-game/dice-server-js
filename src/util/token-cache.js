@@ -1,7 +1,7 @@
 class TokenCache {
   constructor(minutesToLive = 60) {
     this.map = {};
-    this.timeout = 100 * 60 * minutesToLive;
+    this.timeout = 1000 * 60 * minutesToLive;
   }
 
   put(key, value) {
