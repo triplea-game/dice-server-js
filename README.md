@@ -18,7 +18,7 @@ The steps assume node and yarn are on the `PATH` of your system, if that's not t
 4. - Generate an RSA key-pair. If you have installed `openssl` and it's on your PATH, you can simply run `yarn generate-keypair`, which will create the files `privkey.pem` and `pubkey.pem` in the current directory.
    - On production systems you should move them into a "save directory" and (at least on UNIX-like systems) restrict read access of the private key to the user that's going to run the server and root.
 5. - Create a file `config.json` which contains all information the server needs to start.
-   - Alternatively those configuration options can be passed via CLI directly or as environment variables, check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
+   - Alternatively those configuration options can be passed via CLI directly or as environment variables. Check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
    - The config files' Layout will be explained below.
 6. Create a Database in postgres to be used by the Server.
    
