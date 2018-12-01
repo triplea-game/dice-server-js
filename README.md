@@ -160,7 +160,7 @@ Basically all pages consist of a classic HTML form that gets replaced with a res
    - The page the "confirm-registration-email" redirects to to press a confirm button in a user-friendly way.
    - Parameters:
       - `email` String: The email to confirm the registration for.
-      - `token` String: The token to pass to the `/api/register/:token` endpoint
+      - `token` String: The token to pass to the `/api/register/:token` endpoint.
 - GET `/unregister`
    - The Page where users can unregister their email.
    - Paramaters:
