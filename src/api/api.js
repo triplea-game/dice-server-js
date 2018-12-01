@@ -40,12 +40,16 @@ class Api {
     const errors = [];
     ['max', 'times'].forEach((name) => {
       if (!req.body[name]) {
-        errors.push(`${name} parameter is not defined`);
+        errors.push(`Parameter ${name} is not defined`);
       } else {
         req.body[name] = parseInt(req.body[name], 10);
         const maxLimit = 100;
-        if (req.body[name] > maxLimit) {
-          errors.push(`${name} parameter has value ${req.body[name]} which is higher than ${maxLimit}`);
+        if (isNaN(req.body[name])) {
+          errors.push(`Parameter ${name} is not an Integer`);
+        } else if (req.body[name] > maxLimit) {
+          errors.push(`Parameter ${name} has value ${req.body[name]} which is higher than ${maxLimit}`);
+        } else if (req.body[name] <= 0) {
+          errors.push(`Parameter ${name} has value ${req.body[name]} which is 0 or less`);
         }
       }
     });
