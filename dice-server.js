@@ -11,8 +11,8 @@ nconf.defaults({
         host: 'localhost',
         port: 7654,
         baseurl: '',
-      }
-    }
+      },
+    },
   },
   database: {
     username: 'postgres',
@@ -29,6 +29,6 @@ nconf.required([
   'email:display:sender',
   'email:display:server',
   'keys:private',
-  'keys:public'
+  'keys:public',
 ]);
 controller(nconf.get('port'), nconf.get('database'));
