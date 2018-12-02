@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The DB-Handler should create a database when initialized 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "postgres://user:secret@[::1]:1337/someDb",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": Object {
+        "none": [MockFunction] {
+          "calls": Array [
+            Array [
+              "CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": Promise {},
+            },
+          ],
+        },
+        "oneOrNone": [MockFunction],
+        "result": [MockFunction],
+      },
+    },
+  ],
+}
+`;
+
+exports[`The DB-Handler should create a database when initialized 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": Promise {},
+    },
+  ],
+}
+`;
+
+exports[`The DB-Handler should execute the correct call to the database on addUser 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "INSERT INTO users (email) VALUES ($1)",
+      "Test Email",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": Promise {},
+    },
+  ],
+}
+`;
+
+exports[`The DB-Handler should execute the correct call to the database on checkMail 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "SELECT email FROM users WHERE email=$1",
+      "Test Email",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`The DB-Handler should execute the correct call to the database on removeUser 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "DELETE FROM users WHERE email=$1",
+      "Test Email",
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;

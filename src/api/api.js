@@ -9,6 +9,7 @@ const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".
 class Api {
   constructor(database) {
     this.dbHandler = new Handler(database);
+    this.dbHandler.setupDb();
     this.emailManager = new EmailManager(this.dbHandler, nconf.get('email:smtp'), nconf.get('email:display:server'), nconf.get('email:display:sender'));
     this.validator = new Validator();
   }
@@ -195,3 +196,5 @@ module.exports = (router, database) => {
   router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }) || next());
   return router;
 };
+
+module.exports.Api = Api;
