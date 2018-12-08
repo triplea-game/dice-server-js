@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The API should setup the routes correctly 1`] = `
+exports[`The API routing process should setup the routes correctly 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -30,9 +30,9 @@ exports[`The API should setup the routes correctly 1`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 2`] = `[MockFunction]`;
+exports[`The API routing process should setup the routes correctly 2`] = `[MockFunction]`;
 
-exports[`The API should setup the routes correctly 3`] = `
+exports[`The API routing process should setup the routes correctly 3`] = `
 [MockFunction] {
   "calls": Array [
     Array [],
@@ -46,7 +46,7 @@ exports[`The API should setup the routes correctly 3`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 4`] = `
+exports[`The API routing process should setup the routes correctly 4`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -65,7 +65,7 @@ exports[`The API should setup the routes correctly 4`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 5`] = `
+exports[`The API routing process should setup the routes correctly 5`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -83,7 +83,7 @@ exports[`The API should setup the routes correctly 5`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 6`] = `
+exports[`The API routing process should setup the routes correctly 6`] = `
 [MockFunction] {
   "calls": Array [
     Array [],
@@ -97,7 +97,7 @@ exports[`The API should setup the routes correctly 6`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 7`] = `
+exports[`The API routing process should setup the routes correctly 7`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -115,7 +115,7 @@ exports[`The API should setup the routes correctly 7`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 8`] = `
+exports[`The API routing process should setup the routes correctly 8`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -160,7 +160,7 @@ exports[`The API should setup the routes correctly 8`] = `
 }
 `;
 
-exports[`The API should setup the routes correctly 9`] = `
+exports[`The API routing process should setup the routes correctly 9`] = `
 [MockFunction] {
   "calls": Array [
     Array [
