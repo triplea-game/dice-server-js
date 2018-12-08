@@ -62,7 +62,7 @@ describe('The API\'s', () => {
       errors: expect.arrayContaining(expectedErrors),
     }));
     expect(next).not.toHaveBeenCalled();
-  }
+  };
 
   it('isEmail function should reject invalid emails', () => {
     expect(api.Api.isEmail('name.sirname@provider.tl')).toBe(true);
@@ -92,12 +92,12 @@ describe('The API\'s', () => {
         body: {
           email1: emailUnregistered,
           email2: emailRegistered,
-        }
+        },
       }, res, next);
       expectStatusAndErrors(
         403,
         expect.stringContaining(emailUnregistered),
-        expect.stringContaining(emailRegistered)
+        expect.stringContaining(emailRegistered),
       );
     });
 
@@ -106,12 +106,12 @@ describe('The API\'s', () => {
         body: {
           email1: emailRegistered,
           email2: emailUnregistered,
-        }
+        },
       }, res, next);
       expectStatusAndErrors(
         403,
         expect.stringContaining(emailRegistered),
-        expect.stringContaining(emailUnregistered)
+        expect.stringContaining(emailUnregistered),
       );
     });
 
@@ -120,12 +120,12 @@ describe('The API\'s', () => {
         body: {
           email1: emailUnregistered,
           email2: emailUnregistered,
-        }
+        },
       }, res, next);
       expectStatusAndErrors(
         403,
         expect.stringContaining(emailUnregistered),
-        expect.stringContaining(emailUnregistered)
+        expect.stringContaining(emailUnregistered),
       );
     });
 
@@ -134,7 +134,7 @@ describe('The API\'s', () => {
         body: {
           email1: emailRegistered,
           email2: emailRegistered,
-        }
+        },
       }, res, next);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.json).not.toHaveBeenCalled();
@@ -149,7 +149,7 @@ describe('The API\'s', () => {
         body: {
           times: '99',
           max: '1',
-        }
+        },
       }, res, next);
 
       expect(res.json).not.toHaveBeenCalled();
@@ -165,12 +165,12 @@ describe('The API\'s', () => {
           body: {
             times: '101',
             max: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/times.*101.*high/)
+          expect.stringMatching(/times.*101.*high/),
         );
       });
 
@@ -179,12 +179,12 @@ describe('The API\'s', () => {
           body: {
             times: '0',
             max: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/times.*0.*less/)
+          expect.stringMatching(/times.*0.*less/),
         );
       });
 
@@ -193,12 +193,12 @@ describe('The API\'s', () => {
           body: {
             times: 'Definitely not an int',
             max: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/times.*not.*Integer/)
+          expect.stringMatching(/times.*not.*Integer/),
         );
       });
 
@@ -206,28 +206,28 @@ describe('The API\'s', () => {
         api.Api.validateRollArgs({
           body: {
             max: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/times.*not.*defined/)
+          expect.stringMatching(/times.*not.*defined/),
         );
       });
     });
 
-    describe('reject the response using invalid times parameter', () => {
+    describe('reject the response using invalid max parameter', () => {
       it('when too high', () => {
         api.Api.validateRollArgs({
           body: {
             max: '123',
             times: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/max.*123.*high/)
+          expect.stringMatching(/max.*123.*high/),
         );
       });
 
@@ -236,12 +236,12 @@ describe('The API\'s', () => {
           body: {
             max: '-12',
             times: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/max.*-12.*less/)
+          expect.stringMatching(/max.*-12.*less/),
         );
       });
 
@@ -250,12 +250,12 @@ describe('The API\'s', () => {
           body: {
             max: 'Not an int either',
             times: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/max.*not.*Integer/)
+          expect.stringMatching(/max.*not.*Integer/),
         );
       });
 
@@ -263,12 +263,12 @@ describe('The API\'s', () => {
         api.Api.validateRollArgs({
           body: {
             times: '6',
-          }
+          },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/max.*not.*defined/)
+          expect.stringMatching(/max.*not.*defined/),
         );
       });
     });
@@ -291,7 +291,7 @@ describe('The API\'s', () => {
         times: 10,
         email1: 'Email 1',
         email2: 'Email 2',
-      }
+      },
     }, res, next);
 
     expect(mockRollDice).toHaveBeenCalledTimes(1);
@@ -299,11 +299,11 @@ describe('The API\'s', () => {
     expect(Date.now).toHaveBeenCalledTimes(1);
     expect(fakeInstance.validator.sign).toHaveBeenCalledTimes(1);
     expect(fakeInstance.validator.sign).toHaveBeenCalledWith([
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1234567890
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1234567890,
     ]);
     expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledTimes(1);
     expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledWith(
-      'Email 1', 'Email 2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'My signature', 1234567890
+      'Email 1', 'Email 2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'My signature', 1234567890,
     );
 
     expect(next).not.toHaveBeenCalled();
@@ -314,8 +314,8 @@ describe('The API\'s', () => {
       result: {
         dice: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         signature: 'My signature',
-        date: 1234567890
-      }
+        date: 1234567890,
+      },
     }));
   });
 
