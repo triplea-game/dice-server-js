@@ -7,7 +7,7 @@ exports[`The controller should setup the routes correctly 1`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Object {
         "engine": [MockFunction] {
           "calls": Array [
@@ -18,7 +18,7 @@ exports[`The controller should setup the routes correctly 1`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -32,7 +32,7 @@ exports[`The controller should setup the routes correctly 1`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -53,11 +53,11 @@ exports[`The controller should setup the routes correctly 1`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -88,11 +88,11 @@ exports[`The controller should setup the routes correctly 1`] = `
                   ],
                   "results": Array [
                     Object {
-                      "isThrow": false,
+                      "type": "return",
                       "value": undefined,
                     },
                     Object {
-                      "isThrow": false,
+                      "type": "return",
                       "value": undefined,
                     },
                   ],
@@ -102,19 +102,19 @@ exports[`The controller should setup the routes correctly 1`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -149,7 +149,7 @@ exports[`The controller should setup the routes correctly 2`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Object {
         "use": [MockFunction] {
           "calls": Array [
@@ -164,11 +164,11 @@ exports[`The controller should setup the routes correctly 2`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -176,7 +176,7 @@ exports[`The controller should setup the routes correctly 2`] = `
       },
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Object {
         "use": [MockFunction] {
           "calls": Array [
@@ -191,11 +191,11 @@ exports[`The controller should setup the routes correctly 2`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -203,7 +203,7 @@ exports[`The controller should setup the routes correctly 2`] = `
       },
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Object {
         "use": [MockFunction] {
           "calls": Array [
@@ -218,11 +218,11 @@ exports[`The controller should setup the routes correctly 2`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -247,11 +247,11 @@ exports[`The controller should setup the routes correctly 3`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -285,11 +285,11 @@ exports[`The controller should setup the routes correctly 4`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -299,19 +299,19 @@ exports[`The controller should setup the routes correctly 4`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -328,7 +328,7 @@ exports[`The controller should setup the routes correctly 5`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -352,11 +352,11 @@ exports[`The controller should setup the routes correctly 6`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -373,7 +373,7 @@ exports[`The controller should setup the routes correctly 7`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],

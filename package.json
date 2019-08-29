@@ -4,7 +4,7 @@
   "description": "The Official TripleA Dice Server",
   "main": "dice-server.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest && ./node_modules/.bin/eslint .",
+    "test": "jest && eslint .",
     "generate-keypair": "openssl genrsa -out privkey.pem 4096 && openssl rsa -in privkey.pem -outform PEM -pubout -out pubkey.pem"
   },
   "keywords": [
@@ -25,10 +25,10 @@
     "random-number-csprng": "^1.0.2"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^22.1.0",
-    "jest": "^23.6.0"
+    "eslint": "6.2.2",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jest": "22.15.2",
+    "jest": "24.9.0"
   }
 }

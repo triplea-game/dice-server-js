@@ -1,5 +1,5 @@
 const mockNconf = {
-  get: jest.fn(string => string),
+  get: jest.fn((string) => string),
 };
 const mockRollDice = jest.fn();
 const mockValidator = jest.fn();
@@ -81,7 +81,7 @@ describe('The API\'s', () => {
     const emailRegistered = 'REGISTERED';
     const emailUnregistered = 'NOT REGISTERED';
     const fakeDbHandler = {
-      checkMail: jest.fn(email => Promise.resolve(email === emailRegistered)),
+      checkMail: jest.fn((email) => Promise.resolve(email === emailRegistered)),
     };
     const registrationMiddleware = api.Api.prototype.registrationMiddleware.bind({
       dbHandler: fakeDbHandler,

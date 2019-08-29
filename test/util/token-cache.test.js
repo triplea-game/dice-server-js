@@ -5,7 +5,7 @@ describe('A TokenCache entry', () => {
     const cache = new TokenCache(0);
     cache.put('KEY', 'VALUE');
 
-    await new Promise(resolve => setTimeout(resolve, 1));
+    await new Promise((resolve) => setTimeout(resolve, 1));
     expect(cache.verify('KEY', 'VALUE')).toBe(false);
   });
 
