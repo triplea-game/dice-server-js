@@ -25,6 +25,6 @@ window.registerForm = (formId, buttonId, errorDisplayId, method, url, text, succ
     request.open(method, url);
     // urlencode the FormData
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send([...formData.entries()].map(e => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`).join('&'));
+    request.send([...formData.entries()].map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`).join('&'));
   });
 };

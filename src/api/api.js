@@ -20,7 +20,7 @@ class Api {
 
   async registrationMiddleware(req, res, next) {
     const errors = [];
-    await Promise.all([req.body.email1, req.body.email2].map(email => (
+    await Promise.all([req.body.email1, req.body.email2].map((email) => (
       this.dbHandler.checkMail(email).then((result) => {
         if (!result) {
           errors.push(`Email "${email}" not registered.`);

@@ -20,7 +20,7 @@ class DbHandler {
   }
 
   removeUser(email) {
-    return this.db.result('DELETE FROM users WHERE email=$1', email, r => r.rowCount);
+    return this.db.result('DELETE FROM users WHERE email=$1', email, (r) => r.rowCount);
   }
 
   checkMail(email) {

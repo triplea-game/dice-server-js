@@ -8,7 +8,7 @@ describe('The user module', () => {
   const getHandlerForRoute = (route) => {
     user(router);
     expect(router.get).toHaveBeenCalledWith(route, expect.any(Function));
-    const result = router.get.mock.calls.find(call => call[0] === route);
+    const result = router.get.mock.calls.find((call) => call[0] === route);
     if (result) {
       return result[1];
     }
