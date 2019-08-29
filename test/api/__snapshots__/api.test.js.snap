@@ -15,15 +15,15 @@ exports[`The API routing process should setup the routes correctly 1`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": "email:smtp",
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": "email:display:server",
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": "email:display:sender",
     },
   ],
@@ -39,7 +39,7 @@ exports[`The API routing process should setup the routes correctly 3`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -58,7 +58,7 @@ exports[`The API routing process should setup the routes correctly 4`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -76,7 +76,7 @@ exports[`The API routing process should setup the routes correctly 5`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -90,7 +90,7 @@ exports[`The API routing process should setup the routes correctly 6`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -108,7 +108,7 @@ exports[`The API routing process should setup the routes correctly 7`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -141,19 +141,19 @@ exports[`The API routing process should setup the routes correctly 8`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -169,7 +169,7 @@ exports[`The API routing process should setup the routes correctly 9`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],

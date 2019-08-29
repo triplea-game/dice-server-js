@@ -9,7 +9,7 @@ exports[`The DB-Handler should create a database when initialized 1`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Object {
         "none": [MockFunction] {
           "calls": Array [
@@ -19,7 +19,7 @@ exports[`The DB-Handler should create a database when initialized 1`] = `
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": Promise {},
             },
           ],
@@ -41,7 +41,7 @@ exports[`The DB-Handler should create a database when initialized 2`] = `
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Promise {},
     },
   ],
@@ -58,7 +58,7 @@ exports[`The DB-Handler should execute the correct call to the database on addUs
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": Promise {},
     },
   ],
@@ -75,7 +75,7 @@ exports[`The DB-Handler should execute the correct call to the database on check
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
@@ -93,7 +93,7 @@ exports[`The DB-Handler should execute the correct call to the database on remov
   ],
   "results": Array [
     Object {
-      "isThrow": false,
+      "type": "return",
       "value": undefined,
     },
   ],
