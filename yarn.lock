@@ -2770,10 +2770,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-liquidjs@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/liquidjs/-/liquidjs-6.1.1.tgz#81800c652b470251bc1980033370796519bfbbc6"
-  integrity sha512-FsPpyHy2lpqQF/BX/wqQxWXuf3TZc36VlOmK2ixCqBq5Yp71XFaIip2BPlZhlJMOzo+V6jByMN9UBMV83xesww==
+liquidjs@^10.0.0:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/liquidjs/-/liquidjs-10.3.3.tgz#4105d764130e6eedc9bb14d98dd8313330336648"
+  integrity sha512-o6s4rOn81x0FlF9SJEQEx3f/j3iL0Iq3zqOsbFEcsoi7Ivn6jEXBEi2Xl5k0oYc7KqYS54uGOa9XC4Ahk7zdFA==
 
 load-json-file@^2.0.0:
   version "2.0.0"
