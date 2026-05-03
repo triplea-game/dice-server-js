@@ -7,6 +7,10 @@ plugin: community.general.linode
 
 # keyed_groups creates an Ansible host group for each Linode tag.
 # EG: a server tagged "Bot" becomes a member of the inventory group "Bot".
+# Map the first public IPv4 address to ansible_host so SSH uses the IP, not the label.
+compose:
+  ansible_host: ipv4[0]
+
 keyed_groups:
   - key: tags
     prefix: "tag"
