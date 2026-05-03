@@ -1,7 +1,7 @@
 const nconf = require('nconf');
 const roller = require('./dice-roller');
 const Validator = require('./validator');
-const EmailManager = require('./email-manager.js');
+const EmailManager = require('./email-manager');
 const Handler = require('./db-handler');
 
 const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

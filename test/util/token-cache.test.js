@@ -5,7 +5,7 @@ describe('A TokenCache entry', () => {
     const cache = new TokenCache(0);
     cache.put('KEY', 'VALUE');
 
-    await new Promise((resolve) => setTimeout(resolve, 1));
+    await new Promise((resolve) => { setTimeout(resolve, 1); });
     expect(cache.verify('KEY', 'VALUE')).toBe(false);
   });
 
@@ -28,24 +28,30 @@ describe('A TokenCache entry', () => {
   it('should expire after 60 minutes by default', () => {
     jest.useFakeTimers();
     const cache = new TokenCache();
-    cache.put('KEY', 'VALUE');
+    cache.put('KEY_A', 'VALUE');
+    cache.put('KEY_B', 'VALUE');
 
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 60 * 60 * 1000);
+    jest.advanceTimersByTime(60 * 60 * 1000 - 1);
+    expect(cache.verify('KEY_A', 'VALUE')).toBe(true); // not yet expired
 
-    jest.runAllTimers();
-    expect(cache.verify('KEY', 'VALUE')).toBe(false);
+    jest.advanceTimersByTime(1);
+    expect(cache.verify('KEY_B', 'VALUE')).toBe(false); // now expired
+
+    jest.useRealTimers();
   });
 
   it('should expire after the specified amount of time', () => {
     jest.useFakeTimers();
     const cache = new TokenCache(42);
-    cache.put('KEY', 'VALUE');
+    cache.put('KEY_A', 'VALUE');
+    cache.put('KEY_B', 'VALUE');
 
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 42 * 60 * 1000);
+    jest.advanceTimersByTime(42 * 60 * 1000 - 1);
+    expect(cache.verify('KEY_A', 'VALUE')).toBe(true); // not yet expired
 
-    jest.runAllTimers();
-    expect(cache.verify('KEY', 'VALUE')).toBe(false);
+    jest.advanceTimersByTime(1);
+    expect(cache.verify('KEY_B', 'VALUE')).toBe(false); // now expired
+
+    jest.useRealTimers();
   });
 });

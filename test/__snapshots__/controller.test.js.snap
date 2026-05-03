@@ -1,97 +1,97 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`The controller should setup the routes correctly 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [],
+  "calls": [
+    [],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
-      "value": Object {
+      "value": {
         "engine": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "html",
               "Express Router",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
         "listen": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               1337,
               [Function],
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
         "set": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "views",
-              Array [
+              [
                 "./public/partials",
                 "./public/views",
               ],
             ],
-            Array [
+            [
               "view engine",
               "html",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
         "use": [MockFunction] {
-          "calls": Array [
-            Array [
-              [Function],
+          "calls": [
+            [
+              "JSON Parser",
             ],
-            Array [
-              [Function],
+            [
+              "urlencoded",
             ],
-            Array [
+            [
               "Static",
             ],
-            Array [
-              Object {
+            [
+              {
                 "use": [MockFunction] {
-                  "calls": Array [
-                    Array [
+                  "calls": [
+                    [
                       "/api",
                       "API Module",
                     ],
-                    Array [
+                    [
                       "/",
                       "User Module",
                     ],
                   ],
-                  "results": Array [
-                    Object {
+                  "results": [
+                    {
                       "type": "return",
                       "value": undefined,
                     },
-                    Object {
+                    {
                       "type": "return",
                       "value": undefined,
                     },
@@ -100,20 +100,20 @@ exports[`The controller should setup the routes correctly 1`] = `
               },
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -127,47 +127,47 @@ exports[`The controller should setup the routes correctly 1`] = `
 
 exports[`The controller should setup the routes correctly 2`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
-      Object {
+  "calls": [
+    [
+      {
         "caseSensitive": true,
         "strict": true,
       },
     ],
-    Array [
-      Object {
+    [
+      {
         "caseSensitive": true,
         "strict": true,
       },
     ],
-    Array [
-      Object {
+    [
+      {
         "caseSensitive": true,
         "strict": true,
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
-      "value": Object {
+      "value": {
         "use": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "/api",
               "API Module",
             ],
-            Array [
+            [
               "/",
               "User Module",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -175,26 +175,26 @@ exports[`The controller should setup the routes correctly 2`] = `
         },
       },
     },
-    Object {
+    {
       "type": "return",
-      "value": Object {
+      "value": {
         "use": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "/api",
               "API Module",
             ],
-            Array [
+            [
               "/",
               "User Module",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -202,26 +202,26 @@ exports[`The controller should setup the routes correctly 2`] = `
         },
       },
     },
-    Object {
+    {
       "type": "return",
-      "value": Object {
+      "value": {
         "use": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "/api",
               "API Module",
             ],
-            Array [
+            [
               "/",
               "User Module",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -235,22 +235,22 @@ exports[`The controller should setup the routes correctly 2`] = `
 
 exports[`The controller should setup the routes correctly 3`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "/api",
       "API Module",
     ],
-    Array [
+    [
       "/",
       "User Module",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
@@ -260,35 +260,35 @@ exports[`The controller should setup the routes correctly 3`] = `
 
 exports[`The controller should setup the routes correctly 4`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
-      [Function],
+  "calls": [
+    [
+      "JSON Parser",
     ],
-    Array [
-      [Function],
+    [
+      "urlencoded",
     ],
-    Array [
+    [
       "Static",
     ],
-    Array [
-      Object {
+    [
+      {
         "use": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "/api",
               "API Module",
             ],
-            Array [
+            [
               "/",
               "User Module",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -297,20 +297,20 @@ exports[`The controller should setup the routes correctly 4`] = `
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
@@ -320,14 +320,14 @@ exports[`The controller should setup the routes correctly 4`] = `
 
 exports[`The controller should setup the routes correctly 5`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "html",
       "Express Router",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -337,25 +337,25 @@ exports[`The controller should setup the routes correctly 5`] = `
 
 exports[`The controller should setup the routes correctly 6`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "views",
-      Array [
+      [
         "./public/partials",
         "./public/views",
       ],
     ],
-    Array [
+    [
       "view engine",
       "html",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
@@ -365,14 +365,14 @@ exports[`The controller should setup the routes correctly 6`] = `
 
 exports[`The controller should setup the routes correctly 7`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       1337,
       [Function],
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },

@@ -1,10 +1,10 @@
-jest.enableAutomock();
-jest.unmock('../../src/api/db-handler');
+let mockPgFactory;
 
-const pg = require('pg-promise');
+jest.mock('pg-promise', () => {
+  mockPgFactory = jest.fn();
+  return jest.fn().mockReturnValue(mockPgFactory);
+});
 
-const mockedPg = jest.fn();
-pg.mockReturnValue(mockedPg);
 const DbHandler = require('../../src/api/db-handler');
 
 const dbObject = {
@@ -15,7 +15,7 @@ const dbObject = {
 
 describe('The DB-Handler', () => {
   beforeAll(() => {
-    mockedPg.mockReturnValue(dbObject);
+    mockPgFactory.mockReturnValue(dbObject);
     dbObject.none.mockReturnValue(Promise.resolve(true));
   });
 
@@ -30,7 +30,7 @@ describe('The DB-Handler', () => {
 
     handler.setupDb();
 
-    expect(mockedPg).toMatchSnapshot();
+    expect(mockPgFactory).toMatchSnapshot();
     expect(dbObject.none).toMatchSnapshot();
   });
 

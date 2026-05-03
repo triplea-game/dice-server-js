@@ -15,20 +15,18 @@
   "author": "TripleA-Organisation",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "express-async-errors": "^3.1.1",
-    "liquidjs": "^6.1.1",
-    "nconf": "^0.11.4",
-    "nodemailer": "^6.6.1",
-    "pg-promise": "^11.9.1",
+    "express": "^5.2.1",
+    "liquidjs": "^10.25.7",
+    "nconf": "^0.13.0",
+    "nodemailer": "^8.0.7",
+    "pg-promise": "^12.6.2",
     "random-number-csprng": "^1.0.2"
   },
   "devDependencies": {
-    "eslint": "6.2.2",
-    "eslint-config-airbnb-base": "14.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jest": "22.15.2",
-    "jest": "24.9.0"
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.15.2",
+    "jest": "^30.3.0"
   }
 }

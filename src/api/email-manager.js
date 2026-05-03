@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const Liquid = require('liquidjs');
+const { Liquid } = require('liquidjs');
 const path = require('path');
-const TokenCache = require('../util/token-cache.js');
+const TokenCache = require('../util/token-cache');
 
 const getServerBaseUrl = ({
   port, protocol, host, baseurl,
@@ -20,11 +20,13 @@ class EmailManager {
       connectionTimeout: 10000,
       socketTimeout: 10000,
     };
+    this.smtpHost = transport.host;
+    this.smtpPort = transport.port;
     console.log('[email] Creating SMTP transport - host: %s port: %s', transport.host, transport.port);
     this.transport = nodemailer.createTransport(transportOptions);
     this.server = server;
     this.emailsender = emailsender;
-    this.engine = Liquid({
+    this.engine = new Liquid({
       root: path.resolve(__dirname, '../../public/email-templates/'),
       extname: '.html',
     });
@@ -69,7 +71,7 @@ class EmailManager {
       unsub: `${baseUrl}/unregister?email=${encodedEmail}`,
     });
 
-    console.log('[email] registerEmail - sending verification email to: %s via %s:%s', email, this.transport.options.host, this.transport.options.port);
+    console.log('[email] registerEmail - sending verification email to: %s via %s:%s', email, this.smtpHost, this.smtpPort);
     let info;
     try {
       info = await this.transport.sendMail({
@@ -79,7 +81,7 @@ class EmailManager {
         html: content,
       });
     } catch (err) {
-      console.error('[email] registerEmail - failed to send email to: %s via %s:%s -', email, this.transport.options.host, this.transport.options.port, err);
+      console.error('[email] registerEmail - failed to send email to: %s via %s:%s -', email, this.smtpHost, this.smtpPort, err);
       throw err;
     }
     console.log('[email] registerEmail - email sent successfully to: %s', email);

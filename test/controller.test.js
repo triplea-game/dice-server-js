@@ -1,14 +1,11 @@
-jest.mock('liquidjs', () => () => ({
-  name: 'Liquid Module',
-  express: jest.fn().mockReturnValue('Express Router'),
+jest.mock('liquidjs', () => ({
+  Liquid: jest.fn().mockImplementation(() => ({
+    name: 'Liquid Module',
+    express: jest.fn().mockReturnValue('Express Router'),
+  })),
 }));
 jest.mock('../src/api/api', () => () => 'API Module');
 jest.mock('../src/user/user', () => () => 'User Module');
-
-const bodyParser = require('body-parser');
-
-bodyParser.json = jest.fn(() => 'JSON Parser');
-bodyParser.urlencoded = jest.fn().mockReturnValue('urlencoded');
 
 const mockedApp = {
   use: jest.fn(),
@@ -23,6 +20,8 @@ const mockRouter = {
 const mockExpress = jest.fn().mockReturnValue(mockedApp);
 mockExpress.Router = jest.fn().mockReturnValue(mockRouter);
 mockExpress.static = jest.fn().mockReturnValue('Static');
+mockExpress.json = jest.fn(() => 'JSON Parser');
+mockExpress.urlencoded = jest.fn(() => 'urlencoded');
 
 jest.mock('express', () => mockExpress);
 

@@ -1,24 +1,31 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`The DB-Handler should create a database when initialized 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
-      "postgres://user:secret@[::1]:1337/someDb",
+  "calls": [
+    [
+      {
+        "connectionTimeoutMillis": 5000,
+        "database": "someDb",
+        "host": "[::1]",
+        "password": "secret",
+        "port": "1337",
+        "user": "user",
+      },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
-      "value": Object {
+      "value": {
         "none": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": Promise {},
             },
@@ -34,13 +41,13 @@ exports[`The DB-Handler should create a database when initialized 1`] = `
 
 exports[`The DB-Handler should create a database when initialized 2`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": Promise {},
     },
@@ -50,14 +57,14 @@ exports[`The DB-Handler should create a database when initialized 2`] = `
 
 exports[`The DB-Handler should execute the correct call to the database on addUser 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "INSERT INTO users (email) VALUES ($1)",
       "Test Email",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": Promise {},
     },
@@ -67,14 +74,14 @@ exports[`The DB-Handler should execute the correct call to the database on addUs
 
 exports[`The DB-Handler should execute the correct call to the database on checkMail 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "SELECT email FROM users WHERE email=$1",
       "Test Email",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -84,15 +91,15 @@ exports[`The DB-Handler should execute the correct call to the database on check
 
 exports[`The DB-Handler should execute the correct call to the database on removeUser 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "DELETE FROM users WHERE email=$1",
       "Test Email",
       [Function],
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },

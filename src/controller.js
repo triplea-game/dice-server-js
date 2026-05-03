@@ -1,11 +1,5 @@
-// This MUST be required before express gets initialized
-// in order to support async middleware
-// until it gets officially supported in 5.x
-require('express-async-errors');
-
 const express = require('express');
-const bodyParser = require('body-parser');
-const Liquid = require('liquidjs');
+const { Liquid } = require('liquidjs');
 const apiMiddleware = require('./api/api');
 const userMiddleware = require('./user/user');
 
@@ -20,10 +14,10 @@ const setupRoutes = (db) => {
 
 const startServer = (router, port) => {
   const app = express();
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-  const engine = Liquid({ root: __dirname, extname: '.html' });
+  const engine = new Liquid({ root: __dirname, extname: '.html' });
   app.engine('html', engine.express());
   app.set('views', ['./public/partials', './public/views']);
   app.set('view engine', 'html');

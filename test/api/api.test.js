@@ -7,7 +7,6 @@ const mockEmailManager = jest.fn();
 const mockDbHandler = jest.fn();
 mockDbHandler.prototype.setupDb = jest.fn();
 
-
 jest.mock('nconf', () => mockNconf);
 jest.mock('../../src/api/dice-roller', () => ({
   roll: mockRollDice,
@@ -17,7 +16,6 @@ jest.mock('../../src/api/email-manager.js', () => mockEmailManager);
 jest.mock('../../src/api/db-handler', () => mockDbHandler);
 
 const api = require('../../src/api/api');
-
 
 describe('The API routing process', () => {
   const mockRouter = {
@@ -68,7 +66,6 @@ describe('The API\'s', () => {
     expect(api.Api.isEmail('name.sirname@provider.tl')).toBe(true);
     expect(api.Api.isEmail('prefix+something@gmail.com')).toBe(true);
     expect(api.Api.isEmail('hax+0rs@cr4zyd0main.org')).toBe(true);
-
 
     expect(api.Api.isEmail('')).toBe(false);
     expect(api.Api.isEmail('         ')).toBe(false);
@@ -157,7 +154,6 @@ describe('The API\'s', () => {
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenCalledWith();
     });
-
 
     describe('reject the response using invalid times parameter', () => {
       it('when too high', () => {
@@ -302,9 +298,7 @@ describe('The API\'s', () => {
       0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1234567890,
     ]);
     expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledTimes(1);
-    expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledWith(
-      'Email 1', 'Email 2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'My signature', 1234567890,
-    );
+    expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledWith('Email 1', 'Email 2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'My signature', 1234567890);
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).not.toHaveBeenCalled(); // Means status 200

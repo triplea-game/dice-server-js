@@ -2,7 +2,7 @@ const nconf = require('nconf');
 const controller = require('./src/controller');
 
 nconf.argv().env({
-  whitelist: ['SMTP_USER', 'SMTP_PASS'],
+  allowlist: ['SMTP_USER', 'SMTP_PASS'],
   transform(obj) {
     const map = {
       SMTP_USER: 'email:smtp:auth:user',

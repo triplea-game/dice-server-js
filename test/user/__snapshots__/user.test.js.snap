@@ -1,15 +1,15 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`The user module should trigger the correct render on / 1`] = `
-Object {
+{
   "render": [MockFunction] {
-    "calls": Array [
-      Array [
+    "calls": [
+      [
         "register.html",
       ],
     ],
-    "results": Array [
-      Object {
+    "results": [
+      {
         "type": "return",
         "value": undefined,
       },
@@ -19,19 +19,19 @@ Object {
 `;
 
 exports[`The user module should trigger the correct render on /register 1`] = `
-Object {
+{
   "render": [MockFunction] {
-    "calls": Array [
-      Array [
+    "calls": [
+      [
         "confirm-register.html",
-        Object {
+        {
           "email": "itsame@mario.com",
           "token": "My4xNDE1OTI2NTM1ODk3OTMyMzg0NjI2NDMzOA%3D%3D",
         },
       ],
     ],
-    "results": Array [
-      Object {
+    "results": [
+      {
         "type": "return",
         "value": undefined,
       },
@@ -41,18 +41,18 @@ Object {
 `;
 
 exports[`The user module should trigger the correct render on /unregister 1`] = `
-Object {
+{
   "render": [MockFunction] {
-    "calls": Array [
-      Array [
+    "calls": [
+      [
         "unregister.html",
-        Object {
+        {
           "email": "itsame@luigi.com",
         },
       ],
     ],
-    "results": Array [
-      Object {
+    "results": [
+      {
         "type": "return",
         "value": undefined,
       },
@@ -62,14 +62,14 @@ Object {
 `;
 
 exports[`The user module should trigger the correct render on /verify 1`] = `
-Object {
+{
   "render": [MockFunction] {
-    "calls": Array [
-      Array [
+    "calls": [
+      [
         "verify.html",
-        Object {
+        {
           "date": "Thu, 08 Jan 1970 06:04:04 GMT",
-          "dice": Array [
+          "dice": [
             0,
             1,
             1,
@@ -83,8 +83,8 @@ Object {
         },
       ],
     ],
-    "results": Array [
-      Object {
+    "results": [
+      {
         "type": "return",
         "value": undefined,
       },
@@ -94,18 +94,18 @@ Object {
 `;
 
 exports[`The user module should trigger the correct render on /verify with invalid params 1`] = `
-Object {
+{
   "render": [MockFunction] {
-    "calls": Array [
-      Array [
+    "calls": [
+      [
         "verify.html",
-        Object {
+        {
           "invalid": true,
         },
       ],
     ],
-    "results": Array [
-      Object {
+    "results": [
+      {
         "type": "return",
         "value": undefined,
       },

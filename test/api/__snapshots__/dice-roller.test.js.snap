@@ -1,2183 +1,2183 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`The dice-roller should call the RNG with the correct bounds 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       1,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       12,
     ],
-    Array [
+    [
       1,
       123,
     ],
-    Array [
+    [
       1,
       123,
     ],
-    Array [
+    [
       1,
       123,
     ],
-    Array [
+    [
       1,
       123,
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },

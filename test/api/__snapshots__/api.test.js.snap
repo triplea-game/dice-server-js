@@ -1,28 +1,28 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`The API routing process should setup the routes correctly 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "email:smtp",
     ],
-    Array [
+    [
       "email:display:server",
     ],
-    Array [
+    [
       "email:display:sender",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": "email:smtp",
     },
-    Object {
+    {
       "type": "return",
       "value": "email:display:server",
     },
-    Object {
+    {
       "type": "return",
       "value": "email:display:sender",
     },
@@ -34,11 +34,11 @@ exports[`The API routing process should setup the routes correctly 2`] = `[MockF
 
 exports[`The API routing process should setup the routes correctly 3`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [],
+  "calls": [
+    [],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -48,16 +48,16 @@ exports[`The API routing process should setup the routes correctly 3`] = `
 
 exports[`The API routing process should setup the routes correctly 4`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       mockConstructor {},
       "email:smtp",
       "email:display:server",
       "email:display:sender",
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -67,15 +67,15 @@ exports[`The API routing process should setup the routes correctly 4`] = `
 
 exports[`The API routing process should setup the routes correctly 5`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
-      Object {
+  "calls": [
+    [
+      {
         "name": "Dummy DB",
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -85,11 +85,11 @@ exports[`The API routing process should setup the routes correctly 5`] = `
 
 exports[`The API routing process should setup the routes correctly 6`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [],
+  "calls": [
+    [],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -99,15 +99,15 @@ exports[`The API routing process should setup the routes correctly 6`] = `
 
 exports[`The API routing process should setup the routes correctly 7`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "/verify/:token",
       [Function],
       [Function],
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -117,42 +117,42 @@ exports[`The API routing process should setup the routes correctly 7`] = `
 
 exports[`The API routing process should setup the routes correctly 8`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       "/roll",
       [Function],
       [Function],
       [Function],
     ],
-    Array [
+    [
       "/register",
       [Function],
       [Function],
     ],
-    Array [
+    [
       "/register/:token",
       [Function],
     ],
-    Array [
+    [
       "/unregister",
       [Function],
       [Function],
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
-    Object {
+    {
       "type": "return",
       "value": undefined,
     },
@@ -162,13 +162,13 @@ exports[`The API routing process should setup the routes correctly 8`] = `
 
 exports[`The API routing process should setup the routes correctly 9`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       [Function],
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
