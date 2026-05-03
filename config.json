@@ -8,11 +8,11 @@
   },
   "email": {
     "smtp": {
-      "host": "smtp.provider.com",
-      "port": 587
+      "host": "mailpit",
+      "port": 1025
     },
     "display": {
-      "sender": "\"TripleA Dice Server\" <your.email@provider.com>",
+      "sender": "\"TripleA Dice Server\" <dice@dice.triplea-game.org>",
       "server": {
         "protocol": "http",
         "host": "localhost",

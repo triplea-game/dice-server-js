@@ -2,10 +2,9 @@ const nconf = require('nconf');
 const controller = require('./src/controller');
 
 nconf.argv().env({
-  whitelist: ['DB_PASSWORD', 'SMTP_USER', 'SMTP_PASS'],
+  whitelist: ['SMTP_USER', 'SMTP_PASS'],
   transform(obj) {
     const map = {
-      DB_PASSWORD: 'database:password',
       SMTP_USER: 'email:smtp:auth:user',
       SMTP_PASS: 'email:smtp:auth:pass',
     };
@@ -41,4 +40,8 @@ nconf.required([
   'keys:private',
   'keys:public',
 ]);
-controller(nconf.get('port'), nconf.get('database'));
+const dbConfig = {
+  ...nconf.get('database'),
+  password: process.env.DB_PASSWORD,
+};
+controller(nconf.get('port'), dbConfig);

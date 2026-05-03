@@ -24,6 +24,5 @@ typings/
 .yarn-integrity
 .env
 keys/
-config\.json
 
 .docs/

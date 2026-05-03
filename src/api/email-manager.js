@@ -70,12 +70,18 @@ class EmailManager {
     });
 
     console.log('[email] registerEmail - sending verification email to: %s via %s:%s', email, this.transport.options.host, this.transport.options.port);
-    const info = await this.transport.sendMail({
-      from: this.emailsender,
-      to: email,
-      subject,
-      html: content,
-    });
+    let info;
+    try {
+      info = await this.transport.sendMail({
+        from: this.emailsender,
+        to: email,
+        subject,
+        html: content,
+      });
+    } catch (err) {
+      console.error('[email] registerEmail - failed to send email to: %s via %s:%s -', email, this.transport.options.host, this.transport.options.port, err);
+      throw err;
+    }
     console.log('[email] registerEmail - email sent successfully to: %s', email);
     return info;
   }

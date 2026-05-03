@@ -7,18 +7,23 @@ services:
       - ./config.json:/app/config.json:ro
       - ./keys:/app/keys:ro
     environment:
-      - DB_PASSWORD=${DB_PASSWORD}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASS=${SMTP_PASS}
+      - DB_PASSWORD=change-me
     depends_on:
       postgres:
         condition: service_healthy
+      mailpit:
+        condition: service_started
+    restart: unless-stopped
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
     restart: unless-stopped
   postgres:
     image: postgres:16
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: change-me
       POSTGRES_DB: dicedb
     volumes:
       - pgdata:/var/lib/postgresql/data

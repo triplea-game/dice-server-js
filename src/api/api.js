@@ -195,7 +195,11 @@ module.exports = (router, database) => {
 
   // express.js behaves differently if no next parameter is used here
   // so we call next in case something's odd to please ESLint
-  router.use((err, req, res, next) => res.status(500).json({ status: 'Error', errors: [err.toString()] }) || next());
+  router.use((err, req, res, next) => {
+    console.error('[api] Unhandled error on %s %s:', req.method, req.path, err);
+    res.status(500).json({ status: 'Error', errors: [err.toString()] });
+    next();
+  });
   return router;
 };
 
