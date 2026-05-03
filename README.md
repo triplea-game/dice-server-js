@@ -9,6 +9,19 @@ sudo systemctl restart marti.service
 sudo journalctl -u marti.service -n 1000
 ```
 
+## Local Dev
+
+```
+make run
+```
+
+App is at:
+https://localhost:7654
+
+Emails console at:
+https://localhost:8025
+
+
 ## Setup
 ### Prequisites
 In order to be able to run the server you need to have a couple of things installed on your system:
