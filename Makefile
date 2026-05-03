@@ -1,4 +1,5 @@
 .PHONY: run stop restart logs build clean init
+SSH_USER ?= $${USER}
 
 ## Create .env, config.json, and RSA keys for a first-time setup
 init:
@@ -26,7 +27,7 @@ init:
 
 ## Start all services in the background
 run: _check-config
-	docker compose up --build -d
+	docker compose up --build --force-recreate -d
 
 _check-config:
 	@if [ ! -f .env ]; then \
@@ -63,3 +64,9 @@ build:
 clean:
 	docker compose down -v
 
+deploy: ## Triggers deployment to prod
+        ANSIBLE_CONFIG="deploy/ansible.cfg" \
+          ansible-playbook \
+            -e ansible_user=$(SSH_USER) \
+            --inventory deploy/ansible/linode.inventory.yml \
+            deploy/ansible/playbook.yml
