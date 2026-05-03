@@ -1,4 +1,4 @@
-.PHONY: run stop restart logs build clean init
+.PHONY: run stop restart logs build clean init deploy
 SSH_USER ?= $${USER}
 
 ## Create .env, config.json, and RSA keys for a first-time setup
