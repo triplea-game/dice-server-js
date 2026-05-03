@@ -57,6 +57,6 @@ jobs:
           ansible-galaxy collection install community.general
       - name: Deploy
         env:
-          LINODE_READ_ONLY_TOKEN: ${{ secrets.LINODE_READ_ONLY_TOKEN }}
+          LINODE_ACCESS_TOKEN: ${{ secrets.LINODE_READ_ONLY_TOKEN }}
         run: ssh_user=deploy make deploy
 

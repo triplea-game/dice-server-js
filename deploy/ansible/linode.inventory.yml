@@ -3,7 +3,7 @@
 # Requires LINODE_ACCESS_TOKEN environment variable before running Ansible.
 
 plugin: community.general.linode
-access_token: "{{ lookup('env', 'LINODE_READ_ONLY_TOKEN') }}"
+# Token is read from the LINODE_ACCESS_TOKEN environment variable by the plugin automatically.
 
 # keyed_groups creates an Ansible host group for each Linode tag.
 # EG: a server tagged "Bot" becomes a member of the inventory group "Bot".
