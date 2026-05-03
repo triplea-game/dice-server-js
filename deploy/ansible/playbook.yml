@@ -1,5 +1,5 @@
-- hosts: lobby
+- hosts: marti
   tasks:
-    - name: Pull Latest Lobby and Restart
+    - name: Deploy latest marti
       become: true
       command: /usr/local/bin/deploy-marti.sh
