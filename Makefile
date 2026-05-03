@@ -65,8 +65,8 @@ clean:
 	docker compose down -v
 
 deploy: ## Triggers deployment to prod
-        ANSIBLE_CONFIG="deploy/ansible.cfg" \
-          ansible-playbook \
-            -e ansible_user=$(SSH_USER) \
-            --inventory deploy/ansible/linode.inventory.yml \
-            deploy/ansible/playbook.yml
+	ANSIBLE_CONFIG="deploy/ansible.cfg" \
+	  ansible-playbook \
+	  -e ansible_user=$(SSH_USER) \
+	  --inventory deploy/ansible/linode.inventory.yml \
+	  deploy/ansible/playbook.yml
