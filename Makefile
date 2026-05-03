@@ -68,5 +68,5 @@ deploy: ## Triggers deployment to prod
 	ANSIBLE_CONFIG="deploy/ansible.cfg" \
 	  ansible-playbook \
 	  -e ansible_user=$(SSH_USER) \
-	  --inventory deploy/ansible/linode.inventory.yml \
+	  --inventory deploy/ansible/inventory.linode.yml \
 	  deploy/ansible/playbook.yml
