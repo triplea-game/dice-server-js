@@ -51,6 +51,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+      - name: Install Ansible and dependencies
+        run: |
+          pip install ansible linode-api4
+          ansible-galaxy collection install community.general
       - name: Deploy
         env:
           LINODE_READ_ONLY_TOKEN: ${{ secrets.LINODE_READ_ONLY_TOKEN }}
