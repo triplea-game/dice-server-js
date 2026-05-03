@@ -18,6 +18,7 @@ init:
 	@if [ ! -f keys/privkey.pem ]; then \
 		openssl genrsa -out keys/privkey.pem 4096 && \
 		openssl rsa -in keys/privkey.pem -outform PEM -pubout -out keys/pubkey.pem && \
+		chmod 644 keys/privkey.pem keys/pubkey.pem && \
 		echo "Generated RSA key pair in keys/"; \
 	else \
 		echo "RSA keys already exist, skipping."; \
