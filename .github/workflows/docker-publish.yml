@@ -47,7 +47,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      - name: Load SSH private key into ssh-agent
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
       - name: Deploy
+        env:
+          LINODE_READ_ONLY_TOKEN: ${{ secrets.LINODE_READ_ONLY_TOKEN }}
         run: ssh_user=deploy make deploy
 
