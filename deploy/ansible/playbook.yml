@@ -1,5 +1,4 @@
 - hosts: tag_marti
   tasks:
     - name: Deploy latest marti
-      become: true
-      command: /usr/local/bin/deploy-marti.sh
+      command: sudo /usr/local/bin/deploy-marti.sh
