@@ -65,6 +65,7 @@ clean:
 	docker compose down -v
 
 deploy: ## Triggers deployment to prod
+	ansible-galaxy collection install -r deploy/ansible/requirements.yml
 	ANSIBLE_CONFIG="deploy/ansible.cfg" \
 	  ansible-playbook \
 	  -e ansible_user=$(SSH_USER) \
