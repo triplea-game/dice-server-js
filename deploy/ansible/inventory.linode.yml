@@ -9,4 +9,5 @@ plugin: community.general.linode
 # EG: a server tagged "Bot" becomes a member of the inventory group "Bot".
 keyed_groups:
   - key: tags
-    separator: ""
+    prefix: "tag"
+    separator: "_"
