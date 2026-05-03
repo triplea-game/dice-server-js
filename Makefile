@@ -1,26 +1,43 @@
 .PHONY: run stop restart logs build clean init
 
-## Copy config.example.json to config.json and create the keys/ directory
+## Create .env, config.json, and RSA keys for a first-time setup
 init:
+	@if [ ! -f .env ]; then \
+		cp .env.example .env; \
+		echo "Created .env from .env.example - fill in real credentials before running."; \
+	else \
+		echo ".env already exists, skipping."; \
+	fi
 	@if [ ! -f config.json ]; then \
 		cp config.example.json config.json; \
-		echo "Created config.json from config.example.json - edit it before running."; \
+		echo "Created config.json from config.example.json - update display settings if needed."; \
 	else \
 		echo "config.json already exists, skipping."; \
 	fi
 	@mkdir -p keys
+	@if [ ! -f keys/privkey.pem ]; then \
+		openssl genrsa -out keys/privkey.pem 4096 && \
+		openssl rsa -in keys/privkey.pem -outform PEM -pubout -out keys/pubkey.pem && \
+		echo "Generated RSA key pair in keys/"; \
+	else \
+		echo "RSA keys already exist, skipping."; \
+	fi
 
 ## Start all services in the background
 run: _check-config
 	docker compose up --build -d
 
 _check-config:
-	@if [ ! -f config.json ]; then \
-		echo "ERROR: config.json not found. Run 'make init' and edit config.json first."; \
+	@if [ ! -f .env ]; then \
+		echo "ERROR: .env not found. Run 'make init' and fill in credentials first."; \
 		exit 1; \
 	fi
-	@if [ ! -d keys ]; then \
-		echo "ERROR: keys/ directory not found. Run 'make init' and generate keys first."; \
+	@if [ ! -f config.json ]; then \
+		echo "ERROR: config.json not found. Run 'make init' first."; \
+		exit 1; \
+	fi
+	@if [ ! -f keys/privkey.pem ] || [ ! -f keys/pubkey.pem ]; then \
+		echo "ERROR: RSA keys not found in keys/. Run 'make init' first."; \
 		exit 1; \
 	fi
 

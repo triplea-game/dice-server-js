@@ -6,6 +6,10 @@ services:
     volumes:
       - ./config.json:/app/config.json:ro
       - ./keys:/app/keys:ro
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -14,7 +18,7 @@ services:
     image: postgres:16
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: changeme
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: dicedb
     volumes:
       - pgdata:/var/lib/postgresql/data

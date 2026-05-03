@@ -1,7 +1,17 @@
 const nconf = require('nconf');
 const controller = require('./src/controller');
 
-nconf.argv().env().file({ file: './config.json' });
+nconf.argv().env({
+  whitelist: ['DB_PASSWORD', 'SMTP_USER', 'SMTP_PASS'],
+  transform(obj) {
+    const map = {
+      DB_PASSWORD: 'database:password',
+      SMTP_USER: 'email:smtp:auth:user',
+      SMTP_PASS: 'email:smtp:auth:pass',
+    };
+    return map[obj.key] ? { key: map[obj.key], value: obj.value } : obj;
+  },
+}).file({ file: './config.json' });
 nconf.defaults({
   port: 7654,
   email: {

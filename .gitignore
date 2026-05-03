@@ -57,5 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# RSA signing keys - private key must never be committed
+keys/
 
 config\.json
