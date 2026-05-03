@@ -58,8 +58,8 @@ jobs:
           python-version: "3.12"
       - name: Install Ansible and dependencies
         run: |
-          uv tool install --with-executables-from ansible-core,ansible-lint,linode_api4 ansible
-          ansible-galaxy collection install community.general
+          uv tool install --with linode_api4 --with-executables-from ansible-core,ansible-lint ansible
+          ansible-galaxy collection install -r deploy/ansible/requirements.yml
       - name: Deploy
         env:
           LINODE_ACCESS_TOKEN: ${{ secrets.LINODE_READ_ONLY_TOKEN }}
