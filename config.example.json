@@ -1,0 +1,34 @@
+{
+  "port": 7654,
+  "database": {
+    "username": "postgres",
+    "password": "changeme",
+    "host": "postgres",
+    "port": 5432,
+    "database": "dicedb"
+  },
+  "email": {
+    "smtp": {
+      "host": "smtp.provider.com",
+      "port": 587,
+      "auth": {
+        "user": "your.email@provider.com",
+        "pass": "your-smtp-password"
+      }
+    },
+    "display": {
+      "sender": "\"TripleA Dice Server\" <your.email@provider.com>",
+      "server": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 7654,
+        "baseurl": ""
+      }
+    }
+  },
+  "keys": {
+    "private": "/app/keys/privkey.pem",
+    "public": "/app/keys/pubkey.pem"
+  }
+}
+

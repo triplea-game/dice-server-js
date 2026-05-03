@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    ports:
+      - "7654:7654"
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./keys:/app/keys:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: dicedb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+volumes:
+  pgdata:
