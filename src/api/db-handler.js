@@ -4,7 +4,14 @@ class DbHandler {
   constructor({
     username, password, host, port, database,
   }) {
-    this.db = pg(`postgres://${username}:${password}@${host}:${port}/${database}`);
+    this.db = pg({
+      host,
+      port,
+      database,
+      user: username,
+      password,
+      connectionTimeoutMillis: 5000,
+    });
   }
 
   setupDb() {

@@ -15,7 +15,13 @@ class EmailManager {
   constructor(dbhandler, transport, server, emailsender) {
     this.dbhandler = dbhandler;
     this.emailMap = new TokenCache();
-    this.transport = nodemailer.createTransport(transport);
+    const transportOptions = {
+      ...transport,
+      connectionTimeout: 10000,
+      socketTimeout: 10000,
+    };
+    console.log('[email] Creating SMTP transport - host: %s port: %s', transport.host, transport.port);
+    this.transport = nodemailer.createTransport(transportOptions);
     this.server = server;
     this.emailsender = emailsender;
     this.engine = Liquid({
@@ -28,12 +34,26 @@ class EmailManager {
     if (!this.emailMap.verify(email, token)) {
       return false;
     }
-    await this.dbhandler.addUser(email);
+    try {
+      await this.dbhandler.addUser(email);
+    } catch (err) {
+      console.error('[email] verifyEmail - DB error adding user: %s', email, err);
+      throw err;
+    }
     return true;
   }
 
   async registerEmail(email) {
-    if (await this.dbhandler.checkMail(email)) {
+    console.log('[email] registerEmail - checking if already registered: %s', email);
+    let alreadyRegistered;
+    try {
+      alreadyRegistered = await this.dbhandler.checkMail(email);
+    } catch (err) {
+      console.error('[email] registerEmail - DB error checking email: %s', email, err);
+      throw err;
+    }
+    if (alreadyRegistered) {
+      console.log('[email] registerEmail - already registered: %s', email);
       return false;
     }
     const token = crypto.randomBytes(512).toString('base64');
@@ -49,16 +69,22 @@ class EmailManager {
       unsub: `${baseUrl}/unregister?email=${encodedEmail}`,
     });
 
-    return this.transport.sendMail({
+    console.log('[email] registerEmail - sending verification email to: %s via %s:%s', email, this.transport.options.host, this.transport.options.port);
+    const info = await this.transport.sendMail({
       from: this.emailsender,
       to: email,
       subject,
       html: content,
     });
+    console.log('[email] registerEmail - email sent successfully to: %s', email);
+    return info;
   }
 
   unregisterEmail(email) {
-    return this.dbhandler.removeUser(email);
+    return this.dbhandler.removeUser(email).catch((err) => {
+      console.error('[email] unregisterEmail - DB error removing user: %s', email, err);
+      throw err;
+    });
   }
 
   async sendDiceVerificationEmail(email1, email2, dice, signature, date) {
