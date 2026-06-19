@@ -18,7 +18,7 @@
     "express": "^5.2.1",
     "liquidjs": "^10.25.7",
     "nconf": "^0.13.0",
-    "nodemailer": "^8.0.7",
+    "nodemailer": "^9.0.1",
     "pg-promise": "^12.6.2",
     "random-number-csprng": "^1.0.2"
   },
