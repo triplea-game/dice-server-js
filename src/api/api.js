@@ -44,7 +44,7 @@ class Api {
         errors.push(`Parameter ${name} is not defined`);
       } else {
         req.body[name] = parseInt(req.body[name], 10);
-        const maxLimit = 100;
+        const maxLimit = 5000;
         if (Number.isNaN(req.body[name])) {
           errors.push(`Parameter ${name} is not an Integer`);
         } else if (req.body[name] > maxLimit) {
