@@ -12,7 +12,7 @@ sudo journalctl -u marti.service -n 1000
 ## Local Dev
 
 ```
-make run
+just run
 ```
 
 App is at:
