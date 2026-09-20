@@ -52,7 +52,7 @@ jobs:
           enable-cache: true
           python-version: "3.12"
       - name: Cache Ansible Galaxy collections
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.ansible/collections
           key: ansible-collections-${{ hashFiles('deploy/ansible/requirements.yml') }}
