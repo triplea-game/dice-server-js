@@ -159,14 +159,14 @@ describe('The API\'s', () => {
       it('when too high', () => {
         api.Api.validateRollArgs({
           body: {
-            times: '101',
+            times: '5001',
             max: '6',
           },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/times.*101.*high/),
+          expect.stringMatching(/times.*5001.*high/),
         );
       });
 
@@ -216,14 +216,14 @@ describe('The API\'s', () => {
       it('when too high', () => {
         api.Api.validateRollArgs({
           body: {
-            max: '123',
+            max: '5001',
             times: '6',
           },
         }, res, next);
 
         expectStatusAndErrors(
           422,
-          expect.stringMatching(/max.*123.*high/),
+          expect.stringMatching(/max.*5001.*high/),
         );
       });
 
