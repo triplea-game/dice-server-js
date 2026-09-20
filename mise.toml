@@ -1,0 +1,3 @@
+# Local dev Node for mise users; matches the Dockerfile base (node:22).
+[tools]
+node = "22"
