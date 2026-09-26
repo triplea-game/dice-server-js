@@ -1,9 +1,10 @@
 - hosts: tag_marti
   tasks:
-    - name: Deploy latest marti
+    - name: Deploy marti image tag
       # The command path and run-as user must match the NOPASSWD sudoers rule
       # the infrastructure repo's marti/service role installs at
       # /etc/sudoers.d/deploy-marti ('deploy ALL=(marti) NOPASSWD:
       # /opt/triplea-marti/deploy-marti.sh'); any mismatch makes sudo prompt for
       # a password and fail in CI. Keep in sync if that role's path changes.
-      command: sudo -u marti /opt/triplea-marti/deploy-marti.sh
+      # The script waits for the app to turn healthy and rolls back if it doesn't.
+      command: sudo -u marti /opt/triplea-marti/deploy-marti.sh {{ marti_tag | default('latest') | quote }}
