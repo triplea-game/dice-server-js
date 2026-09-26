@@ -4,6 +4,8 @@ const Validator = require('./validator');
 const EmailManager = require('./email-manager');
 const Handler = require('./db-handler');
 
+const { PAYLOAD_VERSION } = Validator;
+
 const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 class Api {
@@ -65,49 +67,81 @@ class Api {
   }
 
   async handleRoll(req, res) {
-    const dice = await roller.roll(req.body.max, req.body.times);
-    const now = Date.now();
-    const signature = await this.validator.sign([...dice, now]);
-    await this.emailManager
-      .sendDiceVerificationEmail(req.body.email1, req.body.email2, dice, signature, now);
+    const {
+      max, times, email1, email2,
+    } = req.body;
+    const dice = await roller.roll(max, times);
+    const roll = {
+      dice, max, times, email1, email2, date: Date.now(),
+    };
+    const signature = await this.validator.sign(roll);
+    await this.emailManager.sendDiceVerificationEmail(roll, signature);
     res.json({
       status: 'OK',
       result: {
         dice,
         signature,
-        date: now,
+        date: roll.date,
       },
     });
   }
 
   static validateVerifyArgs(req, res, next) {
     const errors = [];
+    let information;
     try {
-      const information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
-      req.params.dice = information.dice;
-      req.params.date = information.date;
-      req.params.signature = information.signature;
+      information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
+      if (information === null || typeof information !== 'object') {
+        throw new TypeError('token is not a JSON object');
+      }
     } catch (e) {
       errors.push('The supplied token parameter is invalid JSON.');
     }
     if (errors.length === 0) {
-      if (Array.isArray(req.params.dice)) {
-        if (!req.params.dice.every(Number.isInteger)) {
+      const { dice, date, signature } = information;
+      if (Array.isArray(dice)) {
+        if (!dice.every(Number.isInteger)) {
           errors.push('The provided dice parameter contains values other than integers.');
         }
       } else {
         errors.push('The provided dice parameter is not an array.');
       }
-      if (typeof req.params.signature === 'string') {
-        if (req.params.signature.length !== 684) {
+      if (typeof signature === 'string') {
+        if (signature.length !== 684) {
           errors.push('The provided signature has a wrong length.');
         }
       } else {
         errors.push('The provided signature is not from type string');
       }
-      if (!Number.isInteger(req.params.date)) {
+      if (!Number.isInteger(date)) {
         errors.push('The provided data is not an int');
       }
+      if (information.v === undefined) {
+        // LEGACY: pre-v2 tokens carry only dice, date and signature.
+        req.params.legacy = true;
+      } else if (information.v === PAYLOAD_VERSION) {
+        ['max', 'times'].forEach((name) => {
+          if (!Number.isInteger(information[name])) {
+            errors.push(`The provided ${name} parameter is not an int`);
+          }
+        });
+        ['email1', 'email2'].forEach((name) => {
+          if (typeof information[name] !== 'string') {
+            errors.push(`The provided ${name} parameter is not a string`);
+          }
+        });
+      } else {
+        errors.push(`The provided token version ${information.v} is not supported.`);
+      }
+      req.params.roll = {
+        dice,
+        max: information.max,
+        times: information.times,
+        email1: information.email1,
+        email2: information.email2,
+        date,
+      };
+      req.params.signature = signature;
     }
     if (errors.length > 0) {
       res.status(422).json({
@@ -120,8 +154,13 @@ class Api {
   }
 
   async handleVerify(req, res) {
-    const timedArray = [...req.params.dice, req.params.date];
-    const valid = await this.validator.verify(timedArray, req.params.signature);
+    const { roll, signature } = req.params;
+    if (req.params.legacy) {
+      const valid = await this.validator.verifyLegacy(roll.dice, roll.date, signature);
+      res.json({ status: 'OK', result: { valid, legacy: true } });
+      return;
+    }
+    const valid = await this.validator.verify(roll, signature);
     res.json({
       status: 'OK',
       result: {

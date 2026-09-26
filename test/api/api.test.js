@@ -294,11 +294,17 @@ describe('The API\'s', () => {
     expect(mockRollDice).toHaveBeenCalledWith(9, 10);
     expect(Date.now).toHaveBeenCalledTimes(1);
     expect(fakeInstance.validator.sign).toHaveBeenCalledTimes(1);
-    expect(fakeInstance.validator.sign).toHaveBeenCalledWith([
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1234567890,
-    ]);
+    const expectedRoll = {
+      dice: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      max: 9,
+      times: 10,
+      email1: 'Email 1',
+      email2: 'Email 2',
+      date: 1234567890,
+    };
+    expect(fakeInstance.validator.sign).toHaveBeenCalledWith(expectedRoll);
     expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledTimes(1);
-    expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledWith('Email 1', 'Email 2', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'My signature', 1234567890);
+    expect(fakeInstance.emailManager.sendDiceVerificationEmail).toHaveBeenCalledWith(expectedRoll, 'My signature');
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).not.toHaveBeenCalled(); // Means status 200
@@ -315,10 +321,6 @@ describe('The API\'s', () => {
 
   it('test to be added', () => {
     /* missing tests
-    validateVerifyArgs()
-
-    handleVerify()
-
     handleEmailRegister()
 
     handleEmailRegisterConfirm()

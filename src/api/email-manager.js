@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { Liquid } = require('liquidjs');
 const path = require('path');
 const TokenCache = require('../util/token-cache');
+const { PAYLOAD_VERSION } = require('./validator');
 
 const getServerBaseUrl = ({
   port, protocol, host, baseurl,
@@ -95,11 +96,19 @@ class EmailManager {
     });
   }
 
-  async sendDiceVerificationEmail(email1, email2, dice, signature, date) {
+  async sendDiceVerificationEmail(roll, signature) {
+    const {
+      dice, max, times, email1, email2, date,
+    } = roll;
     const properties = {
+      v: PAYLOAD_VERSION,
       dice,
-      signature,
+      max,
+      times,
+      email1,
+      email2,
       date,
+      signature,
     };
     const subject = 'The dice have been cast!';
     const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));

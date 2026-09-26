@@ -47,6 +47,30 @@ describe('The user module', () => {
     expect(res).toMatchSnapshot();
   });
 
+  it('renders a v2 /verify link with its roll details and no legacy warning', () => {
+    const handler = getHandlerForRoute('/verify');
+    const render = jest.fn();
+
+    handler({
+      query: {
+        token: Buffer.from(JSON.stringify({
+          v: 2,
+          dice: [3, 6],
+          max: 6,
+          times: 2,
+          email1: 'a@example.com',
+          email2: 'b@example.com',
+          date: 626644800,
+          signature: 'VGhlcmUgYXJlIG90aGVyIHNlY3JldHM=',
+        })).toString('base64'),
+      },
+    }, { render });
+
+    expect(render).toHaveBeenCalledWith('verify.html', expect.objectContaining({
+      max: 6, times: 2, email1: 'a@example.com', email2: 'b@example.com', legacy: false,
+    }));
+  });
+
   it('should trigger the correct render on /verify with invalid params', () => {
     const handler = getHandlerForRoute('/verify');
 
