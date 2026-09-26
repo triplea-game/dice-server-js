@@ -1,4 +1,4 @@
-const { createTemplateEngine } = require('../src/templates');
+const { createTemplateEngine } = require('../../src/templates');
 
 describe('createTemplateEngine', () => {
   it('escapes a script tag smuggled into a verify link email', async () => {
