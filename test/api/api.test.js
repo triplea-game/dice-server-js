@@ -41,6 +41,28 @@ describe('The API routing process', () => {
     expect(mockRouter.post).toMatchSnapshot();
     expect(mockRouter.use).toMatchSnapshot();
   });
+
+  it('should not expose internal error details in 500 responses', () => {
+    api(mockRouter, { name: 'Dummy DB' });
+    const errorHandler = mockRouter.use.mock.calls[0][0];
+    const res = {
+      status: jest.fn(() => res),
+      json: jest.fn(),
+    };
+    const errorLog = jest.spyOn(global.console, 'error').mockImplementation(() => {});
+
+    errorHandler(new Error('there is no parameter $1'), { method: 'POST', path: '/roll' }, res, jest.fn());
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ status: 'Error', errors: ['Internal server error'] });
+    expect(errorLog).toHaveBeenCalledWith(
+      expect.any(String),
+      'POST',
+      '/roll',
+      expect.objectContaining({ message: 'there is no parameter $1' }),
+    );
+    errorLog.mockRestore();
+  });
 });
 
 describe('The API\'s', () => {

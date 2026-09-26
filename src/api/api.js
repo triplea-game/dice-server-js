@@ -248,7 +248,7 @@ module.exports = (router, database) => {
   // so we call next in case something's odd to please ESLint
   router.use((err, req, res, next) => {
     console.error('[api] Unhandled error on %s %s:', req.method, req.path, err);
-    res.status(500).json({ status: 'Error', errors: [err.toString()] });
+    res.status(500).json({ status: 'Error', errors: ['Internal server error'] });
     next();
   });
   return router;
