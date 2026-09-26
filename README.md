@@ -106,7 +106,10 @@ It can be terminated using `SIGTERM`, i.e. `Ctrl+C`.
 ### Testing
 In order to run all local tests and eslint, you can simply run
 `yarn test`
-This is also the command that will be executed by Travis.
+
+`just e2e` builds the image and runs the smoke and game-client tests in
+`test/e2e/` against it, with a throwaway Postgres and Mailpit. CI runs both on
+every pull request and before every deploy.
 
 ## Routes
 The dice server is divided into 2 seperate routers.

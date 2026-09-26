@@ -4,6 +4,8 @@
   unless explicitly told to.
 - **yarn, not npm.** `npm install` rewrites `yarn.lock` into a spurious diff; if
   you ran it, `git checkout -- yarn.lock` before committing.
-- `yarn test` runs jest then eslint; it's the full check.
+- `yarn test` runs jest then eslint (unit tests). `just e2e` runs the smoke and
+  game-client tests in `test/e2e/` against the built image with real Postgres
+  and Mailpit; run it for dependency, Dockerfile, or wiring changes.
 - The `justfile` is docker compose orchestration plus `just deploy` (prod), not
   the local dev loop.

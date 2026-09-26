@@ -1,0 +1,28 @@
+{
+  "port": 7654,
+  "database": {
+    "username": "postgres",
+    "host": "postgres",
+    "port": 5432,
+    "database": "dicedb"
+  },
+  "email": {
+    "smtp": {
+      "host": "mailpit",
+      "port": 1025
+    },
+    "display": {
+      "sender": "\"TripleA Dice Server\" <dice@dice.triplea-game.org>",
+      "server": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 17654,
+        "baseurl": ""
+      }
+    }
+  },
+  "keys": {
+    "private": "/app/keys/privkey.pem",
+    "public": "/app/keys/pubkey.pem"
+  }
+}

@@ -31,9 +31,35 @@ jobs:
       - name: Run tests and lint
         run: yarn test
 
+  # Smoke and game-client tests against the built image and real Postgres/SMTP.
+  e2e:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install just
+        uses: extractions/setup-just@v2
+
+      - name: Run e2e tests
+        run: just e2e
+
   build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, e2e]
     permissions:
       contents: read
       packages: write

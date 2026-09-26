@@ -1,0 +1,50 @@
+# Throwaway stack for `just e2e`: the production image against a tmpfs
+# Postgres and Mailpit, on ports that don't collide with `just run`.
+name: dice-e2e
+
+services:
+  app:
+    build: ../..
+    ports:
+      - "17654:7654"
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./.keys:/app/keys:ro
+    environment:
+      - DB_PASSWORD=e2e
+    healthcheck:
+      # node:22-slim has no curl or wget. No spaces in the script: rootless
+      # Podman re-splits exec-form healthcheck arguments on whitespace.
+      test: ["CMD", "node", "-e", "fetch('http://localhost:7654/').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "18025:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  postgres:
+    image: postgres:16
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: e2e
+      POSTGRES_DB: dicedb
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 30

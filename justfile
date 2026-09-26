@@ -79,3 +79,35 @@ clean:
 # Trigger deployment to prod.
 deploy:
     ANSIBLE_CONFIG="deploy/ansible.cfg" ansible-playbook -e ansible_user={{ssh_user}} --inventory deploy/ansible/inventory.linode.yml deploy/ansible/playbook.yml
+
+# Run the smoke and game-client tests against a throwaway stack built from this checkout
+e2e:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    keys=test/e2e/.keys
+    mkdir -p "$keys"
+    if [ ! -f "$keys/privkey.pem" ]; then
+      # 4096 bits: the verify API only accepts 684-char signatures.
+      openssl genrsa -out "$keys/privkey.pem" 4096 2>/dev/null
+      openssl rsa -in "$keys/privkey.pem" -pubout -out "$keys/pubkey.pem" 2>/dev/null
+    fi
+    # The image runs as a non-root user that must read the mounted keys.
+    chmod 644 "$keys"/*.pem
+    compose() { docker compose -f test/e2e/compose.yml "$@"; }
+    cleanup() {
+      local status=$?
+      # A first `down` under rootless Podman sometimes leaves a container behind.
+      compose down -v --remove-orphans >/dev/null 2>&1 \
+        || compose down -v --remove-orphans >/dev/null 2>&1 \
+        || echo "warning: e2e stack cleanup failed; run: docker compose -f test/e2e/compose.yml down -v" >&2
+      exit "$status"
+    }
+    trap cleanup EXIT
+    if ! compose up --build --wait --wait-timeout 180; then
+      compose logs
+      exit 1
+    fi
+    if ! npx --no-install jest --config jest.e2e.config.js; then
+      compose logs app
+      exit 1
+    fi
