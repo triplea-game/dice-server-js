@@ -22,6 +22,18 @@ class Api {
 
   async registrationMiddleware(req, res, next) {
     const errors = [];
+    ['email1', 'email2'].forEach((name) => {
+      if (typeof req.body[name] !== 'string') {
+        errors.push(`Parameter ${name} is not a string`);
+      }
+    });
+    if (errors.length > 0) {
+      res.status(422).json({
+        status: 'Error',
+        errors,
+      });
+      return;
+    }
     await Promise.all([req.body.email1, req.body.email2].map((email) => (
       this.dbHandler.checkMail(email).then((result) => {
         if (!result) {

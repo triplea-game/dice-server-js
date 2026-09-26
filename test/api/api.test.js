@@ -126,6 +126,29 @@ describe('The API\'s', () => {
       );
     });
 
+    it('reject non-string email inputs without querying the database', async () => {
+      await registrationMiddleware({
+        body: {
+          email1: { a: { b: '1' } },
+          email2: emailRegistered,
+        },
+      }, res, next);
+      expectStatusAndErrors(422, 'Parameter email1 is not a string');
+      expect(fakeDbHandler.checkMail).not.toHaveBeenCalled();
+    });
+
+    it('reject missing email inputs', async () => {
+      await registrationMiddleware({
+        body: {},
+      }, res, next);
+      expectStatusAndErrors(
+        422,
+        'Parameter email1 is not a string',
+        'Parameter email2 is not a string',
+      );
+      expect(fakeDbHandler.checkMail).not.toHaveBeenCalled();
+    });
+
     it('proceed correctly on correct email inputs', async () => {
       await registrationMiddleware({
         body: {
