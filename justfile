@@ -11,7 +11,7 @@ ssh_user := env_var_or_default("SSH_USER", env_var_or_default("USER", ""))
 default:
     @just --list
 
-# Create .env, config.json, and RSA keys for a first-time setup.
+# Create .env and RSA keys for a first-time setup (config.json is committed).
 init:
     #!/usr/bin/env bash
     if [ ! -f .env ]; then
@@ -19,12 +19,6 @@ init:
       echo "Created .env from .env.example - fill in real credentials before running."
     else
       echo ".env already exists, skipping."
-    fi
-    if [ ! -f config.json ]; then
-      cp config.example.json config.json
-      echo "Created config.json from config.example.json - update display settings if needed."
-    else
-      echo "config.json already exists, skipping."
     fi
     mkdir -p keys
     if [ ! -f keys/privkey.pem ]; then
@@ -47,7 +41,7 @@ _check-config:
       exit 1
     fi
     if [ ! -f config.json ]; then
-      echo "ERROR: config.json not found. Run 'just init' first." >&2
+      echo "ERROR: config.json not found. It is committed; restore it with 'git checkout -- config.json'." >&2
       exit 1
     fi
     if [ ! -f keys/privkey.pem ] || [ ! -f keys/pubkey.pem ]; then
