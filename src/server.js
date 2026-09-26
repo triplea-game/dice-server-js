@@ -9,6 +9,8 @@ const { createApp } = require('./app');
 // Composition root: turns config into real collaborators and starts listening.
 const startServer = async (config) => {
   const users = new DbHandler(config.database);
+  // Serving without the users table would fail every request, so fail startup
+  // instead and let the container restart until Postgres is reachable.
   await users.setupDb();
 
   console.log('[email] Creating SMTP transport - host: %s port: %s', config.smtp.host, config.smtp.port);

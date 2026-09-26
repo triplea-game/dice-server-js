@@ -15,11 +15,11 @@ class DbHandler {
   }
 
   setupDb() {
-    return this.db.none('CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);')
-      .catch((e) => {
-        console.error('Failed to create table "users"');
-        console.error(e);
-      });
+    return this.db.none('CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);');
+  }
+
+  ping() {
+    return this.db.one('SELECT 1');
   }
 
   addUser(email) {

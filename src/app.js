@@ -19,6 +19,15 @@ const createApp = (deps) => {
   app.set('view engine', 'html');
 
   app.use(express.static(path.join(publicDir, 'static')));
+  app.get('/health', async (req, res) => {
+    try {
+      await deps.users.ping();
+      res.json({ status: 'OK' });
+    } catch (err) {
+      console.error('[health] Database check failed:', err);
+      res.status(503).json({ status: 'Error', errors: ['Database unavailable'] });
+    }
+  });
   app.use('/api', apiRoutes(express.Router(routerParams), deps));
   app.use('/', userRoutes(express.Router(routerParams)));
   return app;

@@ -15,7 +15,7 @@ services:
     healthcheck:
       # node:22-slim has no curl or wget. No spaces in the script: rootless
       # Podman re-splits exec-form healthcheck arguments on whitespace.
-      test: ["CMD", "node", "-e", "fetch('http://localhost:7654/').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      test: ["CMD", "node", "-e", "fetch('http://localhost:7654/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
       interval: 2s
       timeout: 5s
       retries: 30

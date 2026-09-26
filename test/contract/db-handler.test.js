@@ -14,3 +14,14 @@ beforeAll(() => handler.setupDb());
 afterAll(() => handler.close());
 
 describeUsersContract('DbHandler on Postgres', () => handler);
+
+describe('DbHandler on an unreachable Postgres', () => {
+  it('fails setup, so the server refuses to start instead of serving without a users table', async () => {
+    const unreachable = new DbHandler({
+      username: 'postgres', password: 'e2e', host: 'localhost', port: 1, database: 'dicedb',
+    });
+
+    await expect(unreachable.setupDb()).rejects.toThrow();
+    await unreachable.close();
+  });
+});

@@ -8,6 +8,12 @@ services:
       - ./keys:/app/keys:ro
     environment:
       - DB_PASSWORD=change-me
+    healthcheck:
+      # No spaces in the script: rootless Podman re-splits exec-form arguments.
+      test: ["CMD", "node", "-e", "fetch('http://localhost:7654/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       postgres:
         condition: service_healthy

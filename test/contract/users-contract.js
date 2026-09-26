@@ -47,6 +47,12 @@ const describeUsersContract = (name, makeUsers) => {
       expect(await users.removeUser(uniqueEmail())).toBe(0);
     });
 
+    it('answers a ping when its storage is reachable', async () => {
+      const users = await makeUsers();
+
+      await expect(users.ping()).resolves.not.toThrow();
+    });
+
     it('can set up its storage more than once', async () => {
       const users = await makeUsers();
 

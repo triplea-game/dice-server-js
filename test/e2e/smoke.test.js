@@ -14,6 +14,13 @@ describe('the built image', () => {
     expect(await response.text()).toContain('Register for the Dice-Server');
   });
 
+  it('reports healthy with its database reachable', async () => {
+    const response = await fetch(`${appUrl}/health`);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: 'OK' });
+  });
+
   it('serves static assets', async () => {
     const response = await fetch(`${appUrl}/js/ajax-form.js`);
 

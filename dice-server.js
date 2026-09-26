@@ -47,4 +47,7 @@ startServer({
   server: nconf.get('email:display:server'),
   sender: nconf.get('email:display:sender'),
   keys: nconf.get('keys'),
+}).catch((err) => {
+  console.error('Startup failed:', err);
+  process.exit(1);
 });

@@ -10,6 +10,11 @@ class InMemoryUsers {
     // Nothing to create in memory.
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async ping() {
+    // Always reachable.
+  }
+
   async addUser(email) {
     if (this.emails.has(email)) throw new Error(`duplicate key: ${email}`);
     this.emails.add(email);

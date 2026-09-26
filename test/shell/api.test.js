@@ -296,3 +296,27 @@ describe('API errors', () => {
     errorLog.mockRestore();
   });
 });
+
+describe('GET /health', () => {
+  it('reports OK when the users store answers a ping', async () => {
+    const url = await startApp();
+
+    const response = await fetch(`${url}/health`);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: 'OK' });
+  });
+
+  it('reports 503 when the users store cannot be reached', async () => {
+    const users = new InMemoryUsers();
+    users.ping = async () => { throw new Error('connect ECONNREFUSED'); };
+    const url = await startApp({ users });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await fetch(`${url}/health`);
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['Database unavailable'] });
+    errorLog.mockRestore();
+  });
+});
