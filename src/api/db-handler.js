@@ -33,6 +33,10 @@ class DbHandler {
   checkMail(email) {
     return this.db.oneOrNone('SELECT email FROM users WHERE email=$1', email);
   }
+
+  close() {
+    return this.db.$pool.end();
+  }
 }
 
 module.exports = DbHandler;

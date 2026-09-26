@@ -1,0 +1,35 @@
+const fs = require('fs');
+const nodemailer = require('nodemailer');
+const DbHandler = require('./api/db-handler');
+const EmailManager = require('./api/email-manager');
+const Validator = require('./api/validator');
+const roller = require('./api/dice-roller');
+const { createApp } = require('./app');
+
+// Composition root: turns config into real collaborators and starts listening.
+const startServer = async (config) => {
+  const users = new DbHandler(config.database);
+  await users.setupDb();
+
+  console.log('[email] Creating SMTP transport - host: %s port: %s', config.smtp.host, config.smtp.port);
+  const transport = nodemailer.createTransport({
+    ...config.smtp,
+    connectionTimeout: 10000,
+    socketTimeout: 10000,
+  });
+  const app = createApp({
+    users,
+    emailManager: new EmailManager({
+      users, transport, server: config.server, sender: config.sender,
+    }),
+    validator: new Validator(
+      fs.readFileSync(config.keys.private),
+      fs.readFileSync(config.keys.public),
+    ),
+    rollDice: roller.roll,
+    now: Date.now,
+  });
+  app.listen(config.port, () => console.info(`Running on port ${config.port}`));
+};
+
+module.exports = { startServer };

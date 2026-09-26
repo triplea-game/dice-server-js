@@ -1,257 +1,112 @@
-const nconf = require('nconf');
-const roller = require('./dice-roller');
-const Validator = require('./validator');
-const EmailManager = require('./email-manager');
-const Handler = require('./db-handler');
+const {
+  emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
+} = require('../core/requests');
 
-const { PAYLOAD_VERSION } = Validator;
+const reject = (res, status, errors) => res.status(status).json({ status: 'Error', errors });
 
-const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-class Api {
-  constructor(database) {
-    this.dbHandler = new Handler(database);
-    this.dbHandler.setupDb();
-    this.emailManager = new EmailManager(this.dbHandler, nconf.get('email:smtp'), nconf.get('email:display:server'), nconf.get('email:display:sender'));
-    this.validator = new Validator();
-  }
-
-  static isEmail(email) {
-    return emailValidation.test(email);
-  }
-
-  async registrationMiddleware(req, res, next) {
-    const errors = [];
-    ['email1', 'email2'].forEach((name) => {
-      if (typeof req.body[name] !== 'string') {
-        errors.push(`Parameter ${name} is not a string`);
-      }
-    });
-    if (errors.length > 0) {
-      res.status(422).json({
-        status: 'Error',
-        errors,
-      });
+// The /api routes: a thin shell that parses with the core, then calls the
+// injected collaborators (users store, email manager, validator, dice roller, clock).
+module.exports = (router, {
+  users, emailManager, validator, rollDice, now,
+}) => {
+  router.get('/verify/:token', async (req, res) => {
+    const parsed = parseVerifyToken(req.params.token);
+    if (parsed.errors) {
+      reject(res, 422, parsed.errors);
       return;
     }
-    await Promise.all([req.body.email1, req.body.email2].map((email) => (
-      this.dbHandler.checkMail(email).then((result) => {
-        if (!result) {
-          errors.push(`Email "${email}" not registered.`);
-        }
-      })
-    )));
-    if (errors.length > 0) {
-      res.status(403).json({
-        status: 'Error',
-        errors,
-      });
-    } else {
-      next();
-    }
-  }
-
-  static validateRollArgs(req, res, next) {
-    const errors = [];
-    ['max', 'times'].forEach((name) => {
-      if (!req.body[name]) {
-        errors.push(`Parameter ${name} is not defined`);
-      } else {
-        req.body[name] = parseInt(req.body[name], 10);
-        const maxLimit = 5000;
-        if (Number.isNaN(req.body[name])) {
-          errors.push(`Parameter ${name} is not an Integer`);
-        } else if (req.body[name] > maxLimit) {
-          errors.push(`Parameter ${name} has value ${req.body[name]} which is higher than ${maxLimit}`);
-        } else if (req.body[name] <= 0) {
-          errors.push(`Parameter ${name} has value ${req.body[name]} which is 0 or less`);
-        }
-      }
-    });
-    if (errors.length > 0) {
-      res.status(422).json({
-        status: 'Error',
-        errors,
-      });
-    } else {
-      next();
-    }
-  }
-
-  async handleRoll(req, res) {
-    const {
-      max, times, email1, email2,
-    } = req.body;
-    const dice = await roller.roll(max, times);
-    const roll = {
-      dice, max, times, email1, email2, date: Date.now(),
-    };
-    const signature = await this.validator.sign(roll);
-    await this.emailManager.sendDiceVerificationEmail(roll, signature);
-    res.json({
-      status: 'OK',
-      result: {
-        dice,
-        signature,
-        date: roll.date,
-      },
-    });
-  }
-
-  static validateVerifyArgs(req, res, next) {
-    const errors = [];
-    let information;
-    try {
-      information = JSON.parse(Buffer.from(req.params.token, 'base64').toString());
-      if (information === null || typeof information !== 'object') {
-        throw new TypeError('token is not a JSON object');
-      }
-    } catch (e) {
-      errors.push('The supplied token parameter is invalid JSON.');
-    }
-    if (errors.length === 0) {
-      const { dice, date, signature } = information;
-      if (Array.isArray(dice)) {
-        if (!dice.every(Number.isInteger)) {
-          errors.push('The provided dice parameter contains values other than integers.');
-        }
-      } else {
-        errors.push('The provided dice parameter is not an array.');
-      }
-      if (typeof signature === 'string') {
-        if (signature.length !== 684) {
-          errors.push('The provided signature has a wrong length.');
-        }
-      } else {
-        errors.push('The provided signature is not from type string');
-      }
-      if (!Number.isInteger(date)) {
-        errors.push('The provided data is not an int');
-      }
-      if (information.v === undefined) {
-        // LEGACY: pre-v2 tokens carry only dice, date and signature.
-        req.params.legacy = true;
-      } else if (information.v === PAYLOAD_VERSION) {
-        ['max', 'times'].forEach((name) => {
-          if (!Number.isInteger(information[name])) {
-            errors.push(`The provided ${name} parameter is not an int`);
-          }
-        });
-        ['email1', 'email2'].forEach((name) => {
-          if (typeof information[name] !== 'string') {
-            errors.push(`The provided ${name} parameter is not a string`);
-          }
-        });
-      } else {
-        errors.push(`The provided token version ${information.v} is not supported.`);
-      }
-      req.params.roll = {
-        dice,
-        max: information.max,
-        times: information.times,
-        email1: information.email1,
-        email2: information.email2,
-        date,
-      };
-      req.params.signature = signature;
-    }
-    if (errors.length > 0) {
-      res.status(422).json({
-        status: 'Error',
-        errors,
-      });
-    } else {
-      next();
-    }
-  }
-
-  async handleVerify(req, res) {
-    const { roll, signature } = req.params;
-    if (req.params.legacy) {
-      const valid = await this.validator.verifyLegacy(roll.dice, roll.date, signature);
+    const { roll, signature, legacy } = parsed;
+    if (legacy) {
+      const valid = await validator.verifyLegacy(roll.dice, roll.date, signature);
       res.json({ status: 'OK', result: { valid, legacy: true } });
       return;
     }
-    const valid = await this.validator.verify(roll, signature);
+    const valid = await validator.verify(roll, signature);
+    res.json({ status: 'OK', result: { valid } });
+  });
+
+  router.post('/roll', async (req, res) => {
+    const typeErrors = rollEmailErrors(req.body);
+    if (typeErrors.length > 0) {
+      reject(res, 422, typeErrors);
+      return;
+    }
+    const { email1, email2 } = req.body;
+    const registered = await Promise.all([email1, email2].map((email) => users.checkMail(email)));
+    const unregistered = [email1, email2]
+      .filter((email, i) => !registered[i])
+      .map((email) => `Email "${email}" not registered.`);
+    if (unregistered.length > 0) {
+      reject(res, 403, unregistered);
+      return;
+    }
+    const args = parseRollArgs(req.body);
+    if (args.errors) {
+      reject(res, 422, args.errors);
+      return;
+    }
+
+    const roll = {
+      dice: await rollDice(args.max, args.times),
+      max: args.max,
+      times: args.times,
+      email1,
+      email2,
+      date: now(),
+    };
+    const signature = await validator.sign(roll);
+    await emailManager.sendDiceVerificationEmail(roll, signature);
     res.json({
       status: 'OK',
-      result: {
-        valid,
-      },
+      result: { dice: roll.dice, signature, date: roll.date },
     });
-  }
+  });
 
-  async handleEmailRegister(req, res) {
+  router.post('/register', async (req, res) => {
+    const errors = emailParamErrors(req.body.email);
+    if (errors.length > 0) {
+      reject(res, 422, errors);
+      return;
+    }
     console.log('[register] Request received for email: %s', req.body.email);
-    const info = await this.emailManager.registerEmail(req.body.email);
+    const info = await emailManager.registerEmail(req.body.email);
     if (info) {
       console.log('[register] Verification email sent - messageId: %s response: %s', info.messageId, info.response);
       res.status(200).json({ status: 'OK' });
     } else {
       console.log('[register] Email already registered: %s', req.body.email);
-      res.status(412).json({ status: 'Error', errors: ['Mail is already registred'] });
+      reject(res, 412, ['Mail is already registred']);
     }
-  }
+  });
 
-  async handleEmailRegisterConfirm(req, res) {
-    const verified = await this.emailManager.verifyEmail(req.body.email, req.params.token);
+  router.post('/register/:token', async (req, res) => {
+    const verified = await emailManager.verifyEmail(req.body.email, req.params.token);
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
-      res.status(403).json({
-        status: 'Error',
-        errors: ['Invalid Token or E-Mail.'],
-      });
+      reject(res, 403, ['Invalid Token or E-Mail.']);
     }
-  }
+  });
 
-  async handleEmailUnregister(req, res) {
-    const rowCount = await this.emailManager.unregisterEmail(req.body.email);
+  router.post('/unregister', async (req, res) => {
+    const errors = emailParamErrors(req.body.email);
+    if (errors.length > 0) {
+      reject(res, 422, errors);
+      return;
+    }
+    const rowCount = await emailManager.unregisterEmail(req.body.email);
     if (rowCount === 1) {
       res.status(200).json({ status: 'OK' });
-    } else if (rowCount === 0) {
-      res.status(412).json({
-        status: 'Error',
-        errors: [`Email "${req.body.email}" does not exist in the database.`],
-      });
-    }
-  }
-
-  static verifyEmailParam(req, res, next) {
-    if (typeof req.body.email === 'string') {
-      if (Api.isEmail(req.body.email)) {
-        next();
-      } else {
-        res.status(422).json({
-          status: 'Error',
-          errors: ['Email has invalid format'],
-        });
-      }
     } else {
-      res.status(422).json({
-        status: 'Error',
-        errors: ['Body Parameter Email is missing'],
-      });
+      reject(res, 412, [`Email "${req.body.email}" does not exist in the database.`]);
     }
-  }
-}
+  });
 
-module.exports = (router, database) => {
-  const api = new Api(database);
-  router.get('/verify/:token', Api.validateVerifyArgs, api.handleVerify.bind(api));
-  router.post('/roll', api.registrationMiddleware.bind(api), Api.validateRollArgs, api.handleRoll.bind(api));
-  router.post('/register', Api.verifyEmailParam, api.handleEmailRegister.bind(api));
-  router.post('/register/:token', api.handleEmailRegisterConfirm.bind(api));
-  router.post('/unregister', Api.verifyEmailParam, api.handleEmailUnregister.bind(api));
-
-  // express.js behaves differently if no next parameter is used here
-  // so we call next in case something's odd to please ESLint
+  // Express only treats a 4-argument function as an error handler, hence the unused `next`.
+  // eslint-disable-next-line no-unused-vars
   router.use((err, req, res, next) => {
     console.error('[api] Unhandled error on %s %s:', req.method, req.path, err);
-    res.status(500).json({ status: 'Error', errors: ['Internal server error'] });
-    next();
+    reject(res, 500, ['Internal server error']);
   });
   return router;
 };
-
-module.exports.Api = Api;

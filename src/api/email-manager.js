@@ -1,32 +1,20 @@
-const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { Liquid } = require('liquidjs');
 const path = require('path');
 const TokenCache = require('../util/token-cache');
-const { PAYLOAD_VERSION } = require('./validator');
+const { registrationLink, unregisterLink, verifyLink } = require('../core/links');
 
-const getServerBaseUrl = ({
-  port, protocol, host, baseurl,
-}) => {
-  const isCommonPort = () => (port === 80 && protocol === 'http') || (port === 443 && protocol === 'https');
-  return `${protocol}://${host}${isCommonPort() ? '' : (`:${port}`)}${baseurl}`;
-};
-
+// Registration and roll emails. `users` is the DbHandler (or anything with its
+// checkMail/addUser/removeUser), `transport` a nodemailer transport.
 class EmailManager {
-  constructor(dbhandler, transport, server, emailsender) {
-    this.dbhandler = dbhandler;
-    this.emailMap = new TokenCache();
-    const transportOptions = {
-      ...transport,
-      connectionTimeout: 10000,
-      socketTimeout: 10000,
-    };
-    this.smtpHost = transport.host;
-    this.smtpPort = transport.port;
-    console.log('[email] Creating SMTP transport - host: %s port: %s', transport.host, transport.port);
-    this.transport = nodemailer.createTransport(transportOptions);
+  constructor({
+    users, transport, server, sender,
+  }) {
+    this.users = users;
+    this.transport = transport;
     this.server = server;
-    this.emailsender = emailsender;
+    this.sender = sender;
+    this.pendingTokens = new TokenCache();
     this.engine = new Liquid({
       root: path.resolve(__dirname, '../../public/email-templates/'),
       extname: '.html',
@@ -34,11 +22,11 @@ class EmailManager {
   }
 
   async verifyEmail(email, token) {
-    if (!this.emailMap.verify(email, token)) {
+    if (!this.pendingTokens.verify(email, token)) {
       return false;
     }
     try {
-      await this.dbhandler.addUser(email);
+      await this.users.addUser(email);
     } catch (err) {
       console.error('[email] verifyEmail - DB error adding user: %s', email, err);
       throw err;
@@ -50,7 +38,7 @@ class EmailManager {
     console.log('[email] registerEmail - checking if already registered: %s', email);
     let alreadyRegistered;
     try {
-      alreadyRegistered = await this.dbhandler.checkMail(email);
+      alreadyRegistered = await this.users.checkMail(email);
     } catch (err) {
       console.error('[email] registerEmail - DB error checking email: %s', email, err);
       throw err;
@@ -60,29 +48,27 @@ class EmailManager {
       return false;
     }
     const token = crypto.randomBytes(512).toString('base64');
-    this.emailMap.put(email, token);
+    this.pendingTokens.put(email, token);
 
     const subject = 'Verify your E-Mail';
-    const baseUrl = getServerBaseUrl(this.server);
-    const encodedEmail = encodeURIComponent(email);
     const content = await this.engine.renderFile('verify-email.html', {
       subject,
-      url: `${baseUrl}/register?email=${encodedEmail}&token=${encodeURIComponent(token)}`,
+      url: registrationLink(this.server, email, token),
       host: this.server.host,
-      unsub: `${baseUrl}/unregister?email=${encodedEmail}`,
+      unsub: unregisterLink(this.server, email),
     });
 
-    console.log('[email] registerEmail - sending verification email to: %s via %s:%s', email, this.smtpHost, this.smtpPort);
+    console.log('[email] registerEmail - sending verification email to: %s', email);
     let info;
     try {
       info = await this.transport.sendMail({
-        from: this.emailsender,
+        from: this.sender,
         to: email,
         subject,
         html: content,
       });
     } catch (err) {
-      console.error('[email] registerEmail - failed to send email to: %s via %s:%s -', email, this.smtpHost, this.smtpPort, err);
+      console.error('[email] registerEmail - failed to send email to: %s -', email, err);
       throw err;
     }
     console.log('[email] registerEmail - email sent successfully to: %s', email);
@@ -90,41 +76,25 @@ class EmailManager {
   }
 
   unregisterEmail(email) {
-    return this.dbhandler.removeUser(email).catch((err) => {
+    return this.users.removeUser(email).catch((err) => {
       console.error('[email] unregisterEmail - DB error removing user: %s', email, err);
       throw err;
     });
   }
 
   async sendDiceVerificationEmail(roll, signature) {
-    const {
-      dice, max, times, email1, email2, date,
-    } = roll;
-    const properties = {
-      v: PAYLOAD_VERSION,
-      dice,
-      max,
-      times,
-      email1,
-      email2,
-      date,
-      signature,
-    };
     const subject = 'The dice have been cast!';
-    const encodedProperties = encodeURIComponent(Buffer.from(JSON.stringify(properties)).toString('base64'));
-    const baseUrl = getServerBaseUrl(this.server);
-
     const content = await this.engine.renderFile('verify-dice.html', {
       subject,
-      date: new Date(date).toLocaleString('en-US'),
-      dice: JSON.stringify(dice),
-      url: `${baseUrl}/verify?token=${encodedProperties}`,
-      unsub: `${baseUrl}/unregister`,
+      date: new Date(roll.date).toLocaleString('en-US'),
+      dice: JSON.stringify(roll.dice),
+      url: verifyLink(this.server, roll, signature),
+      unsub: unregisterLink(this.server),
     });
 
     return this.transport.sendMail({
-      from: this.emailsender,
-      to: `${email1}, ${email2}`,
+      from: this.sender,
+      to: `${roll.email1}, ${roll.email2}`,
       subject,
       html: content,
     });

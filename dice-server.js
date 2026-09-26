@@ -1,5 +1,5 @@
 const nconf = require('nconf');
-const controller = require('./src/controller');
+const { startServer } = require('./src/server');
 
 nconf.argv().env({
   allowlist: ['SMTP_USER', 'SMTP_PASS'],
@@ -40,8 +40,11 @@ nconf.required([
   'keys:private',
   'keys:public',
 ]);
-const dbConfig = {
-  ...nconf.get('database'),
-  password: process.env.DB_PASSWORD,
-};
-controller(nconf.get('port'), dbConfig);
+startServer({
+  port: nconf.get('port'),
+  database: { ...nconf.get('database'), password: process.env.DB_PASSWORD },
+  smtp: nconf.get('email:smtp'),
+  server: nconf.get('email:display:server'),
+  sender: nconf.get('email:display:sender'),
+  keys: nconf.get('keys'),
+});

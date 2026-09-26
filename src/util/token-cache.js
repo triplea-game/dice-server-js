@@ -5,10 +5,10 @@ class TokenCache {
   }
 
   put(key, value) {
-    this.map[key] = {
-      value,
-      timeout: setTimeout(() => delete this.map[key], this.timeout),
-    };
+    const timeout = setTimeout(() => delete this.map[key], this.timeout);
+    // A pending registration shouldn't keep the process alive on shutdown.
+    timeout.unref();
+    this.map[key] = { value, timeout };
   }
 
   verify(key, token) {

@@ -28,6 +28,7 @@ services:
     image: axllent/mailpit
     ports:
       - "18025:8025"
+      - "11025:1025"
     healthcheck:
       test: ["CMD", "/mailpit", "readyz"]
       interval: 2s
