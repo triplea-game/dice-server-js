@@ -2,7 +2,7 @@
 {%- if invalid -%}
 <h2>Invalid link!</h2>
 {%- elsif token and dice and date -%}
-{%- capture url %}./api/verify/{{ token }}{% endcapture -%}
+{%- assign url = './api/verify/' | append: token -%}
 {%- assign method = 'GET' -%}
 {%- assign formId = 'form' -%}
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
@@ -11,7 +11,7 @@
   {%- if legacy %}
   <p><strong>Warning:</strong> this is an old-format roll. Its signature only weakly protects the dice and date, and does not cover the dice range or the players.</p>
   {%- else %}
-  <p>{{ times | escape }} dice with max {{ max | escape }}, rolled for {{ email1 | escape }} and {{ email2 | escape }}</p>
+  <p>{{ times }} dice with max {{ max }}, rolled for {{ email1 }} and {{ email2 }}</p>
   {%- endif %}
   {% include 'form-ajaxify', buttonText: 'Verify!' %}
 </form>

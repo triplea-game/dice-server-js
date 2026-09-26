@@ -1,6 +1,6 @@
 {%- layout 'layout', title: 'Confirm Registration' -%}
 {%- if email and token -%}
-{%- capture url %}./api/register/{{ token }}{% endcapture -%}
+{%- assign url = './api/register/' | append: token -%}
 {%- assign method = 'POST' -%}
 {%- assign formId = 'form' -%}
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">

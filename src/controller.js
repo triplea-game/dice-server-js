@@ -1,7 +1,7 @@
 const express = require('express');
-const { Liquid } = require('liquidjs');
 const apiMiddleware = require('./api/api');
 const userMiddleware = require('./user/user');
+const { createTemplateEngine } = require('./templates');
 
 const setupRoutes = (db) => {
   const routerParams = { caseSensitive: true, strict: true };
@@ -17,7 +17,7 @@ const startServer = (router, port) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  const engine = new Liquid({ root: __dirname, extname: '.html' });
+  const engine = createTemplateEngine();
   app.engine('html', engine.express());
   app.set('views', ['./public/partials', './public/views']);
   app.set('view engine', 'html');

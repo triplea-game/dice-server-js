@@ -16,7 +16,7 @@ const describeResponse = (response, successText) => {
 };
 
 if (typeof window !== 'undefined') {
-  window.registerForm = (formId, buttonId, errorDisplayId, method, url, text, successText) => {
+  window.registerForm = (formId, buttonId, errorDisplayId, text, successText) => {
     const form = document.getElementById(formId);
     const button = document.getElementById(buttonId);
     const errorDisplay = document.getElementById(errorDisplayId);
@@ -35,14 +35,17 @@ if (typeof window !== 'undefined') {
         button.disabled = false;
         if (outcome.ok) {
           errorDisplay.style.display = 'none';
-          button.innerHTML = outcome.text;
+          button.textContent = outcome.text;
         } else {
           errorDisplay.style.display = 'block';
-          errorDisplay.innerHTML = outcome.errors.join('<br>');
-          button.innerHTML = text;
+          // Errors can echo user input (an email), so they go in as text.
+          errorDisplay.replaceChildren(...outcome.errors.flatMap((error, i) => (
+            i === 0 ? [error] : [document.createElement('br'), error]
+          )));
+          button.textContent = text;
         }
       });
-      request.open(method, url);
+      request.open(form.getAttribute('method'), form.getAttribute('action'));
       // urlencode the FormData
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.send([...formData.entries()].map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`).join('&'));
