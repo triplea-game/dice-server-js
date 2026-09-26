@@ -84,9 +84,10 @@ e2e:
       # 4096 bits: the verify API only accepts 684-char signatures.
       openssl genrsa -out "$keys/privkey.pem" 4096 2>/dev/null
       openssl rsa -in "$keys/privkey.pem" -pubout -out "$keys/pubkey.pem" 2>/dev/null
+      # The image runs as a non-root user that must read the mounted keys.
+      # Only chmod here: keys another user generated can't be chmodded by us.
+      chmod 644 "$keys"/*.pem
     fi
-    # The image runs as a non-root user that must read the mounted keys.
-    chmod 644 "$keys"/*.pem
     compose() { docker compose -f test/e2e/compose.yml "$@"; }
     cleanup() {
       local status=$?
