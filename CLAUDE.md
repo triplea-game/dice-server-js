@@ -11,5 +11,5 @@
   real Express app with the in-memory fakes in `test/fakes/`; `test/contract/`
   holds each fake to the real Postgres/SMTP behavior (runs under `just e2e`).
   New decision logic goes in `src/core/`; new I/O is injected via `createApp`.
-- The `justfile` is docker compose orchestration plus `just deploy` (prod), not
-  the local dev loop.
+- The `justfile` is docker compose orchestration plus `just deploy <tag>` (prod;
+  the tag is required, CI passes `sha-<commit>`), not the local dev loop.

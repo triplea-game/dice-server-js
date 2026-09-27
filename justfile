@@ -70,8 +70,8 @@ build:
 clean:
     docker compose down -v
 
-# Deploy an image tag to prod (CI passes sha-<commit>).
-deploy tag="latest":
+# Deploy an image tag to prod, eg: just deploy sha-<full commit sha> (what CI passes).
+deploy tag:
     ANSIBLE_CONFIG="deploy/ansible.cfg" ansible-playbook -e ansible_user={{ssh_user}} -e marti_tag={{tag}} --inventory deploy/ansible/inventory.linode.yml deploy/ansible/playbook.yml
 
 # Run the smoke and game-client tests against a throwaway stack built from this checkout
