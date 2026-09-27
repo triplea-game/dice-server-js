@@ -46,4 +46,13 @@ const startServer = async (config) => {
   return { server, users };
 };
 
-module.exports = { startServer, listen };
+// Stops accepting connections and waits for in-flight requests, a roll's
+// verification email included, before closing the users store they rely on.
+const stopServer = async ({ server, users }) => {
+  await new Promise((resolve, reject) => {
+    server.close((err) => (err ? reject(err) : resolve()));
+  });
+  await users.close();
+};
+
+module.exports = { startServer, listen, stopServer };

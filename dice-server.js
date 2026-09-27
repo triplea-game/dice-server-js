@@ -1,5 +1,23 @@
 const nconf = require('nconf');
-const { startServer } = require('./src/server');
+const { startServer, stopServer } = require('./src/server');
+
+// Under compose's default 10s stop grace period, after which the container is
+// SIGKILLed; a hung drain gives up and exits nonzero before that.
+const shutdownTimeoutMs = 8000;
+
+// Node's default SIGTERM handling exits at once, which would cut a roll between
+// its DB write and its verification email on every container recreate.
+const exitOnSignal = (running) => (signal) => {
+  console.info(`[shutdown] ${signal}: draining in-flight requests`);
+  setTimeout(() => {
+    console.error(`[shutdown] Still draining after ${shutdownTimeoutMs}ms; exiting`);
+    process.exit(1);
+  }, shutdownTimeoutMs).unref();
+  stopServer(running).then(() => process.exit(0), (err) => {
+    console.error('[shutdown] Failed:', err);
+    process.exit(1);
+  });
+};
 
 nconf.argv().env({
   allowlist: ['SMTP_USER', 'SMTP_PASS'],
@@ -47,6 +65,10 @@ startServer({
   server: nconf.get('email:display:server'),
   sender: nconf.get('email:display:sender'),
   keys: nconf.get('keys'),
+}).then((running) => {
+  const onSignal = exitOnSignal(running);
+  process.once('SIGTERM', onSignal);
+  process.once('SIGINT', onSignal);
 }).catch((err) => {
   console.error('Startup failed:', err);
   process.exit(1);

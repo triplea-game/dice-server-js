@@ -2,8 +2,9 @@
 // The behavior the API and EmailManager assume of their users store. Run
 // against every implementation: DbHandler on real Postgres (db-handler.test.js)
 // and the in-memory fake the shell tests use (test/shell/in-memory-users.test.js).
-// `makeUsers` may return a shared store, so every test uses its own unique email.
-const describeUsersContract = (name, makeUsers) => {
+// `makeUsers` may return a shared store, so every test uses its own unique email;
+// `makeOwnUsers` returns a new store, for tests that close it.
+const describeUsersContract = (name, makeUsers, makeOwnUsers) => {
   const uniqueEmail = () => `contract-${Date.now()}-${Math.floor(Math.random() * 1e6)}@example.com`;
   const emailOfLength = (length) => {
     const unique = uniqueEmail();
@@ -110,6 +111,14 @@ const describeUsersContract = (name, makeUsers) => {
       await users.setupDb();
 
       expect(await users.checkMail(uniqueEmail())).toBeNull();
+    });
+
+    it('rejects queries once closed', async () => {
+      const users = await makeOwnUsers();
+
+      await users.close();
+
+      await expect(users.checkMail(uniqueEmail())).rejects.toThrow();
     });
   });
 };

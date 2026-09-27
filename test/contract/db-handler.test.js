@@ -4,17 +4,18 @@ const { describeUsersContract } = require('./users-contract');
 const DbHandler = require('../../src/api/db-handler');
 const { stackEnv } = require('../e2e/stack');
 
-const handler = new DbHandler({
+const config = {
   username: 'postgres',
   password: 'e2e',
   host: process.env.E2E_DB_HOST || 'localhost',
   port: Number(stackEnv('E2E_DB_PORT')),
   database: 'dicedb',
-});
+};
+const handler = new DbHandler(config);
 beforeAll(() => handler.setupDb());
 afterAll(() => handler.close());
 
-describeUsersContract('DbHandler on Postgres', () => handler);
+describeUsersContract('DbHandler on Postgres', () => handler, () => new DbHandler(config));
 
 describe('DbHandler setup on an existing table', () => {
   it('widens the old varchar(65) column in place, keeping its rows and without rewriting the table', async () => {
