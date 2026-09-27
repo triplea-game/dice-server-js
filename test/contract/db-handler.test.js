@@ -2,12 +2,13 @@
 // test/e2e/compose.yml (via `just e2e`). Guards pg-promise and Postgres bumps.
 const { describeUsersContract } = require('./users-contract');
 const DbHandler = require('../../src/api/db-handler');
+const { stackEnv } = require('../e2e/stack');
 
 const handler = new DbHandler({
   username: 'postgres',
   password: 'e2e',
   host: process.env.E2E_DB_HOST || 'localhost',
-  port: Number(process.env.E2E_DB_PORT || 15432),
+  port: Number(stackEnv('E2E_DB_PORT')),
   database: 'dicedb',
 });
 beforeAll(() => handler.setupDb());

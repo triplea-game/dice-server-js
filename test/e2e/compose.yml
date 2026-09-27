@@ -1,12 +1,12 @@
 # Throwaway stack for `just e2e`: the production image against a tmpfs
-# Postgres and Mailpit, on ports that don't collide with `just run`.
-name: dice-e2e
+# Postgres and Mailpit. Host ports are ephemeral and `just e2e` gives each run
+# its own project, so concurrent runs don't collide with each other or `just run`.
 
 services:
   app:
     build: ../..
     ports:
-      - "17654:7654"
+      - "7654"
     # tini as PID 1, so a stop signal reaches node instead of being ignored
     # and the container is not SIGKILLed after the stop grace period.
     init: true
@@ -30,8 +30,8 @@ services:
   mailpit:
     image: axllent/mailpit
     ports:
-      - "18025:8025"
-      - "11025:1025"
+      - "8025"
+      - "1025"
     healthcheck:
       test: ["CMD", "/mailpit", "readyz"]
       interval: 2s
@@ -40,7 +40,7 @@ services:
   postgres:
     image: postgres:16
     ports:
-      - "15432:5432"
+      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: e2e

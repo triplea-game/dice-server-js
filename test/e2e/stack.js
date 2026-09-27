@@ -1,6 +1,11 @@
 // Talks to the stack in compose.yml: the dice server and Mailpit's HTTP API.
-const appUrl = process.env.E2E_APP_URL || 'http://localhost:17654';
-const mailpitUrl = process.env.E2E_MAILPIT_URL || 'http://localhost:18025';
+// `just e2e` exports where each service landed, since host ports are ephemeral.
+const stackEnv = (name) => {
+  if (!process.env[name]) throw new Error(`${name} is not set; run the e2e tests via \`just e2e\``);
+  return process.env[name];
+};
+const appUrl = stackEnv('E2E_APP_URL');
+const mailpitUrl = stackEnv('E2E_MAILPIT_URL');
 
 const uniqueEmail = (label) => `${label}-${Date.now()}-${Math.floor(Math.random() * 1e6)}@example.com`;
 
@@ -45,5 +50,5 @@ const registerEmail = async (address) => {
 };
 
 module.exports = {
-  appUrl, uniqueEmail, postForm, waitForEmailTo, linkParam, registerEmail,
+  stackEnv, appUrl, uniqueEmail, postForm, waitForEmailTo, linkParam, registerEmail,
 };

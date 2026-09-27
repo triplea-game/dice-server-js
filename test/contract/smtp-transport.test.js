@@ -4,11 +4,11 @@
 // Mailpit from test/e2e/compose.yml (via `just e2e`). Guards nodemailer bumps.
 const net = require('net');
 const nodemailer = require('nodemailer');
-const { uniqueEmail, waitForEmailTo } = require('../e2e/stack');
+const { stackEnv, uniqueEmail, waitForEmailTo } = require('../e2e/stack');
 
 describe('nodemailer SMTP transport', () => {
   it('delivers one message to both comma-separated recipients with its subject and HTML', async () => {
-    const transport = nodemailer.createTransport({ host: 'localhost', port: 11025 });
+    const transport = nodemailer.createTransport({ host: 'localhost', port: Number(stackEnv('E2E_SMTP_PORT')) });
     const player1 = uniqueEmail('smtp1');
     const player2 = uniqueEmail('smtp2');
 

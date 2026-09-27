@@ -88,13 +88,16 @@ e2e:
       # Only chmod here: keys another user generated can't be chmodded by us.
       chmod 644 "$keys"/*.pem
     fi
-    compose() { docker compose -f test/e2e/compose.yml "$@"; }
+    # A per-run project keeps concurrent runs' containers, networks and images apart.
+    project="dice-e2e-$$"
+    compose() { docker compose -p "$project" -f test/e2e/compose.yml "$@"; }
     cleanup() {
       local status=$?
       # A first `down` under rootless Podman sometimes leaves a container behind.
-      compose down -v --remove-orphans >/dev/null 2>&1 \
-        || compose down -v --remove-orphans >/dev/null 2>&1 \
-        || echo "warning: e2e stack cleanup failed; run: docker compose -f test/e2e/compose.yml down -v" >&2
+      # `--rmi local` drops the per-run app image; its layers stay cached.
+      compose down -v --remove-orphans --rmi local >/dev/null 2>&1 \
+        || compose down -v --remove-orphans --rmi local >/dev/null 2>&1 \
+        || echo "warning: e2e stack cleanup failed; run: docker compose -p $project -f test/e2e/compose.yml down -v --rmi local" >&2
       exit "$status"
     }
     trap cleanup EXIT
@@ -102,6 +105,11 @@ e2e:
       compose logs
       exit 1
     fi
+    host_port() { compose port "$1" "$2" | head -n 1 | sed 's/.*://'; }
+    export E2E_APP_URL="http://localhost:$(host_port app 7654)"
+    export E2E_MAILPIT_URL="http://localhost:$(host_port mailpit 8025)"
+    export E2E_SMTP_PORT="$(host_port mailpit 1025)"
+    export E2E_DB_PORT="$(host_port postgres 5432)"
     if ! npx --no-install jest --config jest.e2e.config.js; then
       compose logs app
       exit 1
