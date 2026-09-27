@@ -144,6 +144,23 @@ describe('GET /unregister', () => {
     expect(html).toContain('action="./api/unregister/1700.ab_-"');
   });
 
+  it('calls the arguments invalid when the token is repeated', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/unregister?email=a%40example.com&token=a&token=b`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
+    expect(html).not.toContain('<form');
+  });
+
+  it('calls the arguments invalid when the token is empty', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/unregister?email=a%40example.com&token=`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
+  });
+
   it('calls the arguments invalid when a token comes without an email', async () => {
     const url = await startApp();
 

@@ -32,8 +32,17 @@ module.exports = (router) => {
   });
   // With a token the link came from the confirmation email; without one it is
   // the request form (the emails' unsubscribe link lands here too).
-  router.get('/unregister', (req, res) => (req.query.token
-    ? res.render('confirm-unregister.html', { email: req.query.email, token: encodeURIComponent(req.query.token) })
-    : res.render('unregister.html', { email: req.query.email || '' })));
+  router.get('/unregister', (req, res) => {
+    const { email, token } = req.query;
+    if (token === undefined) {
+      res.render('unregister.html', { email: isNonEmptyString(email) ? email : '' });
+      return;
+    }
+    if (!isNonEmptyString(email) || !isNonEmptyString(token)) {
+      res.render('confirm-unregister.html', {});
+      return;
+    }
+    res.render('confirm-unregister.html', { email, token: encodeURIComponent(token) });
+  });
   return router;
 };
