@@ -48,9 +48,17 @@ const startServer = async (config) => {
 
 // Stops accepting connections and waits for in-flight requests, a roll's
 // verification email included, before closing the users store they rely on.
+// close() drops only the keep-alive sockets idle at that moment; one that
+// finishes its response afterwards would otherwise hold the drain open until
+// 'keepAliveTimeout', so idle sockets are swept until the server is closed.
 const stopServer = async ({ server, users }) => {
   await new Promise((resolve, reject) => {
-    server.close((err) => (err ? reject(err) : resolve()));
+    const sweep = setInterval(() => server.closeIdleConnections(), 100);
+    sweep.unref();
+    server.close((err) => {
+      clearInterval(sweep);
+      if (err) reject(err); else resolve();
+    });
   });
   await users.close();
 };

@@ -10,8 +10,9 @@ const cleanups = [];
 afterEach(() => Promise.all(cleanups.splice(0).map((cleanup) => cleanup())));
 
 // Listens on a free port with a handler that holds each request open until
-// `release` is called, so a test can stop the server mid-request.
-const startHeldServer = async () => {
+// `release` is called, so a test can stop the server mid-request, then answers
+// with whatever `respond` resolves to.
+const startHeldServer = async (respond = async () => 'rolled') => {
   let release;
   const released = new Promise((resolve) => { release = resolve; });
   let arrived;
@@ -19,7 +20,7 @@ const startHeldServer = async () => {
   const server = http.createServer(async (req, res) => {
     arrived();
     await released;
-    res.end('rolled');
+    res.end(await respond());
   });
   await new Promise((resolve) => { server.listen(0, resolve); });
   cleanups.push(() => {
@@ -34,19 +35,21 @@ const startHeldServer = async () => {
 
 describe('stopServer', () => {
   it('finishes an in-flight request before closing the users store', async () => {
+    const users = new InMemoryUsers(['player@example.com']);
     const {
       server, release, requestArrived, url,
-    } = await startHeldServer();
-    const users = new InMemoryUsers(['player@example.com']);
+    } = await startHeldServer(() => users.checkMail('player@example.com').then(
+      (found) => (found ? 'registered' : 'unknown'),
+      () => 'store closed',
+    ));
     const response = fetch(url);
     await requestArrived;
 
     const stopped = stopServer({ server, users });
     await new Promise((resolve) => { setImmediate(resolve); });
-    expect(await users.checkMail('player@example.com')).toBeTruthy();
     release();
 
-    expect(await (await response).text()).toBe('rolled');
+    expect(await (await response).text()).toBe('registered');
     await stopped;
     await expect(users.checkMail('player@example.com')).rejects.toThrow();
   });

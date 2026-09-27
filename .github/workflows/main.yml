@@ -105,6 +105,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
     # Never cancelled mid-run: that would strand prod pinned to an unverified
     # tag with no rollback. A newer deploy waits, replacing any pending one.
     concurrency:

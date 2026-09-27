@@ -5,8 +5,9 @@ const { startServer, stopServer } = require('./src/server');
 // SIGKILLed; a hung drain gives up and exits nonzero before that.
 const shutdownTimeoutMs = 8000;
 
-// Node's default SIGTERM handling exits at once, which would cut a roll between
-// its DB write and its verification email on every container recreate.
+// Node's default SIGTERM handling exits at once, which on every container
+// recreate could cut a roll after its dice are cast but before the verification
+// email is sent and the response written, so a client retry casts different dice.
 const exitOnSignal = (running) => (signal) => {
   console.info(`[shutdown] ${signal}: draining in-flight requests`);
   setTimeout(() => {
