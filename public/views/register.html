@@ -4,5 +4,5 @@
 {%- assign formId = 'form' -%}
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
   <input type="email" name="email" placeholder="Insert your email adress" required>
-  {% include 'form-ajaxify', buttonText: 'Register!', formId: 'form' %}
+  {% include 'form-ajaxify', buttonText: 'Register!', formId: 'form', successText: 'Check your email to confirm' %}
 </form>

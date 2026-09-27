@@ -5,5 +5,5 @@
 
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
   <input type="email" name="email" placeholder="Insert your email adress" value="{{ email }}" required>
-  {% include 'form-ajaxify', buttonText: 'Unregister!' %}
+  {% include 'form-ajaxify', buttonText: 'Unregister!', successText: 'Check your email to confirm' %}
 </form>

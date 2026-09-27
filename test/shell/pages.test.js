@@ -28,6 +28,14 @@ describe('GET /', () => {
 
     expect(html).toContain('<form id="form" action="./api/register" method="POST">');
   });
+
+  it('tells the user to check their email once the form succeeds, since registering only sends a link', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/`)).text();
+
+    expect(html).toContain("'Check your email to confirm');");
+  });
 });
 
 describe('GET /verify', () => {
@@ -117,6 +125,14 @@ describe('GET /unregister', () => {
 
     expect(html).toContain('<form id="form" action="./api/unregister" method="POST">');
     expect(html).toContain('value="a@example.com"');
+  });
+
+  it('tells the user to check their email once the form succeeds, since unregistering only sends a link', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/unregister?email=a%40example.com`)).text();
+
+    expect(html).toContain("'Check your email to confirm');");
   });
 
   it('renders a confirm form carrying the email and posting the token to the API when the link has one', async () => {
