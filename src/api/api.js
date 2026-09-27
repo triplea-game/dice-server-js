@@ -1,8 +1,18 @@
 const {
   normalizeEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
 } = require('../core/requests');
+const { mailFailure } = require('../core/mail-failure');
 
 const reject = (res, status, errors) => res.status(status).json({ status: 'Error', errors });
+
+// Answers a send that failed in the mail transport. Anything else is rethrown
+// for the 500 handler below, so a caller's `catch` must let it propagate.
+const rejectMailFailure = (res, err, purpose) => {
+  const failure = mailFailure(err, purpose);
+  if (!failure) throw err;
+  console.error('[api] Could not send the %s email, answering %d:', purpose, failure.status, err);
+  reject(res, failure.status, failure.errors);
+};
 
 // The /api routes: a thin shell that parses with the core, then calls the
 // injected collaborators (users store, email manager, validator, dice roller, clock).
@@ -56,7 +66,13 @@ module.exports = (router, {
       date: now(),
     };
     const signature = await validator.sign(roll);
-    await emailManager.sendDiceVerificationEmail(roll, signature);
+    // Fail closed: a roll nobody was emailed is not a roll.
+    try {
+      await emailManager.sendDiceVerificationEmail(roll, signature);
+    } catch (err) {
+      rejectMailFailure(res, err, 'roll');
+      return;
+    }
     res.json({
       status: 'OK',
       result: { dice: roll.dice, signature, date: roll.date },
@@ -71,7 +87,13 @@ module.exports = (router, {
     }
     const email = normalizeEmail(req.body.email);
     console.log('[register] Request received for email: %s', email);
-    const info = await emailManager.registerEmail(email);
+    let info;
+    try {
+      info = await emailManager.registerEmail(email);
+    } catch (err) {
+      rejectMailFailure(res, err, 'verification');
+      return;
+    }
     if (info) {
       console.log('[register] Verification email sent - messageId: %s response: %s', info.messageId, info.response);
       res.status(200).json({ status: 'OK' });
@@ -101,7 +123,12 @@ module.exports = (router, {
     }
     const email = normalizeEmail(req.body.email);
     console.log('[unregister] Request received for email: %s', email);
-    await emailManager.requestUnregister(email);
+    try {
+      await emailManager.requestUnregister(email);
+    } catch (err) {
+      rejectMailFailure(res, err, 'unregister');
+      return;
+    }
     res.status(200).json({ status: 'OK' });
   });
 

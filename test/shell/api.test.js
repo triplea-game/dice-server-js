@@ -64,6 +64,18 @@ const postJson = (url, body) => fetch(url, {
 // Links in the emails are HTML attributes, so the '&' between parameters is '&amp;'.
 const linkParam = (html, param) => decodeURIComponent(html.match(new RegExp(`[?&](?:amp;)?${param}=([^"&]+)`))[1]);
 
+// What nodemailer rejects with; test/contract/smtp-transport.test.js pins the
+// refused-connection shape, the recipient rejection is from the prod log.
+const refusedConnection = () => Object.assign(new Error('connect ECONNREFUSED 10.0.0.5:25'), {
+  code: 'ESOCKET', command: 'CONN',
+});
+const rejectedRecipient = (email) => Object.assign(new Error(`Can't send mail - all recipients were rejected: 450 4.1.2 <${email}>: Recipient address rejected: Domain not found`), {
+  code: 'EENVELOPE',
+  response: `450 4.1.2 <${email}>: Recipient address rejected: Domain not found`,
+  responseCode: 450,
+  command: 'RCPT TO',
+});
+
 describe('POST /api/roll', () => {
   it('rejects with 422 an email1 that is not a string, before checking registration', async () => {
     const url = await startApp();
@@ -170,6 +182,22 @@ describe('POST /api/roll', () => {
 
     expect(transport.sent[0].html).toContain('Roll-Time: 2023-11-14 22:13:20 UTC');
   });
+
+  it('answers 503 asking for a retry, and no dice, when the mail server is unreachable', async () => {
+    const transport = { sendMail: async () => { throw refusedConnection(); } };
+    const url = await startApp({ users: new InMemoryUsers(['a@example.com', 'b@example.com']), transport });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await postForm(`${url}/api/roll`, {
+      max: '6', times: '3', email1: 'a@example.com', email2: 'b@example.com',
+    });
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ["The dice server couldn't send the roll email; please try again."],
+    });
+    errorLog.mockRestore();
+  });
 });
 
 describe('POST /api/register', () => {
@@ -246,6 +274,35 @@ describe('POST /api/register', () => {
 
     expect(response.status).toBe(422);
     expect(await response.json()).toEqual({ status: 'Error', errors: ['Email has invalid format'] });
+  });
+
+  it('answers 422 quoting the mail server when it rejects the recipient', async () => {
+    const transport = { sendMail: async () => { throw rejectedRecipient('a@nowhere.invalid'); } };
+    const url = await startApp({ transport });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await postForm(`${url}/api/register`, { email: 'a@nowhere.invalid' });
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      status: 'Error',
+      errors: ['The mail server rejected the address: 450 4.1.2 <a@nowhere.invalid>: Recipient address rejected: Domain not found'],
+    });
+    errorLog.mockRestore();
+  });
+
+  it('answers 503 asking for a retry when the mail server is unreachable', async () => {
+    const transport = { sendMail: async () => { throw refusedConnection(); } };
+    const url = await startApp({ transport });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await postForm(`${url}/api/register`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ["The dice server couldn't send the verification email; please try again."],
+    });
+    errorLog.mockRestore();
   });
 });
 
@@ -390,6 +447,20 @@ describe('POST /api/unregister', () => {
     expect(transport.sent[0].to).toBe('a+b@example.com');
     expect(transport.sent[0].html).toContain('http://dice.test/unregister?email=a%2Bb%40example.com&amp;token=');
     expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
+  });
+
+  it('answers 503 asking for a retry when the mail server is unreachable', async () => {
+    const transport = { sendMail: async () => { throw refusedConnection(); } };
+    const url = await startApp({ users: new InMemoryUsers(['a@example.com']), transport });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ["The dice server couldn't send the unregister email; please try again."],
+    });
+    errorLog.mockRestore();
   });
 
   it('answers the same OK for an unregistered address, without sending mail', async () => {

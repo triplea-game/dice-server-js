@@ -7,6 +7,13 @@ const roller = require('./api/dice-roller');
 const { createApp } = require('./app');
 const { deriveTokenKey } = require('./core/email-token');
 
+// Resolves with the listening server, or rejects if the port can't be bound:
+// Express hands a listen error (EADDRINUSE, EACCES) to the callback, and
+// ignoring it would log "Running" for a server that never was.
+const listen = (app, port) => new Promise((resolve, reject) => {
+  const server = app.listen(port, (err) => (err ? reject(err) : resolve(server)));
+});
+
 // Composition root: turns config into real collaborators and starts listening.
 const startServer = async (config) => {
   const users = new DbHandler(config.database);
@@ -34,7 +41,9 @@ const startServer = async (config) => {
     rollDice: roller.roll,
     now: Date.now,
   });
-  app.listen(config.port, () => console.info(`Running on port ${config.port}`));
+  const server = await listen(app, config.port);
+  console.info(`Running on port ${config.port}`);
+  return { server, users };
 };
 
-module.exports = { startServer };
+module.exports = { startServer, listen };

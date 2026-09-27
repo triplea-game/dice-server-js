@@ -7,6 +7,9 @@ services:
     build: ../..
     ports:
       - "17654:7654"
+    # tini as PID 1, so a stop signal reaches node instead of being ignored
+    # and the container is not SIGKILLed after the stop grace period.
+    init: true
     volumes:
       - ./config.json:/app/config.json:ro
       - ./.keys:/app/keys:ro
