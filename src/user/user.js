@@ -19,6 +19,10 @@ module.exports = (router) => {
     }
   });
   router.get('/register', (req, res) => res.render('confirm-register.html', { email: req.query.email, token: encodeURIComponent(req.query.token) }));
-  router.get('/unregister', (req, res) => res.render('unregister.html', { email: req.query.email || '' }));
+  // With a token the link came from the confirmation email; without one it is
+  // the request form (the emails' unsubscribe link lands here too).
+  router.get('/unregister', (req, res) => (req.query.token
+    ? res.render('confirm-unregister.html', { email: req.query.email, token: encodeURIComponent(req.query.token) })
+    : res.render('unregister.html', { email: req.query.email || '' })));
   return router;
 };

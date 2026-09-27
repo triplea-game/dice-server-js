@@ -1,5 +1,5 @@
 const {
-  serverBaseUrl, registrationLink, unregisterLink, verifyLink,
+  serverBaseUrl, registrationLink, unregisterLink, unregisterConfirmLink, verifyLink,
 } = require('../../src/core/links');
 
 describe('serverBaseUrl', () => {
@@ -49,6 +49,18 @@ describe('unregisterLink', () => {
     };
 
     expect(unregisterLink(server)).toBe('https://dice.example.org/unregister');
+  });
+});
+
+describe('unregisterConfirmLink', () => {
+  it('lands on the unregister page with the email and token URL-encoded', () => {
+    const server = {
+      protocol: 'https', host: 'dice.example.org', port: 443, baseurl: '',
+    };
+
+    expect(unregisterConfirmLink(server, 'a+b@example.com', '1700.ab_-')).toBe(
+      'https://dice.example.org/unregister?email=a%2Bb%40example.com&token=1700.ab_-',
+    );
   });
 });
 

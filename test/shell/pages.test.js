@@ -88,6 +88,24 @@ describe('GET /unregister', () => {
 
     const html = await (await fetch(`${url}/unregister?email=a%40example.com`)).text();
 
+    expect(html).toContain('<form id="form" action="./api/unregister" method="POST">');
     expect(html).toContain('value="a@example.com"');
+  });
+
+  it('renders a confirm form carrying the email and posting the token to the API when the link has one', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/unregister?email=a%40example.com&token=1700.ab_-`)).text();
+
+    expect(html).toContain('<input type="hidden" name="email" value="a@example.com" required>');
+    expect(html).toContain('action="./api/unregister/1700.ab_-"');
+  });
+
+  it('calls the arguments invalid when a token comes without an email', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/unregister?token=1700.ab_-`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
   });
 });

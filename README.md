@@ -158,14 +158,19 @@ On Error:
 - POST `/register`:
    - Required Parameters (POST Body, urlencoded):
       - `email` String: The email a confirmation email will be sent to.
-   - A request to this endpoint sends an email to the specified email with a random 512-bit token that is only saved in the RAM and will expire after a maximum amount of 60 minutes.
+   - A request to this endpoint sends an email to the specified email with a signed token that expires after 24 hours. The token is an HMAC over the email, the action and the expiry, so it needs no server-side state: restarts don't invalidate emailed links, and a wrong guess doesn't cancel anything.
 - POST `/register/:token`:
    - `:token` Parameter:
-      - This parameter is a base64-encoded random number to verify that the person registering the email actually has access.
-      - If the token is wrong, the actual token automatically expires and a new confirmation email needs to be sent.
+      - The token from the confirmation email, `<expiry>.<mac>`, proving that the person registering the email actually has access.
    - Required Parameters (POST Body, urlencoded):
-      - `email` String: The email to compare the token with.
+      - `email` String: The email the token was issued for.
 - POST `/unregister`
+   - Required Parameters (POST Body, urlencoded):
+      - `email` String: The email to remove from the database.
+   - Sends a confirmation email with a signed 24-hour token to that address if it is registered. The response is `OK` either way, so it doesn't reveal which emails are registered.
+- POST `/unregister/:token`
+   - `:token` Parameter:
+      - The token from the confirmation email. Register and unregister tokens are not interchangeable.
    - Required Parameters (POST Body, urlencoded):
       - `email` String: The email to remove from the database.
 ### Frontend
@@ -185,6 +190,7 @@ Basically all pages consist of a classic HTML form that gets replaced with a res
       - `email` String: The email to confirm the registration for.
       - `token` String: The token to pass to the `/api/register/:token` endpoint.
 - GET `/unregister`
-   - The page where users can unregister their email.
+   - The page where users can ask to unregister their email; with a `token` it is the page the confirmation email redirects to.
    - Paramaters:
       - `email` String, optional: The email to remove from the database, used to pre-fill the form.
+      - `token` String, optional: The token to pass to the `/api/unregister/:token` endpoint.

@@ -5,6 +5,7 @@ const EmailManager = require('./api/email-manager');
 const Validator = require('./api/validator');
 const roller = require('./api/dice-roller');
 const { createApp } = require('./app');
+const { deriveTokenKey } = require('./core/email-token');
 
 // Composition root: turns config into real collaborators and starts listening.
 const startServer = async (config) => {
@@ -19,15 +20,17 @@ const startServer = async (config) => {
     connectionTimeout: 10000,
     socketTimeout: 10000,
   });
+  const privateKey = fs.readFileSync(config.keys.private);
   const app = createApp({
     users,
     emailManager: new EmailManager({
-      users, transport, server: config.server, sender: config.sender,
+      users,
+      transport,
+      server: config.server,
+      sender: config.sender,
+      tokenKey: deriveTokenKey(privateKey),
     }),
-    validator: new Validator(
-      fs.readFileSync(config.keys.private),
-      fs.readFileSync(config.keys.public),
-    ),
+    validator: new Validator(privateKey, fs.readFileSync(config.keys.public)),
     rollDice: roller.roll,
     now: Date.now,
   });

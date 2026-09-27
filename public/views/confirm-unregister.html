@@ -1,0 +1,13 @@
+{%- layout 'layout', title: 'Confirm Unregistering' -%}
+{%- if email and token -%}
+{%- assign url = './api/unregister/' | append: token -%}
+{%- assign method = 'POST' -%}
+{%- assign formId = 'form' -%}
+<p>Remove {{ email }} from the dice server? Dice rolls will no longer be sent to or accepted for this email.</p>
+<form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
+  <input type="hidden" name="email" value="{{ email }}" required>
+  {% include 'form-ajaxify', buttonText: 'Confirm Unregistering!' %}
+</form>
+{%- else -%}
+<h2>Invalid Arguments!</h2>
+{%- endif -%}

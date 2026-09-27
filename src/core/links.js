@@ -14,6 +14,8 @@ const unregisterLink = (server, email) => (email === undefined
   ? `${serverBaseUrl(server)}/unregister`
   : `${serverBaseUrl(server)}/unregister?email=${encodeURIComponent(email)}`);
 
+const unregisterConfirmLink = (server, email, token) => `${serverBaseUrl(server)}/unregister?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
+
 const verifyToken = (roll, signature) => Buffer.from(JSON.stringify({
   v: PAYLOAD_VERSION,
   dice: roll.dice,
@@ -28,5 +30,5 @@ const verifyToken = (roll, signature) => Buffer.from(JSON.stringify({
 const verifyLink = (server, roll, signature) => `${serverBaseUrl(server)}/verify?token=${encodeURIComponent(verifyToken(roll, signature))}`;
 
 module.exports = {
-  serverBaseUrl, registrationLink, unregisterLink, verifyToken, verifyLink,
+  serverBaseUrl, registrationLink, unregisterLink, unregisterConfirmLink, verifyToken, verifyLink,
 };

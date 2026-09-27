@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const { createApp } = require('../../src/app');
 const EmailManager = require('../../src/api/email-manager');
 const Validator = require('../../src/api/validator');
+const { deriveTokenKey, TOKEN_LIFETIME_MS } = require('../../src/core/email-token');
 const InMemoryUsers = require('../fakes/in-memory-users');
 const RecordingTransport = require('../fakes/recording-transport');
 
@@ -14,6 +15,7 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
   publicKeyEncoding: { type: 'spki', format: 'pem' },
   privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
 });
+const tokenKey = deriveTokenKey(privateKey);
 
 const servers = [];
 afterAll(() => Promise.all(servers.map((server) => new Promise((resolve) => {
@@ -22,10 +24,11 @@ afterAll(() => Promise.all(servers.map((server) => new Promise((resolve) => {
 
 // Starts the app on a free port. Collaborators the test doesn't care about get
 // working defaults: a validator on the file's keypair, dice that count up from 1,
-// and a clock stopped at 1700000000000.
+// and a clock stopped at 1700000000000 (a test can hand in its own clock).
 const startApp = async ({
   users = new InMemoryUsers(),
   transport = new RecordingTransport(),
+  now = () => 1700000000000,
 } = {}) => {
   const server = {
     protocol: 'http', host: 'dice.test', port: 80, baseurl: '',
@@ -33,11 +36,11 @@ const startApp = async ({
   const app = createApp({
     users,
     emailManager: new EmailManager({
-      users, transport, server, sender: 'dice@dice.test',
+      users, transport, server, sender: 'dice@dice.test', tokenKey, now,
     }),
     validator: new Validator(privateKey, publicKey),
     rollDice: async (max, times) => Array.from({ length: times }, (_, i) => (i % max) + 1),
-    now: () => 1700000000000,
+    now,
   });
   const listening = await new Promise((resolve) => {
     const s = app.listen(0, () => resolve(s));
@@ -146,7 +149,16 @@ describe('POST /api/register', () => {
     expect(response.status).toBe(200);
     expect(transport.sent[0].to).toBe('a+b@example.com');
     expect(linkParam(transport.sent[0].html, 'email')).toBe('a+b@example.com');
-    expect(linkParam(transport.sent[0].html, 'token')).toHaveLength(684);
+    expect(linkParam(transport.sent[0].html, 'token')).toMatch(/^\d+\.[A-Za-z0-9_-]{43}$/);
+  });
+
+  it('tells the reader the link lasts 24 hours', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ transport });
+
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+
+    expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
   });
 
   it('rejects with 412 an email that is already registered, without sending mail', async () => {
@@ -183,7 +195,21 @@ describe('POST /api/register/:token', () => {
     expect(await users.checkMail('a@example.com')).toBeTruthy();
   });
 
-  it('rejects with 403 a token that was not emailed', async () => {
+  it('still registers after a restart, since the link needs no server state', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const before = await startApp({ users, transport });
+    await postForm(`${before}/api/register`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+    const after = await startApp({ users });
+
+    const response = await postForm(`${after}/api/register/${encodeURIComponent(token)}`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('rejects with 403 a token that was not emailed, telling the user to register again', async () => {
     const users = new InMemoryUsers();
     const url = await startApp({ users });
     await postForm(`${url}/api/register`, { email: 'a@example.com' });
@@ -191,42 +217,172 @@ describe('POST /api/register/:token', () => {
     const response = await postForm(`${url}/api/register/forged`, { email: 'a@example.com' });
 
     expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ['This link is invalid or has expired. Please register again.'],
+    });
     expect(await users.checkMail('a@example.com')).toBeNull();
   });
 
-  it('rejects with 403 a token that was already used', async () => {
+  it('keeps the emailed link working after a wrong token was tried', async () => {
+    const users = new InMemoryUsers();
     const transport = new RecordingTransport();
-    const url = await startApp({ transport });
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+    await postForm(`${url}/api/register/forged`, { email: 'a@example.com' });
+
+    const response = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('keeps the first emailed link working after registration is requested again', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+    const firstToken = linkParam(transport.sent[0].html, 'token');
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+
+    const response = await postForm(`${url}/api/register/${encodeURIComponent(firstToken)}`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('rejects with 403 the emailed link for a different email', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const response = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: 'b@example.com' });
+
+    expect(response.status).toBe(403);
+    expect(await users.checkMail('b@example.com')).toBeNull();
+  });
+
+  it('rejects with 403 a link that is 24 hours old', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    let clock = 1700000000000;
+    const url = await startApp({ users, transport, now: () => clock });
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+    clock += TOKEN_LIFETIME_MS;
+
+    const response = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(403);
+    expect(await users.checkMail('a@example.com')).toBeNull();
+  });
+
+  it('answers OK again when the link is clicked a second time', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
     await postForm(`${url}/api/register`, { email: 'a@example.com' });
     const confirmUrl = `${url}/api/register/${encodeURIComponent(linkParam(transport.sent[0].html, 'token'))}`;
     await postForm(confirmUrl, { email: 'a@example.com' });
 
     const response = await postForm(confirmUrl, { email: 'a@example.com' });
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(200);
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
   });
 });
 
 describe('POST /api/unregister', () => {
-  it('removes a registered email', async () => {
-    const users = new InMemoryUsers(['a@example.com']);
-    const url = await startApp({ users });
+  it('emails a confirmation link to a registered address instead of removing it', async () => {
+    const users = new InMemoryUsers(['a+b@example.com']);
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+
+    const response = await postForm(`${url}/api/unregister`, { email: 'a+b@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: 'OK' });
+    expect(await users.checkMail('a+b@example.com')).toBeTruthy();
+    expect(transport.sent[0].to).toBe('a+b@example.com');
+    expect(transport.sent[0].html).toContain('http://dice.test/unregister?email=a%2Bb%40example.com&token=');
+    expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
+  });
+
+  it('answers the same OK for an unregistered address, without sending mail', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ transport });
 
     const response = await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: 'OK' });
+    expect(transport.sent).toHaveLength(0);
+  });
+
+  it('rejects with 422 a malformed email', async () => {
+    const url = await startApp();
+
+    const response = await postForm(`${url}/api/unregister`, { email: 'not-an-email' });
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['Email has invalid format'] });
+  });
+});
+
+describe('POST /api/unregister/:token', () => {
+  it('removes the email when confirmed with the emailed token', async () => {
+    const users = new InMemoryUsers(['a@example.com']);
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const response = await postForm(`${url}/api/unregister/${encodeURIComponent(token)}`, { email: 'a@example.com' });
 
     expect(response.status).toBe(200);
     expect(await users.checkMail('a@example.com')).toBeNull();
   });
 
-  it('rejects with 412 an email that is not registered', async () => {
-    const url = await startApp();
+  it('rejects with 403 a token that was not emailed, telling the user to unregister again', async () => {
+    const users = new InMemoryUsers(['a@example.com']);
+    const url = await startApp({ users });
 
-    const response = await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+    const response = await postForm(`${url}/api/unregister/forged`, { email: 'a@example.com' });
 
-    expect(response.status).toBe(412);
+    expect(response.status).toBe(403);
     expect(await response.json()).toEqual({
-      status: 'Error', errors: ['Email "a@example.com" does not exist in the database.'],
+      status: 'Error', errors: ['This link is invalid or has expired. Please unregister again.'],
     });
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('rejects with 403 a registration token, which cannot double as an unregister one', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: 'a@example.com' });
+    const registerToken = linkParam(transport.sent[0].html, 'token');
+    await postForm(`${url}/api/register/${encodeURIComponent(registerToken)}`, { email: 'a@example.com' });
+
+    const response = await postForm(`${url}/api/unregister/${encodeURIComponent(registerToken)}`, { email: 'a@example.com' });
+
+    expect(response.status).toBe(403);
+    expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('rejects with 403 the emailed link for a different email', async () => {
+    const users = new InMemoryUsers(['a@example.com', 'b@example.com']);
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const response = await postForm(`${url}/api/unregister/${encodeURIComponent(token)}`, { email: 'b@example.com' });
+
+    expect(response.status).toBe(403);
+    expect(await users.checkMail('b@example.com')).toBeTruthy();
   });
 });
 

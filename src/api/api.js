@@ -84,21 +84,29 @@ module.exports = (router, {
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
-      reject(res, 403, ['Invalid Token or E-Mail.']);
+      reject(res, 403, ['This link is invalid or has expired. Please register again.']);
     }
   });
 
+  // Answers OK whether or not the email is registered; only the mailbox owner
+  // learns which, from whether a confirmation email arrives.
   router.post('/unregister', async (req, res) => {
     const errors = emailParamErrors(req.body.email);
     if (errors.length > 0) {
       reject(res, 422, errors);
       return;
     }
-    const rowCount = await emailManager.unregisterEmail(req.body.email);
-    if (rowCount === 1) {
+    console.log('[unregister] Request received for email: %s', req.body.email);
+    await emailManager.requestUnregister(req.body.email);
+    res.status(200).json({ status: 'OK' });
+  });
+
+  router.post('/unregister/:token', async (req, res) => {
+    const confirmed = await emailManager.confirmUnregister(req.body.email, req.params.token);
+    if (confirmed) {
       res.status(200).json({ status: 'OK' });
     } else {
-      reject(res, 412, [`Email "${req.body.email}" does not exist in the database.`]);
+      reject(res, 403, ['This link is invalid or has expired. Please unregister again.']);
     }
   });
 
