@@ -32,8 +32,8 @@ class EmailManager {
     if (!verifyEmailToken(this.tokenKey, token, { purpose: 'register', email, now: this.now() })) {
       return false;
     }
-    // The link stays valid until it expires, so a second click must not fail
-    // on the duplicate row.
+    // Matches a registration stored under different casing, which addUser's
+    // exact-match conflict check would miss and insert a second row for.
     if (await this.users.checkMail(email)) {
       return true;
     }

@@ -20,7 +20,6 @@ class InMemoryUsers {
 
   async addUser(email) {
     if (email.length > MAX_EMAIL_LENGTH) throw new Error(`value too long for type character varying(${MAX_EMAIL_LENGTH})`);
-    if (this.emails.has(email)) throw new Error(`duplicate key: ${email}`);
     this.emails.add(email);
   }
 

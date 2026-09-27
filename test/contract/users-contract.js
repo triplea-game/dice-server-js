@@ -26,12 +26,14 @@ const describeUsersContract = (name, makeUsers) => {
       expect(await users.checkMail(email)).toBeTruthy();
     });
 
-    it('rejects adding the same email twice', async () => {
+    it('keeps one row when the same email is added twice', async () => {
       const users = await makeUsers();
       const email = uniqueEmail();
       await users.addUser(email);
 
-      await expect(users.addUser(email)).rejects.toThrow();
+      await users.addUser(email);
+
+      expect(await users.removeUser(email)).toBe(1);
     });
 
     it('returns 1 when removing a registered email, and forgets it', async () => {

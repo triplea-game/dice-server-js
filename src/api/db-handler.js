@@ -35,8 +35,9 @@ class DbHandler {
     return this.db.one('SELECT 1');
   }
 
+  // Idempotent, so two clicks racing on the same confirm link both succeed.
   addUser(email) {
-    return this.db.none('INSERT INTO users (email) VALUES ($1)', email);
+    return this.db.none('INSERT INTO users (email) VALUES ($1) ON CONFLICT (email) DO NOTHING', email);
   }
 
   removeUser(email) {
