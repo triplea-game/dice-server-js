@@ -1,5 +1,5 @@
 const {
-  emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
+  normalizeEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
 } = require('../core/requests');
 
 const reject = (res, status, errors) => res.status(status).json({ status: 'Error', errors });
@@ -31,7 +31,8 @@ module.exports = (router, {
       reject(res, 422, typeErrors);
       return;
     }
-    const { email1, email2 } = req.body;
+    const email1 = normalizeEmail(req.body.email1);
+    const email2 = normalizeEmail(req.body.email2);
     const registered = await Promise.all([email1, email2].map((email) => users.checkMail(email)));
     const unregistered = [email1, email2]
       .filter((email, i) => !registered[i])
@@ -68,19 +69,21 @@ module.exports = (router, {
       reject(res, 422, errors);
       return;
     }
-    console.log('[register] Request received for email: %s', req.body.email);
-    const info = await emailManager.registerEmail(req.body.email);
+    const email = normalizeEmail(req.body.email);
+    console.log('[register] Request received for email: %s', email);
+    const info = await emailManager.registerEmail(email);
     if (info) {
       console.log('[register] Verification email sent - messageId: %s response: %s', info.messageId, info.response);
       res.status(200).json({ status: 'OK' });
     } else {
-      console.log('[register] Email already registered: %s', req.body.email);
+      console.log('[register] Email already registered: %s', email);
       reject(res, 412, ['Mail is already registred']);
     }
   });
 
   router.post('/register/:token', async (req, res) => {
-    const verified = await emailManager.verifyEmail(req.body.email, req.params.token);
+    const email = normalizeEmail(req.body.email);
+    const verified = await emailManager.verifyEmail(email, req.params.token);
     if (verified) {
       res.status(200).json({ status: 'OK' });
     } else {
@@ -96,13 +99,15 @@ module.exports = (router, {
       reject(res, 422, errors);
       return;
     }
-    console.log('[unregister] Request received for email: %s', req.body.email);
-    await emailManager.requestUnregister(req.body.email);
+    const email = normalizeEmail(req.body.email);
+    console.log('[unregister] Request received for email: %s', email);
+    await emailManager.requestUnregister(email);
     res.status(200).json({ status: 'OK' });
   });
 
   router.post('/unregister/:token', async (req, res) => {
-    const confirmed = await emailManager.confirmUnregister(req.body.email, req.params.token);
+    const email = normalizeEmail(req.body.email);
+    const confirmed = await emailManager.confirmUnregister(email, req.params.token);
     if (confirmed) {
       res.status(200).json({ status: 'OK' });
     } else {

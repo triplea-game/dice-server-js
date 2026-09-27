@@ -1,3 +1,7 @@
+const { formatUtc } = require('../core/dates');
+
+const isNonEmptyString = (value) => typeof value === 'string' && value !== '';
+
 module.exports = (router) => {
   router.get('/', (req, res) => res.render('register.html'));
   router.get('/verify', (req, res) => {
@@ -6,7 +10,7 @@ module.exports = (router) => {
       res.render('verify.html', {
         token: encodeURIComponent(req.query.token),
         dice: tokenInfo.dice,
-        date: new Date(tokenInfo.date).toUTCString(),
+        date: formatUtc(tokenInfo.date),
         max: tokenInfo.max,
         times: tokenInfo.times,
         email1: tokenInfo.email1,
@@ -18,7 +22,14 @@ module.exports = (router) => {
       res.render('verify.html', { invalid: true });
     }
   });
-  router.get('/register', (req, res) => res.render('confirm-register.html', { email: req.query.email, token: encodeURIComponent(req.query.token) }));
+  router.get('/register', (req, res) => {
+    const { email, token } = req.query;
+    if (!isNonEmptyString(email) || !isNonEmptyString(token)) {
+      res.render('confirm-register.html', {});
+      return;
+    }
+    res.render('confirm-register.html', { email, token: encodeURIComponent(token) });
+  });
   // With a token the link came from the confirmation email; without one it is
   // the request form (the emails' unsubscribe link lands here too).
   router.get('/unregister', (req, res) => (req.query.token

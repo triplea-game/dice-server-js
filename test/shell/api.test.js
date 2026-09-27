@@ -61,7 +61,8 @@ const postJson = (url, body) => fetch(url, {
   body: JSON.stringify(body),
 });
 
-const linkParam = (html, param) => decodeURIComponent(html.match(new RegExp(`[?&]${param}=([^"&]+)`))[1]);
+// Links in the emails are HTML attributes, so the '&' between parameters is '&amp;'.
+const linkParam = (html, param) => decodeURIComponent(html.match(new RegExp(`[?&](?:amp;)?${param}=([^"&]+)`))[1]);
 
 describe('POST /api/roll', () => {
   it('rejects with 422 an email1 that is not a string, before checking registration', async () => {
@@ -73,6 +74,27 @@ describe('POST /api/roll', () => {
 
     expect(response.status).toBe(422);
     expect(await response.json()).toEqual({ status: 'Error', errors: ['Parameter email1 is not a string'] });
+  });
+
+  it('rejects with 422 when the request has no body at all', async () => {
+    const url = await startApp();
+
+    const response = await fetch(`${url}/api/roll`, { method: 'POST' });
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ['Parameter email1 is not a string', 'Parameter email2 is not a string'],
+    });
+  });
+
+  it('accepts players whose registered casing differs from the request', async () => {
+    const url = await startApp({ users: new InMemoryUsers(['Alice@Example.com', 'b@example.com']) });
+
+    const response = await postForm(`${url}/api/roll`, {
+      max: '6', times: '1', email1: 'alice@example.com', email2: ' B@EXAMPLE.COM ',
+    });
+
+    expect(response.status).toBe(200);
   });
 
   it('rejects with 403 naming each unregistered player', async () => {
@@ -137,6 +159,17 @@ describe('POST /api/roll', () => {
     expect(transport.sent[0].to).toBe('a@example.com, b@example.com');
     expect(transport.sent[0].html).toContain('http://dice.test/verify?token=');
   });
+
+  it('emails the roll time in UTC', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ users: new InMemoryUsers(['a@example.com', 'b@example.com']), transport });
+
+    await postForm(`${url}/api/roll`, {
+      max: '6', times: '3', email1: 'a@example.com', email2: 'b@example.com',
+    });
+
+    expect(transport.sent[0].html).toContain('Roll-Time: 2023-11-14 22:13:20 UTC');
+  });
 });
 
 describe('POST /api/register', () => {
@@ -161,6 +194,21 @@ describe('POST /api/register', () => {
     expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
   });
 
+  it('escapes the address in the email body while keeping the link usable', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: "o'brien@example.com" });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const confirm = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: "o'brien@example.com" });
+
+    expect(transport.sent[0].html).not.toContain("o'brien");
+    expect(transport.sent[0].html).toContain('&amp;token=');
+    expect(confirm.status).toBe(200);
+    expect(await users.checkMail("o'brien@example.com")).toBeTruthy();
+  });
+
   it('rejects with 412 an email that is already registered, without sending mail', async () => {
     const transport = new RecordingTransport();
     const url = await startApp({ users: new InMemoryUsers(['a@example.com']), transport });
@@ -168,6 +216,26 @@ describe('POST /api/register', () => {
     const response = await postForm(`${url}/api/register`, { email: 'a@example.com' });
 
     expect(response.status).toBe(412);
+    expect(transport.sent).toHaveLength(0);
+  });
+
+  it('rejects with 412 an email registered under different casing', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ users: new InMemoryUsers(['Alice@Example.com']), transport });
+
+    const response = await postForm(`${url}/api/register`, { email: 'alice@example.com' });
+
+    expect(response.status).toBe(412);
+    expect(transport.sent).toHaveLength(0);
+  });
+
+  it('rejects with 422 an email longer than the users column, without sending mail', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ transport });
+
+    const response = await postForm(`${url}/api/register`, { email: `${'a'.repeat(243)}@example.com` });
+
+    expect(response.status).toBe(422);
     expect(transport.sent).toHaveLength(0);
   });
 
@@ -207,6 +275,20 @@ describe('POST /api/register/:token', () => {
 
     expect(response.status).toBe(200);
     expect(await users.checkMail('a@example.com')).toBeTruthy();
+  });
+
+  it('stores the address lowercased, whichever casing the request and confirmation used', async () => {
+    const users = new InMemoryUsers();
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/register`, { email: 'Alice@Example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const response = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: 'ALICE@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(transport.sent[0].to).toBe('alice@example.com');
+    expect(await users.checkMail('alice@example.com')).toEqual({ email: 'alice@example.com' });
   });
 
   it('rejects with 403 a token that was not emailed, telling the user to register again', async () => {
@@ -306,7 +388,7 @@ describe('POST /api/unregister', () => {
     expect(await response.json()).toEqual({ status: 'OK' });
     expect(await users.checkMail('a+b@example.com')).toBeTruthy();
     expect(transport.sent[0].to).toBe('a+b@example.com');
-    expect(transport.sent[0].html).toContain('http://dice.test/unregister?email=a%2Bb%40example.com&token=');
+    expect(transport.sent[0].html).toContain('http://dice.test/unregister?email=a%2Bb%40example.com&amp;token=');
     expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
   });
 
@@ -343,6 +425,20 @@ describe('POST /api/unregister/:token', () => {
 
     expect(response.status).toBe(200);
     expect(await users.checkMail('a@example.com')).toBeNull();
+  });
+
+  it('removes an email registered under different casing than the request and confirmation', async () => {
+    const users = new InMemoryUsers(['Alice@Example.com']);
+    const transport = new RecordingTransport();
+    const url = await startApp({ users, transport });
+    await postForm(`${url}/api/unregister`, { email: 'alice@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const response = await postForm(`${url}/api/unregister/${encodeURIComponent(token)}`, { email: 'ALICE@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(transport.sent[0].to).toBe('alice@example.com');
+    expect(await users.checkMail('alice@example.com')).toBeNull();
   });
 
   it('rejects with 403 a token that was not emailed, telling the user to unregister again', async () => {

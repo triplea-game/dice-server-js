@@ -4,6 +4,7 @@ const { createEmailToken, verifyEmailToken } = require('../core/email-token');
 const {
   registrationLink, unregisterLink, unregisterConfirmLink, verifyLink,
 } = require('../core/links');
+const { formatUtc } = require('../core/dates');
 
 // Registration and roll emails. `users` is the DbHandler (or anything with its
 // checkMail/addUser/removeUser), `transport` a nodemailer transport, `tokenKey`
@@ -18,9 +19,12 @@ class EmailManager {
     this.sender = sender;
     this.tokenKey = tokenKey;
     this.now = now;
+    // Emails print player-supplied addresses, so every {{ }} output is
+    // HTML-escaped; the '&' between link parameters comes out as '&amp;'.
     this.engine = new Liquid({
       root: path.resolve(__dirname, '../../public/email-templates/'),
       extname: '.html',
+      outputEscape: 'escape',
     });
   }
 
@@ -139,7 +143,7 @@ class EmailManager {
     const subject = 'The dice have been cast!';
     const content = await this.engine.renderFile('verify-dice.html', {
       subject,
-      date: new Date(roll.date).toLocaleString('en-US'),
+      date: formatUtc(roll.date),
       dice: JSON.stringify(roll.dice),
       url: verifyLink(this.server, roll, signature),
       unsub: unregisterLink(this.server),

@@ -40,6 +40,7 @@ describe('GET /verify', () => {
     const html = await (await fetch(`${url}/verify?token=${token}`)).text();
 
     expect(html).toContain('<p>Dice Rolled: 3, 6</p>');
+    expect(html).toContain('<p>At 2023-11-14 22:13:20 UTC</p>');
     expect(html).toContain('<p>2 dice with max 6, rolled for a@example.com and b@example.com</p>');
     expect(html).not.toContain('old-format roll');
   });
@@ -79,6 +80,32 @@ describe('GET /register', () => {
 
     expect(html).toContain('<input type="hidden" name="email" value="a@example.com" required>');
     expect(html).toContain('action="./api/register/ab%2B%2F%3D"');
+  });
+
+  it('rejects the link when the token is missing, instead of posting to a token of "undefined"', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/register?email=a%40example.com`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
+    expect(html).not.toContain('<form');
+  });
+
+  it('rejects the link when the token is empty', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/register?email=a%40example.com&token=`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
+    expect(html).not.toContain('<form');
+  });
+
+  it('rejects the link when the email is repeated', async () => {
+    const url = await startApp();
+
+    const html = await (await fetch(`${url}/register?email=a%40example.com&email=b%40example.com&token=abc`)).text();
+
+    expect(html).toContain('<h2>Invalid Arguments!</h2>');
   });
 });
 

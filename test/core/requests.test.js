@@ -1,5 +1,5 @@
 const {
-  isEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
+  isEmail, normalizeEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
 } = require('../../src/core/requests');
 
 const toToken = (properties) => Buffer.from(JSON.stringify(properties)).toString('base64');
@@ -30,9 +30,23 @@ describe('isEmail', () => {
   });
 });
 
+describe('normalizeEmail', () => {
+  it('lowercases the address and trims surrounding whitespace', () => {
+    expect(normalizeEmail('  Foo.Bar@Example.COM ')).toBe('foo.bar@example.com');
+  });
+});
+
 describe('emailParamErrors', () => {
   it('returns no errors for a valid address', () => {
     expect(emailParamErrors('a@example.com')).toEqual([]);
+  });
+
+  it('accepts an address of 254 characters, the users column width', () => {
+    expect(emailParamErrors(`${'a'.repeat(242)}@example.com`)).toEqual([]);
+  });
+
+  it('rejects an address of 255 characters before checking its format', () => {
+    expect(emailParamErrors(`${'a'.repeat(243)}@example.com`)).toEqual(['Email is longer than 254 characters']);
   });
 
   it('reports a missing email', () => {
@@ -57,6 +71,12 @@ describe('rollEmailErrors', () => {
     expect(rollEmailErrors({ email1: ['a@example.com'] })).toEqual([
       'Parameter email1 is not a string',
       'Parameter email2 is not a string',
+    ]);
+  });
+
+  it('rejects an email of 255 characters, which would not fit the users column', () => {
+    expect(rollEmailErrors({ email1: `${'a'.repeat(243)}@example.com`, email2: 'b@example.com' })).toEqual([
+      'Parameter email1 is longer than 254 characters',
     ]);
   });
 });
@@ -94,15 +114,45 @@ describe('parseRollArgs', () => {
     });
   });
 
-  it('reports a JSON zero as not defined, because 0 is falsy', () => {
+  it('rejects a JSON zero as 0 or less', () => {
     expect(parseRollArgs({ max: 6, times: 0 })).toEqual({
-      errors: ['Parameter times is not defined'],
+      errors: ['Parameter times has value 0 which is 0 or less'],
+    });
+  });
+
+  it('rejects a form-encoded negative number as 0 or less', () => {
+    expect(parseRollArgs({ max: '-1', times: 1 })).toEqual({
+      errors: ['Parameter max has value -1 which is 0 or less'],
     });
   });
 
   it('rejects a value that is not a number', () => {
     expect(parseRollArgs({ max: 'six', times: 1 })).toEqual({
       errors: ['Parameter max is not an Integer'],
+    });
+  });
+
+  it('rejects a number with trailing garbage rather than reading its prefix', () => {
+    expect(parseRollArgs({ max: '6abc', times: 1 })).toEqual({
+      errors: ['Parameter max is not an Integer'],
+    });
+  });
+
+  it('rejects a form-encoded decimal rather than truncating it', () => {
+    expect(parseRollArgs({ max: '1.9', times: 1 })).toEqual({
+      errors: ['Parameter max is not an Integer'],
+    });
+  });
+
+  it('rejects a JSON decimal rather than truncating it', () => {
+    expect(parseRollArgs({ max: 6, times: 2.5 })).toEqual({
+      errors: ['Parameter times is not an Integer'],
+    });
+  });
+
+  it('reports an empty form field as not defined', () => {
+    expect(parseRollArgs({ max: '', times: '1' })).toEqual({
+      errors: ['Parameter max is not defined'],
     });
   });
 

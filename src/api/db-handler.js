@@ -1,5 +1,13 @@
-const pg = require('pg-promise')();
+const pg = require('pg-promise')({
+  // Fires for every driver error, including dropped connections that no
+  // query is around to catch. Only the message: params carry emails.
+  error(err, e) {
+    console.error('[db] %s error: %s', e.cn ? 'connection' : 'query', err.message);
+  },
+});
 
+// Emails are stored as typed at registration but matched case-insensitively,
+// so mixed-case rows registered before addresses were normalized still work.
 class DbHandler {
   constructor({
     username, password, host, port, database,
@@ -14,8 +22,13 @@ class DbHandler {
     });
   }
 
+  // Runs at every startup against a table that may already exist with the
+  // old varchar(65) column; widening a varchar is metadata-only in Postgres.
   setupDb() {
-    return this.db.none('CREATE TABLE IF NOT EXISTS users (email varchar(65) NOT NULL PRIMARY KEY);');
+    return this.db.none(`
+      CREATE TABLE IF NOT EXISTS users (email varchar(254) NOT NULL PRIMARY KEY);
+      ALTER TABLE users ALTER COLUMN email TYPE varchar(254);
+    `);
   }
 
   ping() {
@@ -27,11 +40,11 @@ class DbHandler {
   }
 
   removeUser(email) {
-    return this.db.result('DELETE FROM users WHERE email=$1', email, (r) => r.rowCount);
+    return this.db.result('DELETE FROM users WHERE lower(email) = lower($1)', email, (r) => r.rowCount);
   }
 
   checkMail(email) {
-    return this.db.oneOrNone('SELECT email FROM users WHERE email=$1', email);
+    return this.db.oneOrNone('SELECT email FROM users WHERE lower(email) = lower($1) LIMIT 1', email);
   }
 
   close() {

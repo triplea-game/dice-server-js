@@ -7,7 +7,7 @@
 {%- assign formId = 'form' -%}
 <form id="{{ formId }}" action="{{ url }}" method="{{ method }}">
   <p>Dice Rolled: {{ dice | join: ", " }}</p>
-  <p>At {{ date | date: "%a, %b %d, %y" }}</p>
+  <p>At {{ date }}</p>
   {%- if legacy %}
   <p><strong>Warning:</strong> this is an old-format roll. Its signature only weakly protects the dice and date, and does not cover the dice range or the players.</p>
   {%- else %}

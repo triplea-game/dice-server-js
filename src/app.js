@@ -13,6 +13,12 @@ const createApp = (deps) => {
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  // Express 5 leaves req.body undefined when nothing parsed it (no body, or
+  // an unknown Content-Type); the routes validate fields, not the body itself.
+  app.use((req, res, next) => {
+    if (req.body === undefined) req.body = {};
+    next();
+  });
 
   app.engine('html', createTemplateEngine().express());
   app.set('views', [path.join(publicDir, 'partials'), path.join(publicDir, 'views')]);

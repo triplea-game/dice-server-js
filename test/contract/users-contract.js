@@ -5,6 +5,10 @@
 // `makeUsers` may return a shared store, so every test uses its own unique email.
 const describeUsersContract = (name, makeUsers) => {
   const uniqueEmail = () => `contract-${Date.now()}-${Math.floor(Math.random() * 1e6)}@example.com`;
+  const emailOfLength = (length) => {
+    const unique = uniqueEmail();
+    return `${'a'.repeat(length - unique.length)}${unique}`;
+  };
 
   describe(`${name} (users store contract)`, () => {
     it('reports an email that was never added as not registered', async () => {
@@ -39,6 +43,50 @@ const describeUsersContract = (name, makeUsers) => {
 
       expect(removed).toBe(1);
       expect(await users.checkMail(email)).toBeNull();
+    });
+
+    it('finds a registered email whatever the casing of the lookup', async () => {
+      const users = await makeUsers();
+      const email = uniqueEmail();
+      await users.addUser(email.toUpperCase());
+
+      expect(await users.checkMail(email)).toEqual({ email: email.toUpperCase() });
+    });
+
+    it('removes a registered email whatever the casing of the request', async () => {
+      const users = await makeUsers();
+      const email = uniqueEmail();
+      await users.addUser(email.toUpperCase());
+
+      expect(await users.removeUser(email)).toBe(1);
+      expect(await users.checkMail(email)).toBeNull();
+    });
+
+    it('keeps rows that differ only in casing apart, so existing mixed-case rows stay insertable', async () => {
+      const users = await makeUsers();
+      const email = uniqueEmail();
+      await users.addUser(email);
+
+      await users.addUser(email.toUpperCase());
+
+      expect(await users.removeUser(email)).toBe(2);
+    });
+
+    it('accepts an email of 254 characters', async () => {
+      const users = await makeUsers();
+      const email = emailOfLength(254);
+
+      await users.addUser(email);
+
+      expect(await users.checkMail(email)).toEqual({ email });
+      await users.removeUser(email);
+    });
+
+    it('rejects an email of 255 characters', async () => {
+      const users = await makeUsers();
+      const email = emailOfLength(255);
+
+      await expect(users.addUser(email)).rejects.toThrow();
     });
 
     it('returns 0 when removing an email that is not registered', async () => {

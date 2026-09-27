@@ -3,22 +3,40 @@
 const { PAYLOAD_VERSION } = require('./signed-payload');
 
 const MAX_DICE_VALUE = 5000;
+// The users table stores emails as varchar(254), the RFC 5321 address limit.
+const MAX_EMAIL_LENGTH = 254;
 const SIGNATURE_LENGTH = 684;
 
 const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const isEmail = (email) => emailPattern.test(email);
 
+// The stored form of an address: the same person may type it with any casing
+// or stray whitespace, and lookups treat those as one registration. A
+// non-string passes through for the validators to reject.
+const normalizeEmail = (email) => (typeof email === 'string' ? email.trim().toLowerCase() : email);
+
 // Returns the errors for a body's `email` field; empty when it is usable.
 const emailParamErrors = (email) => {
   if (typeof email !== 'string') return ['Body Parameter Email is missing'];
+  if (email.length > MAX_EMAIL_LENGTH) return [`Email is longer than ${MAX_EMAIL_LENGTH} characters`];
   if (!isEmail(email)) return ['Email has invalid format'];
   return [];
 };
 
-const rollEmailErrors = (body) => ['email1', 'email2']
-  .filter((name) => typeof body[name] !== 'string')
-  .map((name) => `Parameter ${name} is not a string`);
+const rollEmailErrors = (body) => ['email1', 'email2'].flatMap((name) => {
+  if (typeof body[name] !== 'string') return [`Parameter ${name} is not a string`];
+  if (body[name].length > MAX_EMAIL_LENGTH) return [`Parameter ${name} is longer than ${MAX_EMAIL_LENGTH} characters`];
+  return [];
+});
+
+// A JSON integer or a form-encoded string of digits (a leading minus is kept
+// so "-1" reports as 0 or less); anything else (a float, "6abc") is NaN.
+const parseWholeNumber = (value) => {
+  if (typeof value === 'number') return Number.isInteger(value) ? value : NaN;
+  if (typeof value === 'string' && /^-?\d+$/.test(value)) return Number(value);
+  return NaN;
+};
 
 // Parses `max` and `times` from a form or JSON body.
 // Returns { errors } or { max, times } as integers.
@@ -26,11 +44,11 @@ const parseRollArgs = (body) => {
   const errors = [];
   const parsed = {};
   ['max', 'times'].forEach((name) => {
-    if (!body[name]) {
+    if (body[name] === undefined || body[name] === null || body[name] === '') {
       errors.push(`Parameter ${name} is not defined`);
       return;
     }
-    const value = parseInt(body[name], 10);
+    const value = parseWholeNumber(body[name]);
     if (Number.isNaN(value)) {
       errors.push(`Parameter ${name} is not an Integer`);
     } else if (value > MAX_DICE_VALUE) {
@@ -102,5 +120,5 @@ const parseVerifyToken = (token) => {
 };
 
 module.exports = {
-  isEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
+  isEmail, normalizeEmail, emailParamErrors, rollEmailErrors, parseRollArgs, parseVerifyToken,
 };
