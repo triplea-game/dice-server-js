@@ -1,4 +1,3 @@
-[![Travis](https://img.shields.io/travis/triplea-game/dice-server-js.svg?style=flat-square)](https://travis-ci.org/triplea-game/dice-server-js)
 # dice-server-js
 The new TripleA dice server re-written in JavaScript.
 
@@ -28,86 +27,38 @@ Emails console at:
 http://localhost:8025
 
 
-## Setup
-### Prequisites
-In order to be able to run the server you need to have a couple of things installed on your system:
- - `node.js` >= 10
- - `yarn`
- - `postgres` >= 10
-After those are installed on your system you can follow the steps below to get yourself up and running.
-The steps assume node and yarn are on the `PATH` of your system, if that's not the case, you need to replace `node` and `yarn` with the fully-qualified path name to the executable.
+## Configuration
+The server reads `config.json` from its working directory. The committed one is
+written for the docker stack; command-line flags such as
+`--database:host=localhost` override it, which is how `just dev` points it at
+the host. In production, `config.json`, the secrets and the keys come from the
+`marti/service` role in the infrastructure repo.
 
-### One-Time-Setup
-1. Clone this Repository in a directory of your choice.
-2. Open a terminal and navigate to the newly checked out directory.
-3. Run `yarn install`, this will resolve all dependencies for you and install them in `node_modules`
-4. - Generate an RSA key-pair. If you have installed `openssl` and it's on your PATH, you can simply run `yarn generate-keypair`, which will create the files `privkey.pem` and `pubkey.pem` in the current directory.
-   - On production systems you should move them into a "save directory" and (at least on UNIX-like systems) restrict read access of the private key to the user that's going to run the server and root.
-5. - Create a file `config.json` which contains all information the server needs to start.
-   - Alternatively those configuration options can be passed via CLI directly or as environment variables. Check the [nconf docs](https://github.com/indexzero/nconf#example) for more information.
-   - The config files' layout will be explained below.
-6. Create a database in Postgres to be used by the server.
+Secrets come from the environment:
+- `DB_PASSWORD`: the database password, the only place it's read from; a
+  `database.password` in `config.json` is ignored.
+- `SMTP_USER`, `SMTP_PASS`: optional SMTP auth, overriding `email.smtp.auth`.
 
-#### config.json
-```json
-{
-  "port": 7654,
-  "database": {
-    "username": "postgres",
-    "password": "",
-    "host": "localhost",
-    "port": 5432,
-    "database": "dicedb"
-  },
-  "email": {
-    "smtp": {
-      "host": "smtp.provider.com",
-      "port": 587,
-      "auth": {
-        "user": "your.email@provider.com",
-        "pass": "super secret password no one will ever guess"
-      }
-    },
-    "display": {
-      "sender": "\"Display Name\" <your.email@provider.com>",
-      "server": {
-        "protocol": "http",
-        "host": "localhost",
-        "port": 7654,
-        "baseurl": ""
-      }
-    }
-  },
-  "keys": {
-    "private": "./privkey.pem",
-    "public": "./pubkey.pem"
-  }
-}
-```
-- `port`: The port node.js will listen on. Required.
-- `database`: Details about the database connection. Required.
-   - `username`: Username to authenticate with the database. Default: `postgres`.
-   - `password`: Password to authenticate with the database. Defaults to an empty String.
-   - `host`: Hostname to connect to the database. Default `localhost`.
-   - `port`: Port to connect to the database. Default `5432`.
-   - `database`: Name of the database to use, this should be the database you created in the one-time setup. Default `dicedb`.
-- `email`: Settings that are used by the EmailManager. Required.
-   - `smtp`: Nodemailer SMTP Configuration, this object will be passed directly to Nodemailer without any further processing. Check the [Nodemailer Docs](https://nodemailer.com/smtp/#general-options). If you need a service to test emails locally you can use [Ethereal](https://ethereal.email/), a dummy email service that doesn't actually sends emails but simulates a fully-featured SMTP server.
+`config.json` fields:
+- `port`: The port node.js will listen on. Default `7654`.
+- `database`: Details about the database connection.
+   - `username`: Default `postgres`.
+   - `host`: Default `localhost`.
+   - `port`: Default `5432`.
+   - `database`: Default `dicedb`.
+- `email`: Settings that are used by the EmailManager.
+   - `smtp`: Nodemailer SMTP Configuration, passed to Nodemailer as is. Check the [Nodemailer Docs](https://nodemailer.com/smtp/#general-options). Required.
    - `display`: Display settings how the server will refer to itself in emails.
       - `sender`: The Entry for the `From:` field in the email. The actual email should be the correct one, otherwise the emails will likely land in SPAM Folders. Required.
-      - `server`: Settings that define how the server will refer to itself in E-Mails. Required.
-         - `protocol`: The protocol that should be used to connect to this server. Default `http`.
-         - `host`: The hostname that should be used to refer to this server, ideally a domain. Default `localhost`.
-         - `port`: The port that should be used to connect to this server, if used behind a reverse-proxy this should be the public port. Default: `7654`.
+      - `server`: How the server refers to itself in links in emails.
+         - `protocol`: Default `http`.
+         - `host`: The hostname, ideally a domain. Default `localhost`.
+         - `port`: The public port; behind a reverse proxy, the proxy's port. Default `7654`.
          - `baseurl`: In case your server is in a non-root installation, set this to the folder name. (Example `yourserver.com/dice` -> `/dice`.) Defaults to an empty String.
-- `keys`:
-   - `private`: Path to the private key used to sign dice rolls. Required.
-   - `public`: Path to the public key used to sign dice rolls. Required.
-
-### Starting
-In order to start the server run
-`node dice-server.js`
-It can be terminated using `SIGTERM`, i.e. `Ctrl+C`.
+- `keys`: Paths to the RSA key pair that signs dice rolls. Required. `just dev` and
+  `just run` generate a local pair in `keys/` (gitignored) if it's missing.
+   - `private`
+   - `public`
 
 ### Testing
 `just unit` runs the unit tests and eslint. `just e2e` builds the image and
@@ -117,7 +68,7 @@ pull request and before every deploy, and the pre-push hook from `just setup`
 runs `just check` before every push.
 
 ## Routes
-The dice server is divided into 2 seperate routers.
+The dice server is divided into 2 separate routers.
 The REST Service handles all calls under `/api`.
 All other requests are handled by the _frontend_ which basically wraps the API calls with a nice UI.
 ### API
@@ -196,6 +147,6 @@ Basically all pages consist of a classic HTML form that gets replaced with a res
       - `token` String: The token to pass to the `/api/register/:token` endpoint.
 - GET `/unregister`
    - The page where users can ask to unregister their email; with a `token` it is the page the confirmation email redirects to.
-   - Paramaters:
+   - Parameters:
       - `email` String, optional: The email to remove from the database, used to pre-fill the form.
       - `token` String, optional: The token to pass to the `/api/unregister/:token` endpoint.
