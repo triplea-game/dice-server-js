@@ -25,11 +25,16 @@ services:
     restart: unless-stopped
   mailpit:
     image: axllent/mailpit
+    # SMTP gets an ephemeral localhost port for 'just dev', which looks it up.
     ports:
       - "8025:8025"
+      - "127.0.0.1::1025"
     restart: unless-stopped
   postgres:
     image: postgres:16
+    # An ephemeral localhost port for 'just dev', which looks it up.
+    ports:
+      - "127.0.0.1::5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: change-me

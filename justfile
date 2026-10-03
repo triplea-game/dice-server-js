@@ -1,4 +1,4 @@
-# dice-server-js — local dev (docker compose) and prod deploy.
+# dice-server-js — dev loop, tests, local docker compose stack, and prod deploy.
 #
 # SSH_USER selects the deploy ssh user (defaults to $USER); the prod deploy runs
 # the ansible playbook under deploy/.
@@ -7,47 +7,49 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 
 ssh_user := env_var_or_default("SSH_USER", env_var_or_default("USER", ""))
 
+alias test := check
+
 # Show available recipes.
 default:
     @just --list
 
-# Create .env and RSA keys for a first-time setup (config.json is committed).
-init:
-    #!/usr/bin/env bash
-    if [ ! -f .env ]; then
-      cp .env.example .env
-      echo "Created .env from .env.example - fill in real credentials before running."
-    else
-      echo ".env already exists, skipping."
-    fi
-    mkdir -p keys
-    if [ ! -f keys/privkey.pem ]; then
-      openssl genrsa -out keys/privkey.pem 4096
-      openssl rsa -in keys/privkey.pem -outform PEM -pubout -out keys/pubkey.pem
-      chmod 644 keys/privkey.pem keys/pubkey.pem
-      echo "Generated RSA key pair in keys/"
-    else
-      echo "RSA keys already exist, skipping."
-    fi
+# Install node dependencies and pre-commit as a pre-push git hook (format + check).
+setup:
+    uv tool install pre-commit
+    pre-commit install --hook-type pre-push
+    yarn install --frozen-lockfile
 
-# Start all services in the background.
-run: _check-config
+# Run the server on the host, restarting on file changes; Postgres and Mailpit run in docker.
+dev: (_keys "keys")
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # The app container from 'just run' would hold port 7654.
+    docker compose stop app
+    docker compose up -d --wait postgres mailpit
+    host_port() { docker compose port "$1" "$2" | head -n 1 | sed 's/.*://'; }
+    echo "App at http://localhost:7654, emails at http://localhost:8025"
+    DB_PASSWORD=change-me exec node --watch dice-server.js \
+      --database:host=localhost --database:port="$(host_port postgres 5432)" \
+      --email:smtp:host=localhost --email:smtp:port="$(host_port mailpit 1025)" \
+      --keys:private=keys/privkey.pem --keys:public=keys/pubkey.pem
+
+# Run the unit tests and eslint (fast, no docker).
+unit:
+    yarn test
+
+# Run every test CI gates on: unit tests and eslint, then the e2e suite.
+check: unit e2e
+
+# Fix eslint findings in place.
+format:
+    yarn eslint --fix .
+
+# Auto-format then verify — the recommended pre-push loop.
+verify: format check
+
+# Start the full stack, app included, in docker in the background.
+run: (_keys "keys")
     docker compose up --build --force-recreate -d
-
-_check-config:
-    #!/usr/bin/env bash
-    if [ ! -f .env ]; then
-      echo "ERROR: .env not found. Run 'just init' and fill in credentials first." >&2
-      exit 1
-    fi
-    if [ ! -f config.json ]; then
-      echo "ERROR: config.json not found. It is committed; restore it with 'git checkout -- config.json'." >&2
-      exit 1
-    fi
-    if [ ! -f keys/privkey.pem ] || [ ! -f keys/pubkey.pem ]; then
-      echo "ERROR: RSA keys not found in keys/. Run 'just init' first." >&2
-      exit 1
-    fi
 
 # Stop all running services.
 stop:
@@ -62,6 +64,10 @@ restart:
 logs:
     docker compose logs -f
 
+# Open a psql shell on the database started by 'just run' or 'just dev'.
+psql:
+    docker compose exec postgres psql -U postgres dicedb
+
 # Build the app image without starting services.
 build:
     docker compose build
@@ -75,19 +81,9 @@ deploy tag:
     ANSIBLE_CONFIG="deploy/ansible.cfg" ansible-playbook -e ansible_user={{ssh_user}} -e marti_tag={{tag}} --inventory deploy/ansible/inventory.linode.yml deploy/ansible/playbook.yml
 
 # Run the smoke and game-client tests against a throwaway stack built from this checkout
-e2e:
+e2e: (_keys "test/e2e/.keys")
     #!/usr/bin/env bash
     set -euo pipefail
-    keys=test/e2e/.keys
-    mkdir -p "$keys"
-    if [ ! -f "$keys/privkey.pem" ]; then
-      # 4096 bits: the verify API only accepts 684-char signatures.
-      openssl genrsa -out "$keys/privkey.pem" 4096 2>/dev/null
-      openssl rsa -in "$keys/privkey.pem" -pubout -out "$keys/pubkey.pem" 2>/dev/null
-      # The image runs as a non-root user that must read the mounted keys.
-      # Only chmod here: keys another user generated can't be chmodded by us.
-      chmod 644 "$keys"/*.pem
-    fi
     # A per-run project keeps concurrent runs' containers, networks and images apart.
     project="dice-e2e-$$"
     compose() { docker compose -p "$project" -f test/e2e/compose.yml "$@"; }
@@ -113,4 +109,18 @@ e2e:
     if ! npx --no-install jest --config jest.e2e.config.js; then
       compose logs app
       exit 1
+    fi
+
+# Generate the RSA signing key pair in a directory unless it already exists.
+_keys dir:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p "{{dir}}"
+    if [ ! -f "{{dir}}/privkey.pem" ]; then
+      # 4096 bits: the verify API only accepts 684-char signatures.
+      openssl genrsa -out "{{dir}}/privkey.pem" 4096 2>/dev/null
+      openssl rsa -in "{{dir}}/privkey.pem" -pubout -out "{{dir}}/pubkey.pem" 2>/dev/null
+      # The image runs as a non-root user that must read the mounted keys.
+      # Only chmod here: keys another user generated can't be chmodded by us.
+      chmod 644 "{{dir}}"/*.pem
     fi

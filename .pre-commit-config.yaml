@@ -1,0 +1,41 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+        stages: [pre-push]
+      - id: check-yaml
+        stages: [pre-push]
+      - id: end-of-file-fixer
+        stages: [pre-push]
+      - id: trailing-whitespace
+        stages: [pre-push]
+      - id: check-case-conflict
+        stages: [pre-push]
+      - id: detect-private-key
+        stages: [pre-push]
+        # Fake PEM headers as token-key test input, not real keys.
+        exclude: ^test/core/email-token\.test\.js$
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+        stages: [pre-push]
+
+  - repo: local
+    hooks:
+      - id: just-format
+        name: Format (just format)
+        language: system
+        entry: just format
+        pass_filenames: false
+        stages: [pre-push]
+      # Pushing main deploys to prod, so every push runs what CI gates on.
+      - id: just-check
+        name: Unit and e2e tests (just check)
+        language: system
+        entry: just check
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
