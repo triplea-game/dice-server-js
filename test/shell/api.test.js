@@ -449,6 +449,18 @@ describe('POST /api/unregister', () => {
     expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
   });
 
+  it('names the button on the page its link opens', async () => {
+    const transport = new RecordingTransport();
+    const url = await startApp({ users: new InMemoryUsers(['a@example.com']), transport });
+    await postForm(`${url}/api/unregister`, { email: 'a@example.com' });
+    const token = linkParam(transport.sent[0].html, 'token');
+
+    const page = await (await fetch(`${url}/unregister?email=a%40example.com&token=${encodeURIComponent(token)}`)).text();
+
+    expect(page).toContain('<button id="submit-button" type="submit" name="button">Confirm Unregistering!</button>');
+    expect(transport.sent[0].html).toContain("then 'Confirm Unregistering!' on the page it opens");
+  });
+
   it('answers 503 asking for a retry when the mail server is unreachable', async () => {
     const transport = { sendMail: async () => { throw refusedConnection(); } };
     const url = await startApp({ users: new InMemoryUsers(['a@example.com']), transport });
