@@ -11,15 +11,21 @@ sudo journalctl -u marti.service -n 1000
 
 ## Local Dev
 
+Needs node 22, yarn, just, and docker (or podman).
+
 ```
-just run
+just setup   # once: yarn install and the pre-push hook
+just dev     # server on the host, restarts on edits; Postgres and Mailpit in docker
 ```
+
+`just run` runs the whole stack, app included, in docker instead.
+`just --list` shows every recipe.
 
 App is at:
-https://localhost:7654
+http://localhost:7654
 
 Emails console at:
-https://localhost:8025
+http://localhost:8025
 
 
 ## Setup
@@ -104,12 +110,11 @@ In order to start the server run
 It can be terminated using `SIGTERM`, i.e. `Ctrl+C`.
 
 ### Testing
-In order to run all local tests and eslint, you can simply run
-`yarn test`
-
-`just e2e` builds the image and runs the smoke and game-client tests in
-`test/e2e/` against it, with a throwaway Postgres and Mailpit. CI runs both on
-every pull request and before every deploy.
+`just unit` runs the unit tests and eslint. `just e2e` builds the image and
+runs the smoke and game-client tests in `test/e2e/` against it, with a
+throwaway Postgres and Mailpit. `just check` runs both; CI runs both on every
+pull request and before every deploy, and the pre-push hook from `just setup`
+runs `just check` before every push.
 
 ## Routes
 The dice server is divided into 2 seperate routers.

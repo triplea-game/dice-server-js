@@ -4,12 +4,15 @@
   unless explicitly told to.
 - **yarn, not npm.** `npm install` rewrites `yarn.lock` into a spurious diff; if
   you ran it, `git checkout -- yarn.lock` before committing.
-- `yarn test` runs jest then eslint (unit tests). `just e2e` runs the smoke and
-  game-client tests in `test/e2e/` against the built image with real Postgres
-  and Mailpit; run it for dependency, Dockerfile, or wiring changes.
+- The `justfile` is the dev loop: `just setup` once (yarn install plus a
+  pre-push hook running `just format` and `just check`), `just dev` to run the
+  server on the host with Postgres and Mailpit in docker, `just unit` for the
+  fast jest + eslint run, `just check` for unit plus e2e (what CI gates on).
+- `just e2e` runs the contract, smoke and game-client tests against the built
+  image with real Postgres and Mailpit.
 - Test layout: `test/core/` pure functions with real values; `test/shell/` the
   real Express app with the in-memory fakes in `test/fakes/`; `test/contract/`
   holds each fake to the real Postgres/SMTP behavior (runs under `just e2e`).
   New decision logic goes in `src/core/`; new I/O is injected via `createApp`.
-- The `justfile` is docker compose orchestration plus `just deploy <tag>` (prod;
-  the tag is required, CI passes `sha-<commit>`), not the local dev loop.
+- `just deploy <tag>` deploys to prod; the tag is required, CI passes
+  `sha-<commit>`.
