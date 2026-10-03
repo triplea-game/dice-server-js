@@ -1,6 +1,6 @@
 # Throwaway stack for `just e2e`: the production image against a tmpfs
 # Postgres and Mailpit. Host ports are ephemeral and `just e2e` gives each run
-# its own project, so concurrent runs don't collide with each other or `just run`.
+# its own project, so concurrent runs don't collide with each other or `just compose-up`.
 
 services:
   app:

@@ -8,6 +8,8 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 ssh_user := env_var_or_default("SSH_USER", env_var_or_default("USER", ""))
 
 alias test := check
+alias run := up
+alias stop := down
 
 # Show available recipes.
 default:
@@ -20,10 +22,10 @@ setup:
     yarn install --frozen-lockfile
 
 # Run the server on the host, restarting on file changes; Postgres and Mailpit run in docker.
-dev: (_keys "keys")
+up: (_keys "keys")
     #!/usr/bin/env bash
     set -euo pipefail
-    # The app container from 'just run' would hold port 7654.
+    # The app container from 'just compose-up' would hold port 7654.
     docker compose stop app
     docker compose up -d --wait postgres mailpit
     host_port() { docker compose port "$1" "$2" | head -n 1 | sed 's/.*://'; }
@@ -44,15 +46,12 @@ check: unit e2e
 format:
     yarn eslint --fix .
 
-# Auto-format then verify — the recommended pre-push loop.
-verify: format check
-
 # Start the full stack, app included, in docker in the background.
-run: (_keys "keys")
+compose-up: (_keys "keys")
     docker compose up --build --force-recreate -d
 
-# Stop all running services.
-stop:
+# Stop all running services, keeping the database.
+down:
     docker compose down
 
 # Restart all services (rebuilds the app image).
@@ -64,7 +63,7 @@ restart:
 logs:
     docker compose logs -f
 
-# Open a psql shell on the database started by 'just run' or 'just dev'.
+# Open a psql shell on the database started by 'just up' or 'just compose-up'.
 psql:
     docker compose exec postgres psql -U postgres dicedb
 

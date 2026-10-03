@@ -5,7 +5,7 @@
 - **yarn, not npm.** `npm install` rewrites `yarn.lock` into a spurious diff; if
   you ran it, `git checkout -- yarn.lock` before committing.
 - The `justfile` is the dev loop: `just setup` once (yarn install plus a
-  pre-push hook running `just format` and `just check`), `just dev` to run the
+  pre-push hook running `just format` and `just check`), `just up` to run the
   server on the host with Postgres and Mailpit in docker, `just unit` for the
   fast jest + eslint run, `just check` for unit plus e2e (what CI gates on).
 - `just e2e` runs the contract, smoke and game-client tests against the built

@@ -14,10 +14,10 @@ Needs node 22, yarn, just, and docker (or podman).
 
 ```
 just setup   # once: yarn install and the pre-push hook
-just dev     # server on the host, restarts on edits; Postgres and Mailpit in docker
+just up      # server on the host, restarts on edits; Postgres and Mailpit in docker
 ```
 
-`just run` runs the whole stack, app included, in docker instead.
+`just compose-up` runs the whole stack, app included, in docker instead.
 `just --list` shows every recipe.
 
 App is at:
@@ -30,7 +30,7 @@ http://localhost:8025
 ## Configuration
 The server reads `config.json` from its working directory. The committed one is
 written for the docker stack; command-line flags such as
-`--database:host=localhost` override it, which is how `just dev` points it at
+`--database:host=localhost` override it, which is how `just up` points it at
 the host. In production, `config.json`, the secrets and the keys come from the
 `marti/service` role in the infrastructure repo.
 
@@ -55,8 +55,8 @@ Secrets come from the environment:
          - `host`: The hostname, ideally a domain. Default `localhost`.
          - `port`: The public port; behind a reverse proxy, the proxy's port. Default `7654`.
          - `baseurl`: In case your server is in a non-root installation, set this to the folder name. (Example `yourserver.com/dice` -> `/dice`.) Defaults to an empty String.
-- `keys`: Paths to the RSA key pair that signs dice rolls. Required. `just dev` and
-  `just run` generate a local pair in `keys/` (gitignored) if it's missing.
+- `keys`: Paths to the RSA key pair that signs dice rolls. Required. `just up` and
+  `just compose-up` generate a local pair in `keys/` (gitignored) if it's missing.
    - `private`
    - `public`
 
