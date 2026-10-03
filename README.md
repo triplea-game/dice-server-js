@@ -5,7 +5,7 @@ The new TripleA dice server re-written in JavaScript.
 ## Ops
 ```
 docker container ls
-sudo systemctl restart marti.service 
+sudo systemctl restart marti.service
 sudo journalctl -u marti.service -n 1000
 ```
 

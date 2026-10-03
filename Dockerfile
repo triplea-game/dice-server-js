@@ -13,4 +13,3 @@ USER appuser
 EXPOSE 7654
 
 CMD ["node", "dice-server.js"]
-
