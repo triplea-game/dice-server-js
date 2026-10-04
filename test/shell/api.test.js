@@ -630,6 +630,100 @@ describe('API errors', () => {
     expect(await response.json()).toEqual({ status: 'Error', errors: ['Internal server error'] });
     errorLog.mockRestore();
   });
+
+  it('answers 400 with a fixed message, not a stack trace, for malformed JSON', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await fetch(`${url}/api/roll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{"canary-7f3a',
+    });
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['The request body is not valid JSON.'] });
+    // The logged line must not carry `err`: body-parser hangs the raw body on it.
+    expect(warnLog.mock.calls).toEqual([
+      ['[app] Rejected %s %s with %d: %s', 'POST', '/api/roll', 400, 'entity.parse.failed'],
+    ]);
+    expect(errorLog).not.toHaveBeenCalled();
+    warnLog.mockRestore();
+    errorLog.mockRestore();
+  });
+
+  it('answers the same JSON 400 outside /api, since the handler is app-wide', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const response = await fetch(`${url}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{bad',
+    });
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['The request body is not valid JSON.'] });
+    warnLog.mockRestore();
+  });
+
+  it('answers 400 naming the nesting for a form nested past the 32-level default', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const response = await fetch(`${url}/api/roll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `a${'[b]'.repeat(33)}=1`,
+    });
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['The request body nests form fields too deeply.'] });
+    warnLog.mockRestore();
+  });
+
+  it('answers 415 naming the charset for a JSON body in an unsupported charset', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const response = await fetch(`${url}/api/roll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=latin1' },
+      body: '{}',
+    });
+
+    expect(response.status).toBe(415);
+    expect(await response.json()).toEqual({
+      status: 'Error', errors: ['The request body uses an unsupported charset; send it as UTF-8.'],
+    });
+    warnLog.mockRestore();
+  });
+
+  it('answers 413 naming the field count for a form over the 1000-field default', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const fields = Object.fromEntries(Array.from({ length: 1001 }, (_, i) => [`f${i}`, '1']));
+
+    const response = await postForm(`${url}/api/roll`, fields);
+
+    expect(response.status).toBe(413);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['The request body has too many fields.'] });
+    warnLog.mockRestore();
+  });
+
+  it('answers 413 with a fixed message, not a stack trace, for an oversized form', async () => {
+    const url = await startApp();
+    const warnLog = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    // Twice express.urlencoded's default 100kb limit.
+    const overDefaultLimit = 'x'.repeat(200 * 1024);
+
+    const response = await postForm(`${url}/api/roll`, { max: overDefaultLimit });
+
+    expect(response.status).toBe(413);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['The request body is too large.'] });
+    warnLog.mockRestore();
+  });
 });
 
 describe('GET /health', () => {

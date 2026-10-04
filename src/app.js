@@ -3,6 +3,7 @@ const express = require('express');
 const apiRoutes = require('./api/api');
 const userRoutes = require('./user/user');
 const { createTemplateEngine } = require('./templates');
+const { errorResponse } = require('./core/error-response');
 
 const publicDir = path.join(__dirname, '..', 'public');
 
@@ -36,6 +37,23 @@ const createApp = (deps) => {
   });
   app.use('/api', apiRoutes(express.Router(routerParams), deps));
   app.use('/', userRoutes(express.Router(routerParams)));
+  // Catches what the /api handler never sees, eg: body-parser errors, so
+  // Express's fallback handler doesn't answer with a stack trace.
+  app.use((err, req, res, next) => {
+    if (res.headersSent) {
+      next(err);
+      return;
+    }
+    const { status, errors } = errorResponse(err);
+    // A client fault logs one line without `err`: body-parser attaches the raw
+    // request body to it, which would let any caller write it into the log.
+    if (status < 500) {
+      console.warn('[app] Rejected %s %s with %d: %s', req.method, req.path, status, err.type || err.name);
+    } else {
+      console.error('[app] Unhandled error on %s %s:', req.method, req.path, err);
+    }
+    res.status(status).json({ status: 'Error', errors });
+  });
   return app;
 };
 
