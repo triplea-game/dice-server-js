@@ -74,7 +74,7 @@ class EmailManager {
     try {
       info = await this.transport.sendMail({
         from: this.sender,
-        to: email,
+        to: { address: email },
         subject,
         html: content,
       });
@@ -115,7 +115,7 @@ class EmailManager {
     try {
       await this.transport.sendMail({
         from: this.sender,
-        to: email,
+        to: { address: email },
         subject,
         html: content,
       });
@@ -151,7 +151,7 @@ class EmailManager {
 
     return this.transport.sendMail({
       from: this.sender,
-      to: `${roll.email1}, ${roll.email2}`,
+      to: [{ address: roll.email1 }, { address: roll.email2 }],
       subject,
       html: content,
     });

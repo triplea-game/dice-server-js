@@ -7,7 +7,11 @@ const MAX_DICE_VALUE = 5000;
 const MAX_EMAIL_LENGTH = 254;
 const SIGNATURE_LENGTH = 684;
 
-const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+// A dot-atom local part only. nodemailer re-parses addresses as header text,
+// so a quoted string, address-list delimiter, whitespace or control character
+// in the local part can make it deliver to a different address than the one
+// validated here.
+const emailPattern = /^[^<>()[\]\\.,;:\s@"\p{Cc}]+(\.[^<>()[\]\\.,;:\s@"\p{Cc}]+)*@(\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\]|([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})$/u;
 
 const isEmail = (email) => emailPattern.test(email);
 
@@ -24,9 +28,12 @@ const emailParamErrors = (email) => {
   return [];
 };
 
+// Checks the format too rather than trusting the users table, which may hold
+// addresses that emailPattern now refuses.
 const rollEmailErrors = (body) => ['email1', 'email2'].flatMap((name) => {
   if (typeof body[name] !== 'string') return [`Parameter ${name} is not a string`];
   if (body[name].length > MAX_EMAIL_LENGTH) return [`Parameter ${name} is longer than ${MAX_EMAIL_LENGTH} characters`];
+  if (!isEmail(normalizeEmail(body[name]))) return [`Parameter ${name} has invalid format`];
   return [];
 });
 

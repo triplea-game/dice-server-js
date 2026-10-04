@@ -168,8 +168,24 @@ describe('POST /api/roll', () => {
     });
 
     expect(transport.sent).toHaveLength(1);
-    expect(transport.sent[0].to).toBe('a@example.com, b@example.com');
+    expect(transport.sent[0].to).toEqual([{ address: 'a@example.com' }, { address: 'b@example.com' }]);
     expect(transport.sent[0].html).toContain('http://dice.test/verify?token=');
+  });
+
+  // The users table may hold an address emailPattern refuses, eg: this one,
+  // which nodemailer reads as y@evil.com.
+  it('rejects with 422 a registered address with a quoted local part, without sending mail', async () => {
+    const transport = new RecordingTransport();
+    const users = new InMemoryUsers(['"x" <y@evil.com>"@example.com', 'b@example.com']);
+    const url = await startApp({ users, transport });
+
+    const response = await postForm(`${url}/api/roll`, {
+      max: '6', times: '3', email1: '"x" <y@evil.com>"@example.com', email2: 'b@example.com',
+    });
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({ status: 'Error', errors: ['Parameter email1 has invalid format'] });
+    expect(transport.sent).toHaveLength(0);
   });
 
   it('emails the roll time in UTC', async () => {
@@ -208,7 +224,7 @@ describe('POST /api/register', () => {
     const response = await postForm(`${url}/api/register`, { email: 'a+b@example.com' });
 
     expect(response.status).toBe(200);
-    expect(transport.sent[0].to).toBe('a+b@example.com');
+    expect(transport.sent[0].to).toEqual({ address: 'a+b@example.com' });
     expect(linkParam(transport.sent[0].html, 'email')).toBe('a+b@example.com');
     expect(linkParam(transport.sent[0].html, 'token')).toMatch(/^\d+\.[A-Za-z0-9_-]{43}$/);
   });
@@ -344,7 +360,7 @@ describe('POST /api/register/:token', () => {
     const response = await postForm(`${url}/api/register/${encodeURIComponent(token)}`, { email: 'ALICE@example.com' });
 
     expect(response.status).toBe(200);
-    expect(transport.sent[0].to).toBe('alice@example.com');
+    expect(transport.sent[0].to).toEqual({ address: 'alice@example.com' });
     expect(await users.checkMail('alice@example.com')).toEqual({ email: 'alice@example.com' });
   });
 
@@ -444,7 +460,7 @@ describe('POST /api/unregister', () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ status: 'OK' });
     expect(await users.checkMail('a+b@example.com')).toBeTruthy();
-    expect(transport.sent[0].to).toBe('a+b@example.com');
+    expect(transport.sent[0].to).toEqual({ address: 'a+b@example.com' });
     expect(transport.sent[0].html).toContain('http://dice.test/unregister?email=a%2Bb%40example.com&amp;token=');
     expect(transport.sent[0].html).toContain('The link expires after 24 hours.');
   });
@@ -520,7 +536,7 @@ describe('POST /api/unregister/:token', () => {
     const response = await postForm(`${url}/api/unregister/${encodeURIComponent(token)}`, { email: 'ALICE@example.com' });
 
     expect(response.status).toBe(200);
-    expect(transport.sent[0].to).toBe('alice@example.com');
+    expect(transport.sent[0].to).toEqual({ address: 'alice@example.com' });
     expect(await users.checkMail('alice@example.com')).toBeNull();
   });
 

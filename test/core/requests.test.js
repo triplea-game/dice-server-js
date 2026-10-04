@@ -28,6 +28,38 @@ describe('isEmail', () => {
   it('rejects a display-name address', () => {
     expect(isEmail('"Display Name" <actual@email.com>')).toBe(false);
   });
+
+  it('accepts a plus-tagged address on a subdomain', () => {
+    expect(isEmail('player+dice@mail.example.co.uk')).toBe(true);
+  });
+
+  // nodemailer's address parser reads this as display name "x @example.com"
+  // for y@evil.com, so mail meant for example.com goes to evil.com.
+  it('rejects a quoted local part that hides a different recipient', () => {
+    expect(isEmail('"x" <y@evil.com>"@example.com')).toBe(false);
+  });
+
+  it('rejects a plain quoted local part', () => {
+    expect(isEmail('"john"@example.com')).toBe(false);
+  });
+
+  // nodemailer drops control characters, so this would be sent to ab@example.com.
+  it('rejects a control character in the local part', () => {
+    expect(isEmail('a\u0001b@example.com')).toBe(false);
+  });
+
+  it.each([
+    ['<', 'a<b@example.com'],
+    ['>', 'a>b@example.com'],
+    [',', 'a,b@example.com'],
+    [';', 'a;b@example.com'],
+    ['parentheses', 'a(b)@example.com'],
+    ['a space', 'a b@example.com'],
+    ['a tab', 'a\tb@example.com'],
+    ['DEL', 'a\u007fb@example.com'],
+  ])('rejects a local part containing %s', (_, email) => {
+    expect(isEmail(email)).toBe(false);
+  });
 });
 
 describe('normalizeEmail', () => {
@@ -78,6 +110,17 @@ describe('rollEmailErrors', () => {
     expect(rollEmailErrors({ email1: `${'a'.repeat(243)}@example.com`, email2: 'b@example.com' })).toEqual([
       'Parameter email1 is longer than 254 characters',
     ]);
+  });
+
+  // The users table may hold such an address, so registration alone is no guard.
+  it('rejects an email with a quoted local part', () => {
+    expect(rollEmailErrors({ email1: 'a@example.com', email2: '"x" <y@evil.com>"@example.com' })).toEqual([
+      'Parameter email2 has invalid format',
+    ]);
+  });
+
+  it('accepts an email with surrounding whitespace and capitals, which the roll normalizes away', () => {
+    expect(rollEmailErrors({ email1: ' A@Example.com ', email2: 'b@example.com' })).toEqual([]);
   });
 });
 
