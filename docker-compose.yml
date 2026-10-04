@@ -24,7 +24,7 @@ services:
         condition: service_started
     restart: unless-stopped
   mailpit:
-    image: axllent/mailpit
+    image: axllent/mailpit:v1.31.4
     # SMTP gets an ephemeral localhost port for 'just up', which looks it up.
     ports:
       - "8025:8025"
