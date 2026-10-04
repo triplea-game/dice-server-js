@@ -54,7 +54,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Install just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v4
 
       - name: Run e2e tests
         run: just e2e
