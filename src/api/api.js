@@ -66,7 +66,7 @@ module.exports = (router, {
       date: now(),
     };
     const signature = await validator.sign(roll);
-    // Fail closed: a roll nobody was emailed is not a roll.
+    // Fail closed: a roll not emailed to both players is not a roll.
     try {
       await emailManager.sendDiceVerificationEmail(roll, signature);
     } catch (err) {

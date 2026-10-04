@@ -23,4 +23,17 @@ const mailFailure = (err, purpose) => {
   return undefined;
 };
 
-module.exports = { mailFailure };
+// sendMail only rejects when the server refused every recipient; when it
+// refused some, it resolves and lists them in `rejected`, each with its own
+// EENVELOPE error in `rejectedErrors`. Returns the first refused recipient's
+// error, or undefined when every recipient was accepted.
+const rejectedRecipientError = (info) => {
+  const { rejected = [], rejectedErrors = [] } = info;
+  if (rejected.length === 0) return undefined;
+  return rejectedErrors[0] || Object.assign(
+    new Error(`Recipient command failed: ${rejected[0]}`),
+    { code: 'EENVELOPE', command: 'RCPT TO', recipient: rejected[0] },
+  );
+};
+
+module.exports = { mailFailure, rejectedRecipientError };

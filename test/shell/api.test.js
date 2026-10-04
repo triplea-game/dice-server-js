@@ -199,6 +199,36 @@ describe('POST /api/roll', () => {
     expect(transport.sent[0].html).toContain('Roll-Time: 2023-11-14 22:13:20 UTC');
   });
 
+  // sendMail resolves rather than rejects when the server refuses only some
+  // recipients; test/contract/smtp-transport.test.js pins that shape.
+  it('answers 422 quoting the mail server, and no dice, when it refuses one of the two players', async () => {
+    const refused = Object.assign(new Error('Recipient command failed: 550 5.1.1 <b@example.com>: Recipient address rejected'), {
+      code: 'EENVELOPE',
+      response: '550 5.1.1 <b@example.com>: Recipient address rejected',
+      responseCode: 550,
+      command: 'RCPT TO',
+      recipient: 'b@example.com',
+    });
+    const transport = {
+      sendMail: async () => ({
+        messageId: '<partial@test>', accepted: ['a@example.com'], rejected: ['b@example.com'], rejectedErrors: [refused],
+      }),
+    };
+    const url = await startApp({ users: new InMemoryUsers(['a@example.com', 'b@example.com']), transport });
+    const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await postForm(`${url}/api/roll`, {
+      max: '6', times: '3', email1: 'a@example.com', email2: 'b@example.com',
+    });
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      status: 'Error',
+      errors: ['The mail server rejected the address: 550 5.1.1 <b@example.com>: Recipient address rejected'],
+    });
+    errorLog.mockRestore();
+  });
+
   it('answers 503 asking for a retry, and no dice, when the mail server is unreachable', async () => {
     const transport = { sendMail: async () => { throw refusedConnection(); } };
     const url = await startApp({ users: new InMemoryUsers(['a@example.com', 'b@example.com']), transport });

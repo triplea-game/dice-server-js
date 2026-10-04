@@ -5,6 +5,7 @@ const {
   registrationLink, unregisterLink, unregisterConfirmLink, verifyLink,
 } = require('../core/links');
 const { formatUtc } = require('../core/dates');
+const { rejectedRecipientError } = require('../core/mail-failure');
 
 // Registration and roll emails. `users` is the DbHandler (or anything with its
 // checkMail/addUser/removeUser), `transport` a nodemailer transport, `tokenKey`
@@ -149,12 +150,16 @@ class EmailManager {
       unsub: unregisterLink(this.server),
     });
 
-    return this.transport.sendMail({
+    const info = await this.transport.sendMail({
       from: this.sender,
       to: [{ address: roll.email1 }, { address: roll.email2 }],
       subject,
       html: content,
     });
+    // Both players witness the roll, so one refused address fails it like two do.
+    const rejection = rejectedRecipientError(info);
+    if (rejection) throw rejection;
+    return info;
   }
 }
 

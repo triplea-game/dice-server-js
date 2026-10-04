@@ -32,6 +32,10 @@ services:
     ports:
       - "8025"
       - "1025"
+    environment:
+      # Refuses any other recipient at RCPT TO, so a contract test can see a
+      # partial rejection. '$$' is compose's escape for a literal '$'.
+      MP_SMTP_ALLOWED_RECIPIENTS: '@example\.com$$'
     healthcheck:
       test: ["CMD", "/mailpit", "readyz"]
       interval: 2s

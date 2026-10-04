@@ -1,4 +1,4 @@
-const { mailFailure } = require('../../src/core/mail-failure');
+const { mailFailure, rejectedRecipientError } = require('../../src/core/mail-failure');
 
 // The error shapes are nodemailer's, pinned by test/contract/smtp-transport.test.js
 // for a refused connection and taken from the prod log for a rejected recipient.
@@ -40,5 +40,42 @@ describe('mailFailure', () => {
 
   it('leaves an error that is not the mail transport alone', () => {
     expect(mailFailure(new Error('there is no parameter $1'), 'roll')).toBeUndefined();
+  });
+});
+
+// The resolved shape is nodemailer's, pinned by test/contract/smtp-transport.test.js.
+describe('rejectedRecipientError', () => {
+  it('returns the refused recipient\'s error when the server accepted only some recipients', () => {
+    const refused = Object.assign(new Error('Recipient command failed: 550 5.1.1 <b@nowhere.invalid>: Recipient address rejected'), {
+      code: 'EENVELOPE',
+      response: '550 5.1.1 <b@nowhere.invalid>: Recipient address rejected',
+      responseCode: 550,
+      command: 'RCPT TO',
+      recipient: 'b@nowhere.invalid',
+    });
+
+    const err = rejectedRecipientError({
+      accepted: ['a@example.com'], rejected: ['b@nowhere.invalid'], rejectedErrors: [refused],
+    });
+
+    expect(err).toBe(refused);
+  });
+
+  it('names the refused recipient in an envelope error when the transport gave no per-recipient error', () => {
+    const err = rejectedRecipientError({ accepted: ['a@example.com'], rejected: ['b@nowhere.invalid'] });
+
+    expect(err).toMatchObject({ code: 'EENVELOPE', command: 'RCPT TO', recipient: 'b@nowhere.invalid' });
+    expect(mailFailure(err, 'roll')).toEqual({
+      status: 422,
+      errors: ['The mail server rejected the address: Recipient command failed: b@nowhere.invalid'],
+    });
+  });
+
+  it('returns undefined when the server accepted every recipient', () => {
+    expect(rejectedRecipientError({ accepted: ['a@example.com', 'b@example.com'], rejected: [] })).toBeUndefined();
+  });
+
+  it('returns undefined for a transport that reports no recipients at all', () => {
+    expect(rejectedRecipientError({ messageId: '<recorded-1@test>', response: '250 recorded' })).toBeUndefined();
   });
 });

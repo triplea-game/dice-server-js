@@ -45,6 +45,27 @@ describe('nodemailer SMTP transport', () => {
     expect(info.envelope.to).not.toContain('y@evil.com');
   });
 
+  // What src/core/mail-failure.js's rejectedRecipientError reads: the e2e
+  // Mailpit only accepts @example.com recipients (test/e2e/compose.yml).
+  it('resolves listing a refused recipient with its envelope error when the server accepts the other', async () => {
+    const transport = nodemailer.createTransport({ host: 'localhost', port: Number(stackEnv('E2E_SMTP_PORT')) });
+    const player1 = uniqueEmail('smtp-accepted');
+
+    const info = await transport.sendMail({
+      from: 'dice@example.com',
+      to: [{ address: player1 }, { address: 'refused@nowhere.invalid' }],
+      subject: 'Partial rejection',
+      text: 'x',
+    });
+
+    expect(info.accepted).toEqual([player1]);
+    expect(info.rejected).toEqual(['refused@nowhere.invalid']);
+    expect(info.rejectedErrors).toHaveLength(1);
+    expect(info.rejectedErrors[0]).toMatchObject({
+      code: 'EENVELOPE', command: 'RCPT TO', recipient: 'refused@nowhere.invalid', response: expect.stringMatching(/^5\d\d /),
+    });
+  });
+
   // What src/core/mail-failure.js keys on to answer 503 rather than 500.
   it('rejects a refused connection with the failed command and a non-envelope code', async () => {
     const occupant = net.createServer();
