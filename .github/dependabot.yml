@@ -24,3 +24,23 @@ updates:
       update-types:
       - minor
       - patch
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: daily
+  ignore:
+  # A node major is a runtime upgrade; take it deliberately.
+  - dependency-name: node
+    update-types:
+    - version-update:semver-major
+- package-ecosystem: docker-compose
+  directories:
+  - "/"
+  - "/test/e2e"
+  schedule:
+    interval: daily
+  ignore:
+  # A postgres major can't read an older data directory.
+  - dependency-name: postgres
+    update-types:
+    - version-update:semver-major
