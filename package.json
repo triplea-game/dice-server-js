@@ -15,9 +15,9 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "express": "^5.2.1",
-    "liquidjs": "^10.29.0",
+    "liquidjs": "^10.30.0",
     "nconf": "^0.13.0",
-    "nodemailer": "^10.0.14",
+    "nodemailer": "^10.0.15",
     "pg-promise": "^12.7.1",
     "random-number-csprng": "^1.0.2"
   },
